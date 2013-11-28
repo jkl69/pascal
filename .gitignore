@@ -8,3 +8,5 @@ s1
 *.ppu
 *.exe
 *.bak
+*.log
+TracePlayer/backup
