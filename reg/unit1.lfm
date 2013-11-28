@@ -1,0 +1,112 @@
+object Form1: TForm1
+  Left = 259
+  Height = 209
+  Top = 389
+  Width = 989
+  Caption = 'Key-Generator'
+  ClientHeight = 209
+  ClientWidth = 989
+  OnCreate = FormCreate
+  LCLVersion = '1.0.8.0'
+  object Button1: TButton
+    Left = 504
+    Height = 25
+    Top = 32
+    Width = 27
+    Caption = '...'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Edit1: TEdit
+    Left = 216
+    Height = 23
+    Top = 32
+    Width = 288
+    TabOrder = 1
+    Text = 'Edit1'
+  end
+  object Edit2: TEdit
+    Left = 16
+    Height = 23
+    Top = 104
+    Width = 960
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial Rounded MT Bold'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 408
+    Height = 25
+    Top = 70
+    Width = 75
+    Caption = 'Create Key'
+    Enabled = False
+    OnClick = Button2Click
+    TabOrder = 3
+  end
+  object Label1: TLabel
+    Left = 504
+    Height = 16
+    Top = 79
+    Width = 28
+    Caption = 'Label1'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clSilver
+    Font.Height = -11
+    Font.Name = 'Arial Narrow'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+    Visible = False
+  end
+  object Edit3: TEdit
+    Left = 288
+    Height = 23
+    Top = 70
+    Width = 120
+    EchoMode = emPassword
+    OnChange = Edit3Change
+    PasswordChar = '*'
+    TabOrder = 4
+  end
+  object Label2: TLabel
+    Left = 71
+    Height = 16
+    Top = 77
+    Width = 201
+    Caption = 'Password to Enable Create Key Button'
+    ParentColor = False
+  end
+  object Log: TMemo
+    Left = 0
+    Height = 82
+    Top = 127
+    Width = 989
+    Align = alBottom
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ScrollBars = ssAutoBoth
+    TabOrder = 5
+    Visible = False
+  end
+  object Button4: TButton
+    Left = 720
+    Height = 25
+    Top = 68
+    Width = 75
+    Caption = 'Decode'
+    OnClick = Button4Click
+    TabOrder = 6
+    Visible = False
+  end
+  object OpenDialog: TOpenDialog
+    DefaultExt = '.exe'
+    Filter = 'Application|*.exe'
+    left = 32
+    top = 16
+  end
+end

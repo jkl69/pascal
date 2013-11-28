@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Compiler Value="D:\lazarus64\fpc\2.6.2\bin\x86_64-win64\fpc.exe" Date="1114729682"/>
+  <Params Value=" -MObjFPC -Scghi -O2 -g -gl -Xs -WG -vewnhi -FiD:\source\pascal\sniffer\lib\x86_64-win64 -FuD:\source\pascal\reg -FuD:\source\pascal\IECComp -FuD:\source\pascal\sniffer\units\log4pascal -FuD:\lazarus64\fpc\2.6.2\source\packages\pcap\src -FuD:\source\pascal\IECComp\lib\x86_64-win64 -FuD:\source\pascal\lnet\lazaruspackage\lib\x86_64-win64 -FuD:\lazarus64\lcl\units\x86_64-win64\win32 -FuD:\lazarus64\lcl\units\x86_64-win64 -FuD:\lazarus64\components\lazutils\lib\x86_64-win64 -FuD:\lazarus64\packager\units\x86_64-win64 -FuD:\source\pascal\sniffer\ -FUD:\source\pascal\sniffer\lib\x86_64-win64\ -l -dLCL -dLCLwin32 sniffer.lpr"/>
+</CONFIG>

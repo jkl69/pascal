@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Compiler Value="D:\lazarus64\fpc\2.6.2\bin\x86_64-win64\fpc.exe" Date="1114729682"/>
+  <Params Value=" -MObjFPC -Sgim -CX -O2 -gs -gl -vew -FiD:\source\pascal\lnet\lib\sys -FuD:\source\pascal\lnet\lib -FuD:\source\pascal\lnet\lazaruspackage\ -FUD:\source\pascal\lnet\lazaruspackage\lib\x86_64-win64\ -l -dLNET_BASE lnetbase.pas"/>
+</CONFIG>

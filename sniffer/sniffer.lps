@@ -1,0 +1,704 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="66">
+      <Unit0>
+        <Filename Value="sniffer.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="sniffer"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="98" Y="18"/>
+        <UsageCount Value="100"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="monitor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Main"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="312"/>
+        <CursorPos X="1" Y="333"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="D:\lazarus\fpc\2.6.2\source\packages\pcap\src\pcap.pp"/>
+        <UnitName Value="Pcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="176"/>
+        <CursorPos X="6" Y="194"/>
+        <UsageCount Value="72"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\reg\key.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="key"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="17"/>
+        <UsageCount Value="55"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="history.txt"/>
+        <IsPartOfProject Value="True"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="4"/>
+        <UsageCount Value="45"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\IECComp\iecsockdlg.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SockDlg"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="IECSockDlg"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="95" Y="2"/>
+        <UsageCount Value="37"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tconfiguratorunit.pas"/>
+        <UnitName Value="TConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="7"/>
+        <UsageCount Value="30"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="Tappappenderunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TAppAppenderunit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="35" Y="20"/>
+        <UsageCount Value="32"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="tlevelgroupunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TLevelGroupUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="72"/>
+        <CursorPos X="33" Y="84"/>
+        <UsageCount Value="29"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="monsock.pas"/>
+        <UnitName Value="monsock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="78"/>
+        <CursorPos X="65" Y="82"/>
+        <UsageCount Value="24"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="WSocket.pas"/>
+        <UnitName Value="WSocket"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5737"/>
+        <CursorPos X="21" Y="5757"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="Packhdrs.pas"/>
+        <UnitName Value="packhdrs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="564"/>
+        <CursorPos X="1" Y="588"/>
+        <UsageCount Value="22"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="D:\lazarus\fpc\2.6.2\source\rtl\win\winsock.pp"/>
+        <UnitName Value="winsock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="711"/>
+        <CursorPos X="36" Y="725"/>
+        <UsageCount Value="5"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="version.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="14" Y="19"/>
+        <UsageCount Value="20"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="sniffer.ini"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="5"/>
+        <UsageCount Value="17"/>
+        <DefaultSyntaxHighlighter Value="Ini"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <UnitName Value="IEC104Sockets"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="445"/>
+        <CursorPos X="3" Y="462"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="D:\lazarus\components\lnet\lib\lnet.pp"/>
+        <UnitName Value="lNet"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1538"/>
+        <CursorPos X="1" Y="1556"/>
+        <UsageCount Value="5"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="..\simpleLogger\simplelog.pas"/>
+        <UnitName Value="simplelog"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="10"/>
+        <CursorPos X="3" Y="24"/>
+        <UsageCount Value="42"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="597"/>
+        <CursorPos X="11" Y="617"/>
+        <UsageCount Value="16"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="D:\lazarus64\lcl\stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="476"/>
+        <CursorPos X="3" Y="485"/>
+        <UsageCount Value="10"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="D:\lazarus64\lcl\include\customlistbox.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="544"/>
+        <CursorPos X="1" Y="572"/>
+        <UsageCount Value="7"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="monpcap.pas"/>
+        <UnitName Value="monpcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="387"/>
+        <CursorPos X="16" Y="417"/>
+        <UsageCount Value="25"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="Pcap.pas"/>
+        <UnitName Value="Pcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="392"/>
+        <CursorPos X="62" Y="403"/>
+        <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="bpf.pas"/>
+        <UnitName Value="bpf"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="47"/>
+        <CursorPos X="5" Y="61"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="Packet32.pas"/>
+        <UnitName Value="Packet32"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="671"/>
+        <CursorPos X="5" Y="666"/>
+        <UsageCount Value="13"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="Ndis_def.pas"/>
+        <UnitName Value="Ndis_def"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="43"/>
+        <CursorPos X="22" Y="57"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="revision.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="2" Y="1"/>
+        <UsageCount Value="7"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="wpcap.pas"/>
+        <UnitName Value="WPcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="4" Y="30"/>
+        <UsageCount Value="22"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="..\rawsock1\unit1.pas"/>
+        <UnitName Value="Unit1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="156"/>
+        <CursorPos X="59" Y="170"/>
+        <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="D:\lazarus\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="746"/>
+        <CursorPos X="15" Y="763"/>
+        <UsageCount Value="7"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="D:\lazarus\lcl\include\customlistbox.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="545"/>
+        <CursorPos X="1" Y="563"/>
+        <UsageCount Value="7"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="D:\lazarus64\lcl\include\wincontrol.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="7198"/>
+        <CursorPos X="1" Y="7218"/>
+        <UsageCount Value="12"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="D:\lazarus64\lcl\include\control.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2700"/>
+        <CursorPos X="10" Y="2710"/>
+        <UsageCount Value="12"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="D:\lazarus64\lcl\include\customform.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2151"/>
+        <CursorPos X="1" Y="2171"/>
+        <UsageCount Value="7"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="D:\lazarus64\components\lazutils\lazmethodlist.pas"/>
+        <UnitName Value="LazMethodList"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="39"/>
+        <CursorPos X="1" Y="62"/>
+        <UsageCount Value="7"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\packages\pcap\src\pcap.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Pcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="188"/>
+        <CursorPos X="79" Y="211"/>
+        <UsageCount Value="24"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\inc\socketsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="192"/>
+        <CursorPos X="10" Y="211"/>
+        <UsageCount Value="7"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\inc\sockets.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="255"/>
+        <CursorPos X="10" Y="274"/>
+        <UsageCount Value="7"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\winsock.pp"/>
+        <UnitName Value="winsock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="208"/>
+        <CursorPos X="4" Y="226"/>
+        <UsageCount Value="10"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="cap.pas"/>
+        <UnitName Value="Pcap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="96"/>
+        <CursorPos X="14" Y="115"/>
+        <UsageCount Value="14"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit39>
+      <Unit40>
+        <Filename Value="Packet.pas"/>
+        <UnitName Value="Packet"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="142"/>
+        <CursorPos X="3" Y="104"/>
+        <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\fpwinsockh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="50"/>
+        <CursorPos X="3" Y="68"/>
+        <UsageCount Value="10"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\winsock2.pp"/>
+        <UnitName Value="WinSock2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="128"/>
+        <CursorPos X="3" Y="141"/>
+        <UsageCount Value="10"/>
+      </Unit42>
+      <Unit43>
+        <Filename Value="D:\lazarus64\lcl\include\messagedialogs.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="237"/>
+        <CursorPos X="1" Y="259"/>
+        <UsageCount Value="8"/>
+      </Unit43>
+      <Unit44>
+        <Filename Value="D:\lazarus64\components\lazutils\avglvltree.pas"/>
+        <UnitName Value="AvgLvlTree"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1430"/>
+        <CursorPos X="1" Y="1450"/>
+        <UsageCount Value="8"/>
+      </Unit44>
+      <Unit45>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tpropertyconfiguratorunit.pas"/>
+        <UnitName Value="TPropertyConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="9" Y="23"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit45>
+      <Unit46>
+        <Filename Value="D:\lazarus64\lcl\include\custommemo.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="49"/>
+        <CursorPos X="1" Y="68"/>
+        <UsageCount Value="11"/>
+      </Unit46>
+      <Unit47>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tfileappenderunit.pas"/>
+        <UnitName Value="TFileAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="58"/>
+        <CursorPos X="27" Y="76"/>
+        <UsageCount Value="12"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="..\log4delphi-0.7\src\delphi\twriterappenderunit.pas"/>
+        <UnitName Value="TWriterAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="10"/>
+        <CursorPos X="1" Y="24"/>
+        <UsageCount Value="9"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tloggingeventunit.pas"/>
+        <UnitName Value="TLoggingEventUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="98"/>
+        <CursorPos X="10" Y="115"/>
+        <UsageCount Value="13"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tappenderunit.pas"/>
+        <UnitName Value="TAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="33"/>
+        <CursorPos X="67" Y="55"/>
+        <UsageCount Value="13"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tloglogunit.pas"/>
+        <UnitName Value="TLogLogUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="26" Y="1"/>
+        <UsageCount Value="13"/>
+      </Unit51>
+      <Unit52>
+        <Filename Value="D:\lazarus64\lcl\textstrings.pas"/>
+        <UnitName Value="TextStrings"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="283"/>
+        <CursorPos X="1" Y="304"/>
+        <UsageCount Value="12"/>
+      </Unit52>
+      <Unit53>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tlevelunit.pas"/>
+        <UnitName Value="TLevelUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="185"/>
+        <CursorPos X="4" Y="257"/>
+        <UsageCount Value="12"/>
+      </Unit53>
+      <Unit54>
+        <Filename Value="D:\lazarus64\lcl\extctrls.pp"/>
+        <UnitName Value="ExtCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="580"/>
+        <CursorPos X="3" Y="597"/>
+        <UsageCount Value="11"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="..\log4delphi-0.7\src\delphi\tloggerunit.pas"/>
+        <UnitName Value="TLoggerUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="274"/>
+        <CursorPos X="31" Y="292"/>
+        <UsageCount Value="11"/>
+      </Unit55>
+      <Unit56>
+        <Filename Value="D:\lazarus64\lcl\lclclasses.pp"/>
+        <UnitName Value="LCLClasses"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="124"/>
+        <CursorPos X="1" Y="141"/>
+        <UsageCount Value="10"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="units\log4pascal\tconfiguratorunit.pas"/>
+        <UnitName Value="TConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="17"/>
+        <CursorPos X="4" Y="34"/>
+        <UsageCount Value="22"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="units\log4pascal\tloggerunit.pas"/>
+        <UnitName Value="TLoggerUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="17" Y="21"/>
+        <UsageCount Value="11"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="units\log4pascal\tappenderunit.pas"/>
+        <UnitName Value="TAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="19" Y="21"/>
+        <UsageCount Value="12"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="units\log4pascal\tlayoutunit.pas"/>
+        <UnitName Value="TLayoutUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="14"/>
+        <CursorPos X="4" Y="31"/>
+        <UsageCount Value="11"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="units\log4pascal\tpropertyconfiguratorunit.pas"/>
+        <UnitName Value="TPropertyConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="32"/>
+        <CursorPos X="13" Y="47"/>
+        <UsageCount Value="12"/>
+      </Unit61>
+      <Unit62>
+        <Filename Value="units\log4pascal\tpropertiesunit.pas"/>
+        <UnitName Value="TPropertiesUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="15"/>
+        <CursorPos X="4" Y="32"/>
+        <UsageCount Value="12"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="units\log4pascal\tfileappenderunit.pas"/>
+        <UnitName Value="TFileAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="42"/>
+        <CursorPos X="15" Y="59"/>
+        <UsageCount Value="12"/>
+      </Unit63>
+      <Unit64>
+        <Filename Value="units\log4pascal\tloggingeventunit.pas"/>
+        <UnitName Value="TLoggingEventUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="56"/>
+        <CursorPos X="1" Y="73"/>
+        <UsageCount Value="10"/>
+      </Unit64>
+      <Unit65>
+        <Filename Value="units\log4pascal\tprintwriterunit.pas"/>
+        <UnitName Value="TPrintWriterUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit65>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="59" Column="4" TopLine="31"/>
+      </Position1>
+      <Position2>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="58" Column="23" TopLine="31"/>
+      </Position2>
+      <Position3>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="8" Column="63" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="5" Column="25" TopLine="1"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="8" Column="63" TopLine="1"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="9" Column="3" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="58" Column="4" TopLine="41"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="59" Column="2" TopLine="43"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="58" Column="2" TopLine="43"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="59" Column="3" TopLine="40"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="91" Column="4" TopLine="74"/>
+      </Position11>
+      <Position12>
+        <Filename Value="main.pas"/>
+        <Caret Line="95" Column="21" TopLine="129"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="245" Column="11" TopLine="228"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="279" Column="8" TopLine="262"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="283" Column="11" TopLine="266"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="298" Column="9" TopLine="281"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="382" Column="3" TopLine="365"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="392" Column="9" TopLine="376"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="394" Column="9" TopLine="378"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="422" Column="12" TopLine="399"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="440" Column="12" TopLine="423"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="445" Column="11" TopLine="428"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\IECComp\iec104sockets.pas"/>
+        <Caret Line="462" Column="9" TopLine="445"/>
+      </Position23>
+      <Position24>
+        <Filename Value="main.pas"/>
+        <Caret Line="283" Column="3" TopLine="279"/>
+      </Position24>
+      <Position25>
+        <Filename Value="main.pas"/>
+        <Caret Line="323" Column="3" TopLine="306"/>
+      </Position25>
+      <Position26>
+        <Filename Value="main.pas"/>
+        <Caret Line="330" Column="3" TopLine="313"/>
+      </Position26>
+      <Position27>
+        <Filename Value="main.pas"/>
+        <Caret Line="451" Column="25" TopLine="432"/>
+      </Position27>
+      <Position28>
+        <Filename Value="main.pas"/>
+        <Caret Line="432" Column="3" TopLine="430"/>
+      </Position28>
+      <Position29>
+        <Filename Value="main.pas"/>
+        <Caret Line="332" Column="6" TopLine="316"/>
+      </Position29>
+      <Position30>
+        <Filename Value="main.pas"/>
+        <Caret Line="51" Column="22" TopLine="35"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="Pcap.pas"/>
+        <Line Value="418"/>
+      </Item1>
+    </BreakPoints>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="PacketInfo"/>
+      </Item1>
+      <Item2>
+        <Expression Value="rlic"/>
+      </Item2>
+    </Watches>
+  </Debugging>
+</CONFIG>

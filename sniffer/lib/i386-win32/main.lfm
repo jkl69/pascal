@@ -1,0 +1,284 @@
+object monitor: Tmonitor
+  Left = 381
+  Height = 518
+  Top = 99
+  Width = 759
+  Caption = 'monitor'
+  ClientHeight = 518
+  ClientWidth = 759
+  Icon.Data = {
+    FE0200000000010001002020100000000000E802000016000000280000002000
+    0000400000000100040000000000800200000000000000000000000000000000
+    0000000000000000800000800000008080008000000080008000808000008080
+    8000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+    FF00000000000088700000037800000000000000000087000000000000080000
+    00000000000700003BBB3BB330000800000000000F0001BBBBBB3BBBBB300080
+    000000008000BBBB33310333BBBB000800000000000BBBB113B33B3313BBB300
+    8000000000BBB31BBBBB3BBBB30BBB300800008003BB03BBBBB33BBBBB30BBB0
+    000000003BB0BBBBBBB33BBBBBBB0BBB00800800BB33BBBB31130313BBBBB0BB
+    30000003BB1BBBB31BBB3BB31BBBB33BB008800BB33BBB33BBBB3BBB31BBBB0B
+    B107803BB1BBBB1BBBBB3BBBB33BBB33B307703BB3BBB33BBBB33BBBBB1BBB33
+    BB00003B33BBB1BBBBBB3BBBBB3BBBB3BB000033313330333331033333033330
+    3300003B33B331BBB3B303B33B33BB31BB00303B33BBB1BBBBBB333BBB3BBBB3
+    BB00703BB33BB33BBBF87F03BB1BBB33BB00801BB0BBB31BBBB87FF1333BBB33
+    B307800BB3BBB3B18FF87FFF01BBBB1BB0080003BB0BBBB303887F83733BB33B
+    B0080800BB30BBB8F8110378FF1331BB007000003BB33BBBFFF87FFFFFF10BB3
+    0080008003BB338FFFF87FFFFF873BB00700000700BBB3038FF87FFF827FBB00
+    000000003003B8F7578738737FFB30000000000003003BB8F887788FF8B30008
+    000000000070003BBB8838BBB300010000000000000800001333333300008000
+    0000000000000800000000000080000000000000000000008730007880000000
+    0000FFC003FFFF0000FFFE00003FF800001FF000000FF0000007E0000003C000
+    0003C00000018000000180000000000000000000000000000000000000000000
+    000000000000000000000000000000000000000000008000000080000001C000
+    0001C0000003E0000007F000000FF800000FFC00003FFE00007FFF8001FFFFF0
+    07FF
+  }
+  OnCreate = FormCreate
+  LCLVersion = '1.0.8.0'
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 492
+    Top = 0
+    Width = 759
+    ActivePage = Tab2
+    Align = alClient
+    TabIndex = 1
+    TabOrder = 0
+    object Tab1: TTabSheet
+      Caption = 'Monitor'
+      ClientHeight = 460
+      ClientWidth = 751
+      object MonIpList: TListBox
+        Left = 5
+        Height = 99
+        Top = 10
+        Width = 189
+        ItemHeight = 0
+        TabOrder = 0
+      end
+      object Panel1: TPanel
+        Left = 0
+        Height = 346
+        Top = 114
+        Width = 751
+        Align = alBottom
+        Caption = 'Panel1'
+        ClientHeight = 346
+        ClientWidth = 751
+        TabOrder = 1
+        object log: TMemo
+          Left = 146
+          Height = 344
+          Top = 1
+          Width = 604
+          Align = alClient
+          Lines.Strings = (
+            'log'
+          )
+          TabOrder = 0
+        end
+        object monlist: TListBox
+          Left = 1
+          Height = 344
+          Top = 1
+          Width = 145
+          Align = alLeft
+          Items.Strings = (
+            'source IPs'
+          )
+          ItemHeight = 19
+          TabOrder = 1
+        end
+      end
+      object Version: TLabel
+        Left = 220
+        Height = 17
+        Top = 92
+        Width = 399
+        Anchors = [akTop, akRight]
+        AutoSize = False
+        Caption = 'V1.0 (c) IDS/jaen '
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clPurple
+        Font.Height = -19
+        Font.Name = 'System'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object BdoMonitor: TButton
+        Left = 436
+        Height = 28
+        Top = 60
+        Width = 123
+        Action = Actionmonitor
+        Anchors = [akTop, akRight]
+        TabOrder = 2
+      end
+      object monport: TSpinEdit
+        Left = 462
+        Height = 27
+        Top = 12
+        Width = 97
+        Anchors = [akTop, akRight]
+        MaxValue = 65535
+        TabOrder = 3
+        Value = 2404
+      end
+      object StaticText1: TStaticText
+        Left = 404
+        Height = 17
+        Top = 20
+        Width = 40
+        Anchors = [akTop, akRight]
+        Caption = 'Port Nr.'
+        TabOrder = 4
+      end
+    end
+    object Tab2: TTabSheet
+      Caption = 'Server'
+      ClientHeight = 460
+      ClientWidth = 751
+      object Bevel2: TBevel
+        Left = 0
+        Height = 24
+        Top = 73
+        Width = 751
+        Align = alTop
+      end
+      object Label6: TLabel
+        Left = 8
+        Height = 17
+        Top = 80
+        Width = 218
+        Caption = 'time    Client addres     Data '
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Logout: TMemo
+        Left = 0
+        Height = 363
+        Top = 97
+        Width = 598
+        Align = alClient
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        ParentFont = False
+        ScrollBars = ssBoth
+        TabOrder = 0
+      end
+      object PanelServer: TPanel
+        Left = 0
+        Height = 73
+        Top = 0
+        Width = 751
+        Align = alTop
+        ClientHeight = 73
+        ClientWidth = 751
+        TabOrder = 1
+        object version2: TLabel
+          Left = 12
+          Height = 17
+          Top = 12
+          Width = 464
+          Anchors = [akTop, akRight]
+          AutoSize = False
+          Caption = 'V1.0 (c) IDS/jaen '
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clPurple
+          Font.Height = -19
+          Font.Name = 'System'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object BdoServer: TButton
+          Left = 436
+          Height = 27
+          Top = 28
+          Width = 112
+          Action = ActionServer
+          TabOrder = 0
+        end
+        object sockproperties: TButton
+          Left = 636
+          Height = 20
+          Top = 33
+          Width = 98
+          Anchors = [akTop, akRight]
+          Caption = 'sockproperties'
+          Enabled = False
+          TabOrder = 1
+        end
+        object ServerPort: TSpinEdit
+          Left = 216
+          Height = 27
+          Top = 28
+          Width = 105
+          MaxValue = 65535
+          TabOrder = 2
+          Value = 2405
+        end
+        object Text1: TStaticText
+          Left = 132
+          Height = 17
+          Top = 33
+          Width = 40
+          Caption = 'Port Nr.'
+          TabOrder = 3
+        end
+      end
+      object clientList: TListBox
+        Left = 598
+        Height = 363
+        Top = 97
+        Width = 153
+        Align = alRight
+        ItemHeight = 0
+        TabOrder = 2
+      end
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 26
+    Top = 492
+    Width = 759
+    Panels = <    
+      item
+        Text = 'Packets rx:'
+        Width = 180
+      end    
+      item
+        Text = 'Packets tx:'
+        Width = 150
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
+  end
+  object ActionList1: TActionList
+    left = 280
+    top = 8
+    object Actionmonitor: TAction
+      Caption = 'Actionmonitor'
+      OnExecute = ActionmonitorExecute
+    end
+    object ActionServer: TAction
+      Caption = 'ActionServer'
+      OnExecute = ActionServerExecute
+    end
+  end
+  object Timer: TTimer
+    OnTimer = TimerTimer
+    left = 660
+    top = 20
+  end
+end

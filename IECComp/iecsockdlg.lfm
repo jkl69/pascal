@@ -1,0 +1,218 @@
+object SockDlg: TSockDlg
+  Left = 816
+  Height = 390
+  Top = 139
+  Width = 306
+  BorderStyle = bsDialog
+  Caption = 'Socket Parameter'
+  ClientHeight = 390
+  ClientWidth = 306
+  OnClose = FormClose
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '1.0.8.0'
+  object PanelLog: TPanel
+    Left = 0
+    Height = 96
+    Top = 294
+    Width = 306
+    Align = alBottom
+    TabOrder = 0
+  end
+  object GroupBox: TGroupBox
+    Left = 2
+    Height = 290
+    Top = 2
+    Width = 302
+    Align = alClient
+    BorderSpacing.Around = 2
+    Caption = 'Socket Parameter'
+    ClientHeight = 272
+    ClientWidth = 298
+    TabOrder = 1
+    object T0: TSpinEdit
+      Left = 188
+      Height = 23
+      Top = 22
+      Width = 65
+      MaxValue = 300
+      TabOrder = 0
+    end
+    object T1: TSpinEdit
+      Left = 189
+      Height = 23
+      Top = 54
+      Width = 66
+      MaxValue = 300
+      TabOrder = 1
+    end
+    object T2: TSpinEdit
+      Left = 189
+      Height = 23
+      Top = 86
+      Width = 66
+      MaxValue = 300
+      TabOrder = 2
+    end
+    object T3: TSpinEdit
+      Left = 189
+      Height = 23
+      Top = 118
+      Width = 64
+      MaxValue = 300
+      TabOrder = 3
+    end
+    object LabelT0: TLabel
+      Left = 260
+      Height = 16
+      Top = 29
+      Width = 22
+      Caption = '(T0)'
+      ParentColor = False
+    end
+    object LabelT1: TLabel
+      Left = 260
+      Height = 16
+      Top = 61
+      Width = 22
+      Caption = '(T1)'
+      ParentColor = False
+    end
+    object LabelT2: TLabel
+      Left = 260
+      Height = 16
+      Top = 93
+      Width = 22
+      Caption = '(T2)'
+      ParentColor = False
+    end
+    object LabelT3: TLabel
+      Left = 260
+      Height = 16
+      Top = 125
+      Width = 22
+      Caption = '(T3)'
+      ParentColor = False
+    end
+    object Label1: TLabel
+      Left = 12
+      Height = 17
+      Top = 32
+      Width = 121
+      Caption = 'Reconnect after time'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 12
+      Height = 17
+      Top = 64
+      Width = 148
+      Caption = 'expect acknowledge after'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 12
+      Height = 17
+      Top = 96
+      Width = 141
+      Caption = 'send acknowledge after '
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 12
+      Height = 17
+      Top = 128
+      Width = 119
+      Caption = 'test connection time'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 40
+      Height = 17
+      Top = 153
+      Width = 227
+      Caption = 'expect acknowledged after max. APDU'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 40
+      Height = 17
+      Top = 214
+      Width = 209
+      Caption = 'send acknowledge after max. APDU'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object k: TSpinEdit
+      Left = 188
+      Height = 23
+      Top = 174
+      Width = 65
+      TabOrder = 4
+    end
+    object w: TSpinEdit
+      Left = 189
+      Height = 23
+      Top = 237
+      Width = 65
+      TabOrder = 5
+    end
+    object Labelk: TLabel
+      Left = 260
+      Height = 16
+      Top = 181
+      Width = 15
+      Caption = '(k)'
+      ParentColor = False
+    end
+    object Labelw: TLabel
+      Left = 260
+      Height = 16
+      Top = 237
+      Width = 18
+      Caption = '(w)'
+      ParentColor = False
+    end
+  end
+end

@@ -1,0 +1,10 @@
+LazColorPalette
+log4delphi_0.7
+msock
+msock11
+rawsock1
+s1
+*.o
+*.ppu
+*.exe
+*.bak

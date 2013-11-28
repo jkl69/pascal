@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Compiler Value="d:\lazarus\fpc\2.6.2\bin\i386-win32\fpc.exe" Date="1114732070"/>
+  <Params Value=" -MDelphi -Scghi -O2 -WG -vewnhi -FiD:\source\pascal\sniffer\lib\i386-win32 -FuD:\source\pascal\IECComp\lib\i386-win32 -FuD:\lazarus\components\lnet\lazaruspackage\lib\i386-win32 -FuD:\lazarus\lcl\units\i386-win32\win32 -FuD:\lazarus\lcl\units\i386-win32 -FuD:\lazarus\components\lazutils\lib\i386-win32 -FuD:\lazarus\packager\units\i386-win32 -FuD:\source\pascal\sniffer\ -FUD:\source\pascal\sniffer\lib\i386-win32\ -l -dLCL -dLCLwin32 sniffer.lpr"/>
+</CONFIG>

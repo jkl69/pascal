@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="4">
+      <Unit0>
+        <Filename Value="iRevision.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="iRevision"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="78" Y="30"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="revision.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="2" Y="1"/>
+        <UsageCount Value="11"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="version.inc"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="16"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\s1\revision.inc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit3>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="9" HistoryIndex="8">
+      <Position1>
+        <Filename Value="version.inc"/>
+        <Caret Line="3" Column="13" TopLine="1"/>
+      </Position1>
+      <Position2>
+        <Filename Value="version.inc"/>
+        <Caret Line="2" Column="12" TopLine="1"/>
+      </Position2>
+      <Position3>
+        <Filename Value="version.inc"/>
+        <Caret Line="4" Column="37" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="version.inc"/>
+        <Caret Line="3" Column="1" TopLine="1"/>
+      </Position4>
+      <Position5>
+        <Filename Value="version.inc"/>
+        <Caret Line="6" Column="10" TopLine="1"/>
+      </Position5>
+      <Position6>
+        <Filename Value="version.inc"/>
+        <Caret Line="8" Column="18" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="version.inc"/>
+        <Caret Line="3" Column="26" TopLine="1"/>
+      </Position7>
+      <Position8>
+        <Filename Value="version.inc"/>
+        <Caret Line="10" Column="15" TopLine="1"/>
+      </Position8>
+      <Position9>
+        <Filename Value="version.inc"/>
+        <Caret Line="12" Column="11" TopLine="1"/>
+      </Position9>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

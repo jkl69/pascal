@@ -1,0 +1,71 @@
+INFO: Configuring root logger.
+DEBUG: Parsing for [ROOT] with value=[INFO, fileAppender].
+DEBUG: Level token is [INFO].
+DEBUG: TLogger.SetLevel: INFO
+INFO: Category ROOT set to INFO
+DEBUG: TLogger.RemoveAllAppenders
+DEBUG: Parsing appender named "fileAppender".
+DEBUG: InstantiateAppender: TRollingFileAppender, log4delphi.appender.fileAppender
+DEBUG: TAppender#Create
+DEBUG: TFileAppender#Create
+DEBUG: TRollingFileAppender created.
+DEBUG: TRollingFileAppender - MaxBackupIndex
+DEBUG: TRollingFileAppender - MaxFileSize
+DEBUG: TRollingFileAppender - Append
+DEBUG: TRollingFileAppender - AppDir
+DEBUG: TFileAppender#SetFile: D:\source\pascal\sniffer\sniffer.log
+DEBUG: TRollingFileAppender - D:\source\pascal\sniffer\sniffer.log
+DEBUG: TAppender#SetName: fileAppender
+DEBUG: InstantiateLayout: TPatternLayout, log4delphi.appender.fileAppender.layout
+DEBUG: TPatternLayout#Create
+DEBUG: TAppender#SetLayout: TPatternLayout
+DEBUG: Set layout for "fileAppender".
+DEBUG: Parsed "fileAppender" options.
+DEBUG: Appender added to ROOT, named fileAppender
+DEBUG: Logger created - name=MONITOR, level=ALL
+DEBUG: Parsing for [MONITOR] with value=[DEBUG, fileAppender].
+DEBUG: Level token is [DEBUG].
+DEBUG: TLogger.SetLevel: DEBUG
+INFO: Category MONITOR set to DEBUG
+DEBUG: TLogger.RemoveAllAppenders
+DEBUG: Parsing appender named "fileAppender".
+DEBUG: Appender added to MONITOR, named fileAppender
+DEBUG: Logger created - name=IECServer, level=ALL
+DEBUG: Parsing for [IECServer] with value=[INFO, fileAppender].
+DEBUG: Level token is [INFO].
+DEBUG: TLogger.SetLevel: INFO
+INFO: Category IECServer set to INFO
+DEBUG: TLogger.RemoveAllAppenders
+DEBUG: Parsing appender named "fileAppender".
+DEBUG: Appender added to IECServer, named fileAppender
+DEBUG: Finished configuring.
+DEBUG: TAppender#Create
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: Appender added to MONITOR, named TAppAppender
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TAppender#Create
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: Appender added to IECServer, named TAppAppender
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: TAppender#SetThreshold: INFO
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append

@@ -1,0 +1,233 @@
+13:52:12:393 MONITOR [ INFO] Application started
+13:52:12:441 MONITOR [DEBUG] Create server:
+13:52:12:441 MONITOR [ INFO] Licence OK
+13:52:12:447 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+13:52:33:469 MONITOR [ INFO] stopMonitoring:
+13:52:33:471 MONITOR [ INFO] stopApplication:
+INFO - Application started
+DEBUG - Create server:
+INFO - Licence OK
+INFO - startMonitoring on IP:192.168.178.23
+INFO - stopMonitoring:
+INFO - stopApplication:
+13:58:40:851 MONITOR [ INFO] Application started
+13:58:40:901 MONITOR [DEBUG] Create server:
+13:58:40:901 MONITOR [ INFO] Licence OK
+13:58:40:907 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+13:58:41:598 MONITOR [DEBUG] receive 50 Bytes for port 137
+13:58:41:598 MONITOR [DEBUG] receive 50 Bytes for port 137
+13:58:42:347 MONITOR [DEBUG] receive 50 Bytes for port 137
+13:58:42:347 MONITOR [DEBUG] receive 50 Bytes for port 137
+13:58:42:988 MONITOR [ INFO] stopMonitoring:
+13:58:42:990 MONITOR [ INFO] stopApplication:
+14:02:50:189 MONITOR [ INFO] Application started
+14:02:50:236 MONITOR [DEBUG] Create server:
+14:02:50:237 MONITOR [ INFO] Licence OK
+14:02:50:243 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:02:52:351 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:02:52:351 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:02:53:101 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:02:53:101 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:02:53:851 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:02:53:851 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:08:639 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:08:640 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:09:389 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:09:390 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:10:139 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:10:141 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:10:892 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:10:893 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:11:641 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:11:643 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:12:391 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:12:393 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:16:222 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:16:224 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:16:972 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:16:975 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:17:722 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:17:725 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:03:18:177 MONITOR [ INFO] stopMonitoring:
+14:03:18:180 MONITOR [ INFO] stopApplication:
+14:03:22:108 MONITOR [ INFO] Application started
+14:03:22:157 MONITOR [DEBUG] Create server:
+14:03:22:157 MONITOR [ INFO] Licence OK
+14:03:22:163 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:03:29:264 MONITOR [ INFO] stopMonitoring:
+14:03:29:265 MONITOR [ INFO] stopApplication:
+14:13:39:815 MONITOR [ INFO] Application started
+14:13:39:863 MONITOR [DEBUG] Create server:
+14:13:39:864 MONITOR [ INFO] Licence OK
+14:13:39:870 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:13:40:197 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:40:197 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:40:947 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:40:947 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:41:718 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:41:718 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:42:468 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:42:468 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:43:218 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:43:218 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:43:973 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:43:973 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:44:723 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:44:723 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:45:473 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:45:473 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:46:242 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:46:242 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:46:991 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:46:991 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:13:47:509 MONITOR [ INFO] stopMonitoring:
+14:13:47:510 MONITOR [ INFO] stopApplication:
+14:16:21:299 MONITOR [ INFO] Application started
+14:16:21:347 MONITOR [DEBUG] Create server:
+14:16:21:348 MONITOR [ INFO] Licence OK
+14:16:21:354 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:16:23:909 MONITOR [ INFO] stopMonitoring:
+14:16:23:910 MONITOR [ INFO] stopApplication:
+14:22:40:598 MONITOR [ INFO] Application started
+14:22:40:653 MONITOR [DEBUG] Create server:
+14:22:40:653 MONITOR [ INFO] Licence OK
+14:22:40:659 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:22:41:160 MONITOR [DEBUG] receive 34 Bytes for port 50999
+14:22:41:163 MONITOR [DEBUG] receive 76 Bytes for port 53
+14:22:43:289 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:43:289 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:038 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:038 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:039 MONITOR [DEBUG] receive 319 Bytes for port 68
+14:22:44:039 MONITOR [DEBUG] receive 319 Bytes for port 68
+14:22:44:045 MONITOR [DEBUG] receive 548 Bytes for port 67
+14:22:44:083 MONITOR [DEBUG] receive 29 Bytes for port 58237
+14:22:44:084 MONITOR [DEBUG] receive 29 Bytes for port 58237
+14:22:44:093 MONITOR [DEBUG] receive 36 Bytes for port 54244
+14:22:44:183 MONITOR [DEBUG] receive 29 Bytes for port 58237
+14:22:44:183 MONITOR [DEBUG] receive 29 Bytes for port 58237
+14:22:44:216 MONITOR [DEBUG] receive 101 Bytes for port 53
+14:22:44:218 MONITOR [DEBUG] receive 38 Bytes for port 65249
+14:22:44:220 MONITOR [DEBUG] receive 54 Bytes for port 53
+14:22:44:221 MONITOR [DEBUG] receive 38 Bytes for port 63780
+14:22:44:244 MONITOR [DEBUG] receive 85 Bytes for port 53
+14:22:44:246 MONITOR [DEBUG] receive 94 Bytes for port 60966
+14:22:44:288 MONITOR [DEBUG] receive 12 Bytes for port 53
+14:22:44:291 MONITOR [DEBUG] receive 66 Bytes for port 57284
+14:22:44:339 MONITOR [DEBUG] receive 52 Bytes for port 59603
+14:22:44:346 MONITOR [DEBUG] receive 117 Bytes for port 53
+14:22:44:346 MONITOR [DEBUG] receive 35 Bytes for port 62561
+14:22:44:349 MONITOR [DEBUG] receive 100 Bytes for port 53
+14:22:44:349 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:349 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:44:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:44:364 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:44:364 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:44:469 MONITOR [DEBUG] receive 131 Bytes for port 53
+14:22:44:470 MONITOR [DEBUG] receive 49 Bytes for port 58808
+14:22:44:540 MONITOR [DEBUG] receive 114 Bytes for port 53
+14:22:44:546 MONITOR [DEBUG] receive 36 Bytes for port 63711
+14:22:44:550 MONITOR [DEBUG] receive 101 Bytes for port 53
+14:22:44:553 MONITOR [DEBUG] receive 38 Bytes for port 55918
+14:22:44:555 MONITOR [DEBUG] receive 54 Bytes for port 53
+14:22:44:556 MONITOR [DEBUG] receive 38 Bytes for port 60075
+14:22:44:559 MONITOR [DEBUG] receive 85 Bytes for port 53
+14:22:44:561 MONITOR [DEBUG] receive 94 Bytes for port 54870
+14:22:44:584 MONITOR [DEBUG] receive 12 Bytes for port 53
+14:22:44:788 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:788 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:44:875 MONITOR [DEBUG] receive 34 Bytes for port 58830
+14:22:44:893 MONITOR [DEBUG] receive 50 Bytes for port 53
+14:22:44:897 MONITOR [DEBUG] receive 35 Bytes for port 63405
+14:22:44:917 MONITOR [DEBUG] receive 172 Bytes for port 53
+14:22:45:099 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:45:099 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:45:540 MONITOR [DEBUG] receive 31 Bytes for port 50854
+14:22:45:546 MONITOR [DEBUG] receive 96 Bytes for port 53
+14:22:45:546 MONITOR [DEBUG] receive 34 Bytes for port 61661
+14:22:45:550 MONITOR [DEBUG] receive 76 Bytes for port 53
+14:22:45:550 MONITOR [DEBUG] receive 24 Bytes for port 59493
+14:22:45:551 MONITOR [DEBUG] receive 24 Bytes for port 59493
+14:22:45:650 MONITOR [DEBUG] receive 24 Bytes for port 59493
+14:22:45:650 MONITOR [DEBUG] receive 24 Bytes for port 59493
+14:22:45:849 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:45:850 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:45:850 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:45:850 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:46:600 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:46:600 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:47:350 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:47:350 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:22:47:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:47:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:47:363 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:47:363 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:50:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:50:358 MONITOR [DEBUG] receive 133 Bytes for port 54078
+14:22:50:363 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:50:363 MONITOR [DEBUG] receive 348 Bytes for port 1900
+14:22:50:516 MONITOR [DEBUG] receive 326 Bytes for port 1900
+14:22:50:520 MONITOR [DEBUG] receive 389 Bytes for port 1900
+14:22:50:536 MONITOR [DEBUG] receive 326 Bytes for port 1900
+14:22:50:539 MONITOR [DEBUG] receive 365 Bytes for port 1900
+14:22:50:553 MONITOR [DEBUG] receive 326 Bytes for port 1900
+14:22:50:557 MONITOR [DEBUG] receive 385 Bytes for port 1900
+14:22:50:570 MONITOR [DEBUG] receive 353 Bytes for port 1900
+14:22:50:578 MONITOR [DEBUG] receive 397 Bytes for port 1900
+14:22:50:588 MONITOR [DEBUG] receive 381 Bytes for port 1900
+14:22:50:598 MONITOR [DEBUG] receive 379 Bytes for port 1900
+14:22:51:391 MONITOR [ INFO] stopMonitoring:
+14:22:51:392 MONITOR [ INFO] stopApplication:
+14:25:48:619 MONITOR [ INFO] Application started
+14:25:48:668 MONITOR [DEBUG] Create server:
+14:25:48:668 IECServer [ INFO] stop server.
+14:25:48:668 MONITOR [ INFO] Licence OK
+14:25:48:674 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:25:48:675 IECServer [ INFO] start server on port 2405
+14:25:52:705 IECServer [ INFO] stop server.
+14:25:53:937 IECServer [ INFO] start server on port 2405
+14:25:55:134 MONITOR [ INFO] stopMonitoring:
+14:25:55:135 MONITOR [ INFO] stopApplication:
+14:30:29:404 MONITOR [ INFO] Application started
+14:30:29:453 MONITOR [DEBUG] Create server:
+14:30:29:453 IECServer [ INFO] stop server.
+14:30:29:453 MONITOR [ INFO] Licence OK
+14:30:29:459 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:30:29:460 IECServer [ INFO] start server on port 2405
+14:30:36:830 IECServer [ INFO] stop server.
+14:30:38:639 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:38:639 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:39:174 IECServer [ INFO] start server on port 2405
+14:30:39:388 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:39:388 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:40:138 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:40:138 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:40:891 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:40:892 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:41:641 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:41:641 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:42:391 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:42:391 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:30:43:236 MONITOR [ INFO] stopMonitoring:
+14:30:43:237 MONITOR [ INFO] stopApplication:
+14:31:34:670 MONITOR [ INFO] Application started
+14:31:34:718 MONITOR [DEBUG] Create server:
+14:31:34:718 IECServer [ INFO] stop server.
+14:31:34:719 MONITOR [ INFO] Licence OK
+14:31:34:725 MONITOR [ INFO] startMonitoring on IP:192.168.178.23
+14:31:34:725 IECServer [ INFO] start server on port 2405
+14:31:38:638 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:38:639 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:39:388 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:39:388 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:40:138 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:40:138 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:40:891 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:40:891 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:41:642 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:41:642 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:42:392 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:31:42:392 MONITOR [DEBUG] receive 50 Bytes for port 137
+14:32:03:005 MONITOR [ INFO] stopMonitoring:
+14:32:03:007 MONITOR [ INFO] stopApplication:
