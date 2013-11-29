@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils,
   WinSock, Windows, sockets,
-  Pcap,    packhdrs, simplelog;
+  Pcap,    packhdrs, TLoggerUnit;
 
 type
 
@@ -26,8 +26,8 @@ type
 
   TWPcap = class(TComponent)
   protected
-    Flog :Tlog;
- //   Flogger :TLogger;
+ //   Flog :Tlog;
+    Flogger :TLogger;
     FMonAdapter:TPcap_If;
 //    FAdapterMac: array[0..5]of byte;
     FAdapterMac: TMacAddr;
@@ -48,8 +48,8 @@ type
     procedure Stop;
 //  published
     property MonAdapter:TPcap_If read FMonAdapter write FMonAdapter;
-    property Log :Tlog read  Flog write FLog;
-//    property Logger :TLogger read  Flog write FLog;
+//    property Log :Tlog read  Flog write FLog;
+    property Logger :TLogger read  Flogger write FLogger;
 //    property Header :TPcap_Pkthdr read  FPkthdr write FPkthdr;
     property connected :Boolean read  FConnected write FConnected;
     property TotRecvPackets: integer  read FTotRecvPackets ;
@@ -243,7 +243,7 @@ end;
 
 procedure TWPcap.ThreadTerminate(Sender: TObject);
 begin
- log.info('Thread Terminated');
+ logger.info('Thread Terminated');
 end;
 
 procedure TWPcap.MonDataAvailable(const Header: Ppcap_pkthdr;const PackPtr: Pchar);
@@ -271,7 +271,7 @@ var
                 DataLen := Header^.Len - OFFSET_IP - offset;
             if DataLen = 0 then exit ;
             SetLength (DataBuf, DataLen) ;
-            log.debug('getDATA  '+inttostr(DataLen));
+            logger.debug('getDATA  '+inttostr(DataLen));
             Move (datastart^,PacketInfo.ByteBuff[0], DataLen) ;
         end ;
     end;
@@ -289,7 +289,7 @@ begin
  else
     s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(PackPtr,62)+'..';
 
- log.debug(s);
+ logger.debug(s);
  PacketInfo.EtherSrc := ethernethdr^.smac ;
  PacketInfo.EtherDest := ethernethdr^.dmac ;
  PacketInfo.SendFlag := CompareMem(@FAdapterMAC, @PacketInfo.EtherSrc, SizeOf(MACAddr));
@@ -317,7 +317,7 @@ begin
           PacketInfo.PortSrc := ntohs (tcphdr^.source) ;
           PacketInfo.PortDest := ntohs (tcphdr^.dest) ;
           PacketInfo.TcpFlags := ntohs (tcphdr^.flags) ;
-          log.debug('getdataoffset:  '+inttostr(hdrlen + GetTHdoff (tcphdr^))) ;
+          logger.debug('getdataoffset:  '+inttostr(hdrlen + GetTHdoff (tcphdr^))) ;
           GetDataByOffset (hdrlen + GetTHdoff (tcphdr^)) ;
 //          log.debug('TCPIP_DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(@PacketInfo.bytebuff[0],10)) ;
           FOnPacketEvent (Self, PacketInfo) ;
@@ -328,7 +328,7 @@ end;
 constructor TWPcap.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  Log:=TLog.create;
+  logger := TLogger.GetInstance('WinPcap');
   FTotRecvPackets:=0;
   FTotSendPackets:=0;
   FOnPacketEvent:= nil;
@@ -338,7 +338,7 @@ end;
 destructor TWPcap.Destroy;
 begin
 //  if Activ then
-  freeandnil(Flog);
+//  flogger.Destroy;
   inherited Destroy;
 end;
 
@@ -353,7 +353,7 @@ begin
   if getmac(FMonAdapter)<>NIL then
     begin
       FAdapterMac:=MACAddr;
-      log.info('Start Monitoring on MAC: '+MactoStr(@FAdapterMac));
+      logger.info('Start Monitoring on MAC: '+MactoStr(@FAdapterMac));
     end;
 
   p:=pcap_open_live(Pchar(FMonAdapter.name),65535,0,100,pchar(errorbuf));

@@ -43,6 +43,7 @@ DEBUG: TAppender#Create
 DEBUG: TAppender#SetThreshold: INFO
 DEBUG: Appender added to MONITOR, named TAppAppender
 DEBUG: TRollingFileAppender#Append
+DEBUG: Logger created - name=WinPcap, level=ALL
 DEBUG: TRollingFileAppender#Append
 DEBUG: TAppender#Create
 DEBUG: TAppender#SetThreshold: INFO
@@ -55,16 +56,6 @@ DEBUG: TAppender#SetThreshold: INFO
 DEBUG: TAppender#SetThreshold: INFO
 DEBUG: TAppender#SetThreshold: INFO
 DEBUG: TAppender#SetThreshold: INFO
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
-DEBUG: TRollingFileAppender#Append
 DEBUG: TRollingFileAppender#Append
 DEBUG: TRollingFileAppender#Append
 DEBUG: TRollingFileAppender#Append

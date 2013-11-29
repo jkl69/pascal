@@ -104,8 +104,8 @@ constructor TSockDlg.Create(TheOwner: TComponent; var iecsocket: TIEC104Socket);
 begin
   FSock:=iecsocket;
   inherited Create(TheOwner);
-  log:=iecsocket.Log;
-  lg:=TLogLevelGroup.create(self,log);
+//  log:=iecsocket.Log;
+//  lg:=TLogLevelGroup.create(self,log);
 end;
 
 destructor TSockDlg.destroy;

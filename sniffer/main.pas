@@ -261,8 +261,9 @@ IECSocket.Name:=s+' > '+d;
 IECSocket.onRXData := @RXEvent;
 //IECSocket.Log.LogLevel:=lDEBUG;
 //IECSocket.Log.LogAppender:=logAppender;
-IECSocket.Log.LogLevel:=lFATAL;
-IECSocket.Log.code:=logmonsock;
+//IECSocket.Log.LogLevel:=lFATAL;
+//IECSocket.Log.LogLevel:=lFATAL;
+//IECSocket.Log.code:=logmonsock;
 
 monlist.Items.AddObject(s,IECsocket);
 result := IECSocket;
@@ -310,9 +311,8 @@ begin
    if MonIpList.Items.Count > 0 then MonIpList.ItemIndex := 0 ;
 
     WPmon:= TWPcap.Create(self);
-    WPmon.Log.Name:='WinPcap';
-    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,Wpmon.Log);
-    WPLogLevel.Parent:=PanelPCap;
+//    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,Wpmon.Log);
+//    WPLogLevel.Parent:=PanelPCap;
 //    WPmon.Log.LogAppender:=wlogAppender;
     WPmon.onPacketEvent := @PacketEvent ;
     AdapterList.Items.Assign (Wpcap.AdapterDescList) ;
@@ -446,7 +446,7 @@ begin
     for i:=1 to clientlist.Count-1 do
        begin
        IECSock:=TIEC104Socket(clientlist.Items.Objects[i]);
-       IECsock.Log.LogLevel:=lFATAL;
+//       IECsock.Log.LogLevel:=lFATAL;
        end;
 //    ServerLogLevel.setlog(IECServer.log);
     end;
@@ -459,7 +459,7 @@ begin
          if i<>ix then
 //           IECsock.Log.LogLevel:=IECServer.Log.LogLevel
 //         else
-           IECsock.Log.LogLevel:=lFATAL;
+//           IECsock.Log.LogLevel:=lFATAL;
     end;
 //   ServerLogLevel.setlog(TIEC104Socket(clientlist.Items.Objects[ix]).log);
    end;
@@ -485,8 +485,8 @@ end;
 procedure Tmonitor.IECServerClientConnect(Sender: TObject;Socket: TIEC104Socket);
 begin
 clientlist.AddItem(socket.name,socket);
-socket.Log.LogLevel:=lFATAL;
-socket.Log.code:=logservsock;
+//socket.Log.LogLevel:=lFATAL;
+//socket.Log.code:=logservsock;
 end;
 
 procedure Tmonitor.IECServerClientDisConnect(Sender: TObject;Socket: TIEC104Socket);
@@ -558,7 +558,7 @@ begin
     for i:=1 to monlist.Count-1 do
         begin
         IECSock:=TIEC104Socket(monlist.Items.Objects[i]);
-        IECsock.Log.LogLevel:=lFATAL;
+//        IECsock.Log.LogLevel:=lFATAL;
         end;
  //   monLogLevel.setlog(log);
     end;
@@ -571,7 +571,7 @@ begin
           if i<>ix then
 //            IECsock.Log.LogLevel:=log.LogLevel
 //          else
-            IECsock.Log.LogLevel:=lFATAL;
+//            IECsock.Log.LogLevel:=lFATAL;
      end;
 //    monLogLevel.setlog(TIEC104Socket(monlist.Items.Objects[ix]).log);
 

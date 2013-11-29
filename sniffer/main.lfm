@@ -60,9 +60,9 @@ object monitor: Tmonitor
     Height = 614
     Top = 0
     Width = 1109
-    ActivePage = Tab2
+    ActivePage = Tab1
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 1
     object Tab1: TTabSheet
       Caption = 'Monitor'
