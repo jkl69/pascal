@@ -51,7 +51,7 @@ var
  strings:Tstrings;
 begin
    strings:=  Fplines^;
-   strings.Append(AEvent.GetMessage());
+   strings.Append(AEvent.GetLogger()+'  '+AEvent.GetMessage());
 //   monitor.logTXT.Append(s);
 end;
 

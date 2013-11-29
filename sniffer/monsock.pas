@@ -28,7 +28,7 @@ interface
 
 uses
   Windows, Messages, Classes, SysUtils, WSocket, Winsock,
-   Packhdrs;
+   Packhdrs, TLoggerUnit;
 //  MagClasses, Magsubs1 ;
 
 type
@@ -36,6 +36,7 @@ type
 
   TMonitorSocket = class(TCustomWSocket)
   protected
+      Flogger : Tlogger;
       FAddrMask: string ;
 //      FIgnoreIPList: TFindList ;
       FInAddr: TInAddr ;
@@ -55,6 +56,7 @@ type
       procedure StopMonitor;
   protected
   published
+      property logger :Tlogger read FLogger write Flogger;
       property Addr ;
       property AddrMask: string         read FAddrMask
                                         write FAddrMask ;
@@ -73,6 +75,20 @@ type
 
 implementation
 
+function BufferToHexStr(const buf:Pchar;count:integer):string;
+ var
+   x:integer;
+   w:word;
+begin
+ result:='';
+ for x:=0 to count-1 do
+    begin
+    w:=word(buf[x]);
+    result:=result+inttohex(w,2)+' ';
+//     inc(buf);
+    end;
+end;
+
 procedure Register;
 begin
     RegisterComponents('FPiette', [TMonitorSocket]) ;
@@ -80,6 +96,7 @@ end ;
 
 constructor TMonitorSocket.Create(AOwner: TComponent);
 begin
+    logger := TLogger.GetInstance('RawMon');
     ReqVerHigh := 2 ;
     ReqVerLow := 2 ;
     FIgnoreData := false ;
@@ -110,6 +127,7 @@ end ;
 
 procedure TMonitorSocket.MonDataAvailable (Sender: TObject; ErrCode: Word) ;
 var
+    s:String;
     hdrlen, iploc: integer ;
     packetbuff: array [0..2000] of char ;
     iphdr: PHdrIP;
@@ -179,7 +197,7 @@ begin
             inc (FTotRecvBytes, packetlen) ;
             inc (FTotRecvPackets) ;
         end ;
-
+     s:=('['+inttostr(PacketLen)+'] ');
     // check protocol and find ports and data
         if Assigned (FOnPacketEvent) then
         begin
@@ -189,6 +207,7 @@ begin
             begin
                 IcmpType := PByte (PChar (iphdr) + hdrlen)^ ;
                 GetDataByOffset (hdrlen) ;
+                s := s+'_ICMP';
             end
             else
             begin
@@ -199,6 +218,7 @@ begin
                     PortDest := ntohs (tcphdr.dest) ;
                     TcpFlags := ntohs (tcphdr.flags) ;
                     GetDataByOffset (hdrlen + GetTHdoff (tcphdr^)) ;
+                    s := s+'_TCP';
                 end;
                 if ProtoType = IPPROTO_UDP then
                 begin
@@ -206,10 +226,20 @@ begin
                     PortSrc := ntohs (udphdr.src_port) ;
                     PortDest := ntohs (udphdr.dst_port) ;
                     GetDataByOffset (hdrlen + Sizeof (THdrUDP));
+                    s := s+'_UDP';
                 end;
             end;
         end ;
-        FOnPacketEvent (Self, PacketInfo) ;
+
+      if PacketLen < 8 then
+          s:=s+'  DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(@packetbuff [0],PacketLen)
+      else
+          s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(@packetbuff [0],8)+'..';
+       logger.debug(s+'  ['+inttostr(DataLen)+']');
+//       logger.debug('receive '+inttostr(Datalen)+' Bytes for port '+inttostr(PortSrc));
+
+      if ProtoType = IPPROTO_TCP then
+          FOnPacketEvent (Self, PacketInfo) ;
     end ;
 end ;
 

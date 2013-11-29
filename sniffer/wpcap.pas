@@ -26,7 +26,6 @@ type
 
   TWPcap = class(TComponent)
   protected
- //   Flog :Tlog;
     Flogger :TLogger;
     FMonAdapter:TPcap_If;
 //    FAdapterMac: array[0..5]of byte;
@@ -284,10 +283,10 @@ begin
  ethernethdr := PHdrEthernet (PackPtr) ;
  PacketInfo.EtherProto := ntohs (ethernethdr^.protocol) ;
  s:=('Protokoll =  '+GetEtherProtoName(PacketInfo.EtherProto));
- if PacketLen < 62 then
+ if PacketLen < 8 then
     s:=s+'  DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(PackPtr,PacketLen)
  else
-    s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(PackPtr,62)+'..';
+    s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(PackPtr,8)+'..';
 
  logger.debug(s);
  PacketInfo.EtherSrc := ethernethdr^.smac ;
@@ -307,8 +306,9 @@ begin
       iphdr := PHdrIP(Pchar(PackPtr) + OFFSET_IP) ;  // IP header is past ethernet header
       PacketInfo.AddrSrc := iphdr^.saddr ;        // 32-bit IP addresses
       PacketInfo.AddrDest := iphdr^.daddr ;
-//     SendFlag := (FInAddr.S_addr = AddrSrc.S_addr) ;  // did we sent this packet
-      PacketInfo.ProtoType := iphdr^.protocol ;   // TCP, UDP, ICMP                  PacketInfo.ProtoType := iphdr.protocol ;   // TCP, UDP, ICMP
+//      SendFlag := (FInAddr.S_addr = AddrSrc.S_addr) ;  // did we sent this packet
+      PacketInfo.ProtoType := iphdr^.protocol ;   // TCP, UDP, ICMP
+//      PacketInfo.ProtoType := iphdr.protocol ;   // TCP, UDP, ICMP
       ipver:=GetIHver(iphdr^);
       hdrlen := GetIHlen (iphdr^) ;
       if (PacketInfo.ProtoType = IPPROTO_TCP)and (ipver=4) then
@@ -317,9 +317,9 @@ begin
           PacketInfo.PortSrc := ntohs (tcphdr^.source) ;
           PacketInfo.PortDest := ntohs (tcphdr^.dest) ;
           PacketInfo.TcpFlags := ntohs (tcphdr^.flags) ;
-          logger.debug('getdataoffset:  '+inttostr(hdrlen + GetTHdoff (tcphdr^))) ;
+//          logger.debug('getdataoffset:  '+inttostr(hdrlen + GetTHdoff (tcphdr^))) ;
           GetDataByOffset (hdrlen + GetTHdoff (tcphdr^)) ;
-//          log.debug('TCPIP_DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(@PacketInfo.bytebuff[0],10)) ;
+          logger.debug('TCPIP_DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(@PacketInfo.bytebuff[0],10)) ;
           FOnPacketEvent (Self, PacketInfo) ;
       end;
  end;

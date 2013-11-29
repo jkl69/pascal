@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ActnList, ExtCtrls, ComCtrls, Spin, monsock, wsocket, packhdrs,
-  simplelog, iec104sockets, TLoggerUnit, TLevelGroupUnit, WPcap;
+  iec104sockets, TLoggerUnit, TLevelGroupUnit, WPcap;
 
 type
 
@@ -16,54 +16,52 @@ type
   Tmonitor = class(TForm)
     ActionWPCAP: TAction;
     ActionServer: TAction;
-    Actionmonitor: TAction;
+    ActionRawmonitor: TAction;
     ActionList1: TActionList;
     AdapterList: TListBox;
-    BdoMonitor: TButton;
+    B_doRawMonitor: TButton;
+    B_doPcapMonitor: TButton;
     BdoServer: TButton;
-    Bevel1: TBevel;
     Bevel2: TBevel;
-    Button1: TButton;
-    PanelPcap: TPanel;
-    TabSheet1: TTabSheet;
-    clientList: TListBox;
-    Label6: TLabel;
-    logTXT: TMemo;
-    Logout: TMemo;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    monport: TSpinEdit;
+    Panel1: TPanel;
+    RawLog: TMemo;
+    StaticText1: TStaticText;
+    winpcaplog: TMemo;
+    mainlog: TMemo;
     MonIpList: TListBox;
     monlist: TListBox;
-    monport: TSpinEdit;
+    monitorControl: TPageControl;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    clientList: TListBox;
+    Label6: TLabel;
+    Logout: TMemo;
     PageControl1: TPageControl;
-    Panel1: TPanel;
     Panelmonitor: TPanel;
+    Panelmonitor1: TPanel;
     PanelServer: TPanel;
+    RawMonitorTab: TTabSheet;
     ServerPort: TSpinEdit;
-    StaticText1: TStaticText;
     Tab1: TTabSheet;
     Tab2: TTabSheet;
     Text1: TStaticText;
     Timer: TTimer;
-    MonitorSocket: TMonitorSocket ;
-    IECServer : TIEC104Server;
     StatusBar: TStatusBar;
-//    monloglevel: TLogLevelGroup;
     monloglevel: TLevelGroup;
     serverLoglevel: TLevelGroup;
-    WPLoglevel: TLogLevelGroup;
-    UsePCap: TCheckBox;
-    procedure ActionmonitorExecute(Sender: TObject);
+    PcapMonitorTab: TTabSheet;
+    procedure ActionrawmonitorExecute(Sender: TObject);
     procedure ActionServerExecute(Sender: TObject);
-    procedure ActionWPCAPExecute(Sender: TObject);
-    procedure AdapterListClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure ActionWINPcapmonitorExecute(Sender: TObject);
     procedure clientListClick(Sender: TObject);
     procedure clientListDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
-    procedure init();
     procedure monlistClick(Sender: TObject);
     procedure monlistDblClick(Sender: TObject);
-    procedure trace(const S:String);
     procedure TimerTimer(Sender: TObject);
 //  private
     { private declarations }
@@ -73,16 +71,12 @@ type
 
     procedure IECServerClientConnect(Sender: TObject;Socket: TIEC104Socket);
     procedure IECServerClientDisConnect(Sender: TObject;Socket: TIEC104Socket);
+  private
+     procedure doIniFile(properties:Tstringlist);
   public
     { public declarations }
+    procedure chkpw();
   end;
-
-  { TLogAppender }
-  TLoggAppender =class(TInterfacedObject, Ilogappender)
-    public
-     procedure dolog(sender:Tlog;s:string);
-     procedure onLevelchange(sender:Tlog);
-   end;
 
 
 const
@@ -90,15 +84,8 @@ const
 //               01:02:03:004  192.168.1.201:161    > 192.168.1.109:1040     81 [0O    ]
   sHeaderLine = 'Time         Source IP:Port       Dest IP:Port           Dlen              Packet Data' ;
 
-
- var
-    logger : TLogger;
+var
     monitor: Tmonitor;
-///  MonitorPcap : TMonitorPcap;
-   WPMon:TWPcap;
-  IECSocket: TIEC104Socket;
-  MonLive: boolean = false;
-  monitorport:integer = 2404;
 
 implementation
 
@@ -108,8 +95,14 @@ uses
 {$INCLUDE version.inc}
 
 var
- llog:TLog;
-// logAppender:TLogappender;
+ logger : TLogger;
+ RawMonitor: TMonitorSocket ;
+ PcapMonitor:TWPcap;
+ IECServer : TIEC104Server;
+ IECSocket: TIEC104Socket;
+ MonLive: boolean = false;
+ isMonPcap: boolean;
+ monitorport:integer = 2404;
 
 const
     logmon=1;logmonsock=2;logserv=3;logservsock=4;
@@ -170,35 +163,6 @@ function getPW(llic:string):string;
    result:=copy(llic,licpos*2+1,16)  ;
    logger.debug(result);
  end;
-
-{ TLogAppender }
-
-procedure TLoggAppender.dolog(sender:Tlog;s: string);
-begin
-
-case sender.code of
-  logmon,logmonsock : begin
-           monitor.logTXT.Append(s);
-           if monitor.logTXT.Lines.Count>1000 then
-              monitor.logTXT.Clear;
-           end;
-  logserv,logservsock : begin
-           monitor.Logout.Append(TimeToStr(now)+'  '+s);
-           if monitor.Logout.Lines.Count>1000 then
-              monitor.Logout.Clear;
-           end;
-  end;
-
-end;
-
-procedure TLoggAppender.onLevelchange(sender:Tlog);
-begin
- case sender.code of
-   logmon,logmonsock : monitor.trace(sender.Name+' LogLevel Changed to '+ sender.GetLogLevelStr);
-   logserv,logservsock :  monitor.Logout.Append(sender.Name+' LogLevel Changed to '+ sender.GetLogLevelStr);
- end;
-
-end;
 
 
 { Tmonitor }
@@ -269,53 +233,40 @@ monlist.Items.AddObject(s,IECsocket);
 result := IECSocket;
 end;
 
-procedure Tmonitor.trace(const S:String);
-begin
-  logTXT.Append(s);
-  if logTXT.Lines.Count>1000 then
-    logTXT.Clear;
-end;
-
-
 procedure Tmonitor.FormCreate(Sender: TObject);
 var
    AppAppender: TAppAppender  ;
 begin
   logger := TLogger.GetInstance('MONITOR');
-//  logger := TLogger.GetInstance;
-//  logger.setLevel(TLevelUnit.INFO);
-//    logger.addAppender(TFileAppender.Create('C:\test.log'));
-
-   AppAppender:= TAppAppender.Create(@logtxt.Lines);
+   AppAppender:= TAppAppender.Create(@mainLog.Lines);
    AppAppender.SetThreshold(INFO);
 
-//   logger.addAppender(TAppAppender.Create(@logtxt.Lines));
+//   logger.addAppender(TAppAppender.Create(@RawLog.Lines));
    logger.addAppender(AppAppender);
    logger.info('Application started');
 
-//   log:=TLog.Create;
-// logAppender:=TLogAppender.Create;
-// slogAppender:=TServerLogAppender.Create;
-// log.Name:='MonitorSocket';
-// log.code:= logmon;
-// log.LogAppender:= logAppender;
-
-   monLogLevel:=TLevelGroup.Create(PanelMonitor,AppAppender);
-//   monLogLevel:=TLevelGroup.Create(PanelMonitor,logger);
-   monLogLevel.Parent:=Panelmonitor;
+   monLogLevel:=TLevelGroup.Create(Panel2,AppAppender);
+   monLogLevel.Parent:=Panel2;
 
   // raw sockets monitoring
-   MonitorSocket := TMonitorSocket.Create (self) ;
-   MonitorSocket.onPacketEvent := @PacketEvent ;
+   RawMonitor := TMonitorSocket.Create (self) ;
+   AppAppender:= TAppAppender.Create(@Rawlog.Lines);
+   AppAppender.SetThreshold(DEBUG);
+   RawMonitor.Logger.AddAppender(AppAppender);
+   RawMonitor.onPacketEvent := @PacketEvent ;
+
    MonIpList.Items := LocalIPList ;
    if MonIpList.Items.Count > 0 then MonIpList.ItemIndex := 0 ;
 
-    WPmon:= TWPcap.Create(self);
-//    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,Wpmon.Log);
+   PcapMonitor:= TWPcap.Create(self);
+   AppAppender:= TAppAppender.Create(@Winpcaplog.Lines);
+   AppAppender.SetThreshold(DEBUG);
+//    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,PcapMonitorTab.Log);
 //    WPLogLevel.Parent:=PanelPCap;
-//    WPmon.Log.LogAppender:=wlogAppender;
-    WPmon.onPacketEvent := @PacketEvent ;
+    PcapMonitor.Logger.AddAppender(AppAppender);
+    PcapMonitor.onPacketEvent := @PacketEvent ;
     AdapterList.Items.Assign (Wpcap.AdapterDescList) ;
+    if AdapterList.Items.Count > 0 then AdapterList.ItemIndex := 0 ;
 
    logger.debug('Create server:');
    IECServer:= TIEC104Server.Create(self);
@@ -332,67 +283,75 @@ AppAppender.SetThreshold(INFO);
    ServerLogLevel:=TLevelGroup.Create(PanelServer,AppAppender);
    serverLoglevel.Parent:=PanelServer;
 
-   init();
+   chkpw();
 //   close;
 end;
 
 
 procedure Tmonitor.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-   if MonLive then
+timer.Enabled:=false;
+if MonLive then
      begin           //Stop monitoring
-         if UsePCap.Checked then
-            begin
-                if WPmon.connected then
-               WPmon.stop ;
-            end
-         else
-            MonitorSocket.StopMonitor ;
-         MonLive := false ;
-         BdoMonitor.Caption := 'Start Monitor' ;
-         logger.info('stopMonitoring:');
-       end ;
+       if isMonPcap then
+          if PcapMonitor.connected then
+               PcapMonitor.stop
+           else
+               RawMonitor.StopMonitor ;
+     end ;
 
 freeandnil(IECServer);
-freeandnil(MonitorSocket);
+freeandnil(RawMonitor);
+freeandnil(PcapMonitor);
 
-freeandnil(WPMon);
 logger.info('stopApplication:');
 TLogger.freeInstances;
 end;
 
-procedure Tmonitor.ActionmonitorExecute(Sender: TObject);
+procedure Tmonitor.ActionrawmonitorExecute(Sender: TObject);
 begin
  if MonLive then
    begin           //Stop monitoring
-       if UsePCap.Checked then
-          begin
-              if WPmon.connected then
-             WPmon.stop ;
-          end
-       else
-          MonitorSocket.StopMonitor ;
+       RawMonitor.StopMonitor ;
        MonLive := false ;
-       BdoMonitor.Caption := 'Start Monitor' ;
+       B_doRawMonitor.Caption := 'Start Monitor' ;
        logger.info('stopMonitoring:');
-//       logger.Debug('DstopMonitoring:');
+       B_doPcapMonitor.Enabled := true;
      end
  else
     begin    //Start monitoring
-    if UsePCap.Checked then
-      begin
-      WPmon.MonAdapter :=Wpcap.getAdapter(AdapterList.ItemIndex) ;
-      WPmon.Start;
-//      log.info('startMonitoring on Pcap:');
-      end
-    else
-       begin
-       MonitorSocket.Addr := MonIpList.Items [MonIpList.ItemIndex] ;
-       MonitorSocket.StartMonitor ;
-       logger.info('startMonitoring on IP:'+MonitorSocket.Addr);
-       end;
+    RawMonitor.Addr := MonIpList.Items [MonIpList.ItemIndex] ;
+    RawMonitor.StartMonitor ;
+    monitorport := monport.value;
+    logger.info('startMonitoring on IP:'+RawMonitor.Addr);
     MonLive := true ;
-    BdoMonitor.Caption := 'Stop Monitor' ;
+    isMonPcap := false;
+    B_doRawMonitor.Caption := 'Stop Monitor' ;
+    B_doPcapMonitor.Enabled := false;
+    end;
+
+end;
+
+procedure Tmonitor.ActionWINPcapmonitorExecute(Sender: TObject);
+begin
+ if MonLive then
+   begin           //Stop monitoring
+       if PcapMonitor.connected then
+         PcapMonitor.stop ;
+       MonLive := false ;
+       B_doPcapMonitor.Caption := 'Start Monitor' ;
+       B_doRawMonitor.Enabled := true;
+       logger.info('stop Pcap Monitoring:');
+     end
+ else
+    begin    //Start monitoring
+    PcapMonitor.MonAdapter :=Wpcap.getAdapter(AdapterList.ItemIndex) ;
+    PcapMonitor.Start;
+    logger.info('startMonitoring on Pcap:');
+    MonLive := true ;
+    isMonPcap := true ;
+    B_doPcapMonitor.Caption := 'Stop Monitor' ;
+    B_doRawMonitor.Enabled := false;
     monitorport := monport.value;
     end;
 
@@ -415,25 +374,6 @@ else
    end;
 end;
 
-procedure Tmonitor.ActionWPCAPExecute(Sender: TObject);
-begin
-  if WPmon.connected then
-     WPmon.stop
-  else
-    begin
-      WPmon.MonAdapter :=Wpcap.getAdapter(AdapterList.ItemIndex) ;
-      WPmon.Start;
-    end;
-end;
-
-procedure Tmonitor.AdapterListClick(Sender: TObject);
-begin
-end;
-
-procedure Tmonitor.Button1Click(Sender: TObject);
-begin
-  close;
-end;
 
 procedure Tmonitor.clientListClick(Sender: TObject);
 var
@@ -500,42 +440,30 @@ for x:=1 to clientlist.Items.Count-1 do
 //if clientlist.Items.Count=0 then
 end;
 
-procedure Tmonitor.init();
+procedure Tmonitor.chkpw();
 var
-  ini:String;
-  llic:string;
+  ini,value:String;
   plist:Tstringlist;
-  i,code:integer;
   PWOK:boolean;
 
 begin
- Caption:=caption+'  '+versionStr;
-
- ini:=getcurrentDir+'\sniffer.ini';
- PWOK:=false;
- if fileexists(ini) then
-    begin
-    statusbar.Panels[2].Text:=ini;
-    plist:=Tstringlist.Create;
-    pList.LoadFromFile(ini);
-    llic:=plist.Values['KEY'];
-    PWOK := checkPW(llic,Application.ExeName);
-    end;
+Caption:=caption+'  '+versionStr;
+ini:=getcurrentDir+'\sniffer.ini';
+PWOK:=false;
+if fileexists(ini) then
+   begin
+   statusbar.Panels[2].Text:=ini;
+   plist:=Tstringlist.Create;
+   pList.LoadFromFile(ini);
+   value:=plist.Values['KEY'];
+   PWOK := checkPW(value,Application.ExeName);
+   end;
 
 if (pwok) then
-    begin
-    ActionServer.Enabled:=true;
-    Logger.info('Licence OK');
-    ini:=plist.Values['MonitorIP'];
-    i:=MonIpList.Items.IndexOf(ini);
-    if i<>-1 then
-         MonIpList.ItemIndex:=i;
-    Val (plist.Values['ServerPort'],i,Code);
-    If Code=0 then
-           serverport.Value:=i;
-    ActionMonitor.Execute;
-    ActionServer.Execute;
-    end
+   begin
+   Logger.info('Licence OK');
+   doIniFile(pList);
+   end
 else
     begin
      if PasswordBox('Password','PLS. Enter Password')=pwStr then
@@ -546,6 +474,70 @@ else
        Logger.error('Licence ERROR no Server Available');//+llic);
      end;
 end;
+
+procedure Tmonitor.doIniFile(properties:Tstringlist);
+var
+  ini,value:String;
+  i,errorcode:integer;
+  usePcap,boolval:boolean;
+begin
+ value :=properties.Values['usePcap'];
+ if value ='' then value:= 'false';
+ usePcap := StrToBool(value);
+ if (not usePcap) then
+    begin
+    value:=properties.Values['MonitorIP'];
+    i:=MonIpList.Items.IndexOf(value);
+     if i<> -1 then
+        MonIpList.ItemIndex:=i
+      else
+         begin
+          MonIpList.ItemIndex:=0;
+          logger.Error('scan IP not available change to 1-st available IP');
+          end;
+    monitorControl.ActivePageIndex:=0;
+    end
+ else
+    begin
+    value:=properties.Values['MonitorInterface'];
+    errorcode:=-1;
+    for i:=0 to AdapterList.Count-1 do
+      begin
+      ini := AdapterList.Items[i];
+      if (pos(value,ini) <> 0 ) then
+        errorcode:=i;
+      end;
+    i:=AdapterList.Items.IndexOf(value);
+    if errorcode<> -1 then
+         AdapterList.ItemIndex:=errorcode
+    else
+        begin
+         AdapterList.ItemIndex:=0;
+         logger.Error('scan Interface not available change to 1-st available Interface');
+         end;
+    monitorControl.ActivePageIndex:=1;
+    end;
+
+ Val (properties.Values['ServerPort'],i,errorcode);
+ If errorcode=0 then
+           serverport.Value:=i;
+
+ value :=properties.Values['MonitorStart'];
+ if value ='' then value:= 'false';
+ if (StrToBool(value)) then
+    begin
+    if (not usePcap) then  ActionRawmonitor.Execute
+    else ActionWPCAP.Execute;
+    end;
+
+ value :=properties.Values['ServerStart'];
+ if value ='' then value:= 'false';
+ if (StrToBool(value)) then    ActionServer.Execute;
+
+ ActionServer.Enabled:=true;
+
+end;
+
 
 procedure Tmonitor.monlistClick(Sender: TObject);
 var
@@ -601,15 +593,15 @@ begin
   if NOT MonLive then
       exit ;
 
-  if usePcap.Checked then
+  if isMonPcap then
        begin
-       s:= 'Packets Sent: ' + IntToStr (WPmon.TotSendPackets);
-       r:= 'Packets Received: ' + IntToStr (Wpmon.TotRecvPackets);
+       s:= 'Packets Sent: ' + IntToStr (PcapMonitor.TotSendPackets);
+       r:= 'Packets Received: ' + IntToStr (PcapMonitor.TotRecvPackets);
        end
   else
      begin
-     s:= 'Packets Sent: ' + IntToStr (MonitorSocket.TotSendPackets);
-     r:= 'Packets Received: ' + IntToStr (MonitorSocket.TotRecvPackets);
+     s:= 'Packets Sent: ' + IntToStr (RawMonitor.TotSendPackets);
+     r:= 'Packets Received: ' + IntToStr (RawMonitor.TotRecvPackets);
      end;
 
   statusbar.Panels[0].Text:=r;

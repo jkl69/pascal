@@ -1,11 +1,11 @@
 object monitor: Tmonitor
-  Left = 253
-  Height = 637
-  Top = 94
-  Width = 1109
+  Left = 314
+  Height = 642
+  Top = 121
+  Width = 1127
   Caption = 'IECmonitor'
-  ClientHeight = 637
-  ClientWidth = 1109
+  ClientHeight = 642
+  ClientWidth = 1127
   Icon.Data = {
     FE0200000000010001002020100000000000E802000016000000280000002000
     0000400000000100040000000000800200000000000000000000000000000000
@@ -39,8 +39,8 @@ object monitor: Tmonitor
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
-    Top = 614
-    Width = 1109
+    Top = 619
+    Width = 1127
     Panels = <    
       item
         Text = 'Packets rx:'
@@ -57,131 +57,246 @@ object monitor: Tmonitor
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 614
+    Height = 619
     Top = 0
-    Width = 1109
+    Width = 1127
     ActivePage = Tab1
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object Tab1: TTabSheet
       Caption = 'Monitor'
-      ClientHeight = 586
-      ClientWidth = 1101
-      object Panel1: TPanel
+      ClientHeight = 591
+      ClientWidth = 1119
+      object Panel2: TPanel
         Left = 0
-        Height = 474
-        Top = 112
-        Width = 1101
-        Align = alClient
-        Caption = 'Panel1'
-        ClientHeight = 474
-        ClientWidth = 1101
+        Height = 591
+        Top = 0
+        Width = 196
+        Align = alLeft
+        Caption = 'Panel2'
+        ClientHeight = 591
+        ClientWidth = 196
         TabOrder = 0
-        object logtxt: TMemo
-          Left = 146
-          Height = 450
-          Top = 23
-          Width = 954
-          Align = alClient
-          ScrollBars = ssAutoBoth
-          TabOrder = 0
-          WordWrap = False
-        end
         object monlist: TListBox
-          Left = 1
-          Height = 450
-          Top = 23
-          Width = 145
-          Align = alLeft
+          Left = 12
+          Height = 443
+          Top = 136
+          Width = 171
+          Anchors = [akTop, akLeft, akRight, akBottom]
           Items.Strings = (
             'source IPs'
           )
           ItemHeight = 15
           OnClick = monlistClick
           OnDblClick = monlistDblClick
-          TabOrder = 1
-        end
-        object Bevel1: TBevel
-          Left = 1
-          Height = 22
-          Top = 1
-          Width = 1099
-          Align = alTop
+          TabOrder = 0
         end
       end
-      object Panelmonitor: TPanel
-        Left = 0
-        Height = 112
+      object Panel3: TPanel
+        Left = 196
+        Height = 591
         Top = 0
-        Width = 1101
-        Align = alTop
-        ClientHeight = 112
-        ClientWidth = 1101
+        Width = 923
+        Align = alClient
+        Caption = 'Panel3'
+        ClientHeight = 591
+        ClientWidth = 923
         TabOrder = 1
-        object monport: TSpinEdit
-          Left = 588
-          Height = 23
-          Top = 18
-          Width = 89
-          MaxValue = 65535
+        object mainlog: TMemo
+          Left = 1
+          Height = 278
+          Top = 312
+          Width = 921
+          Align = alBottom
+          Lines.Strings = (
+            'mainlog'
+          )
+          ScrollBars = ssAutoBoth
           TabOrder = 0
-          Value = 2404
         end
-        object StaticText1: TStaticText
-          Left = 468
-          Height = 17
-          Top = 24
-          Width = 96
-          Caption = 'Monitor Port Nr.'
-          TabOrder = 1
-        end
-        object BdoMonitor: TButton
-          Left = 508
-          Height = 28
+        object monitorControl: TPageControl
+          Left = 1
+          Height = 264
           Top = 48
-          Width = 123
-          Action = Actionmonitor
-          Anchors = [akTop, akRight]
-          Caption = 'Start Monitor'
+          Width = 921
+          ActivePage = RawMonitorTab
+          Align = alClient
+          TabIndex = 0
+          TabOrder = 1
+          TabPosition = tpRight
+          object RawMonitorTab: TTabSheet
+            Caption = 'RawMonitor'
+            ClientHeight = 256
+            ClientWidth = 890
+            object Panelmonitor: TPanel
+              Left = 0
+              Height = 112
+              Top = 0
+              Width = 890
+              Align = alTop
+              ClientHeight = 112
+              ClientWidth = 890
+              TabOrder = 0
+              object B_doRawMonitor: TButton
+                Left = 339
+                Height = 28
+                Top = 75
+                Width = 123
+                Action = ActionRawmonitor
+                Anchors = [akTop, akRight]
+                Caption = 'Start Monitor'
+                TabOrder = 0
+              end
+              object MonIpList: TListBox
+                Left = 5
+                Height = 99
+                Top = 4
+                Width = 288
+                ItemHeight = 0
+                TabOrder = 1
+              end
+              object Memo2: TMemo
+                Left = 339
+                Height = 64
+                Top = 4
+                Width = 536
+                Color = clForm
+                Lines.Strings = (
+                  'RawSocket is to capture  only IP frames on an selected IP-Addresse'
+                )
+                ReadOnly = True
+                TabOrder = 2
+              end
+            end
+            object RawLog: TMemo
+              Left = 0
+              Height = 144
+              Top = 112
+              Width = 890
+              Align = alClient
+              Font.CharSet = ANSI_CHARSET
+              Font.Height = -11
+              Font.Name = 'Arial'
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              Lines.Strings = (
+                'RawLog'
+              )
+              ParentFont = False
+              ScrollBars = ssAutoBoth
+              TabOrder = 1
+              WordWrap = False
+            end
+          end
+          object PcapMonitorTab: TTabSheet
+            Caption = 'PcapMonitor'
+            ClientHeight = 256
+            ClientWidth = 890
+            object Panelmonitor1: TPanel
+              Left = 0
+              Height = 112
+              Top = 0
+              Width = 890
+              Align = alTop
+              ClientHeight = 112
+              ClientWidth = 890
+              TabOrder = 0
+              object B_doPcapMonitor: TButton
+                Left = 403
+                Height = 28
+                Top = 76
+                Width = 123
+                Action = ActionWPCAP
+                Anchors = [akTop, akRight]
+                Caption = 'Start Monitor'
+                TabOrder = 0
+              end
+              object AdapterList: TListBox
+                Left = 5
+                Height = 99
+                Top = 4
+                Width = 390
+                ItemHeight = 0
+                TabOrder = 1
+              end
+              object Memo1: TMemo
+                Left = 403
+                Height = 72
+                Top = 4
+                Width = 466
+                Color = clForm
+                Lines.Strings = (
+                  'WinPcap is an ThirdParty LIB to captue ALL type of Netprotocolls on an selected '
+                  'Network-Interface.'
+                  'Therefor Winpcap has to be installed on this maschine '
+                  'Donlad : http://www.winpcap.org/'
+                )
+                ReadOnly = True
+                ScrollBars = ssVertical
+                TabOrder = 2
+              end
+            end
+            object winpcaplog: TMemo
+              Left = 0
+              Height = 144
+              Top = 112
+              Width = 890
+              Align = alClient
+              Font.CharSet = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Arial'
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              Lines.Strings = (
+                'WinPcapLog'
+              )
+              ParentFont = False
+              ScrollBars = ssAutoBoth
+              TabOrder = 1
+              WordWrap = False
+            end
+          end
+        end
+        object Panel1: TPanel
+          Left = 1
+          Height = 47
+          Top = 1
+          Width = 921
+          Align = alTop
+          ClientHeight = 47
+          ClientWidth = 921
           TabOrder = 2
-        end
-        object MonIpList: TListBox
-          Left = 284
-          Height = 99
-          Top = 5
-          Width = 160
-          ItemHeight = 0
-          TabOrder = 3
-        end
-        object AdapterList: TListBox
-          Left = 692
-          Height = 99
-          Top = 5
-          Width = 400
-          ItemHeight = 0
-          OnClick = AdapterListClick
-          TabOrder = 4
-        end
-        object UsePCap: TCheckBox
-          Left = 548
-          Height = 19
-          Top = 85
-          Width = 67
-          Caption = 'UsePCap'
-          TabOrder = 5
+          object monport: TSpinEdit
+            Left = 385
+            Height = 23
+            Top = 12
+            Width = 89
+            MaxValue = 65535
+            TabOrder = 0
+            Value = 2404
+          end
+          object StaticText1: TStaticText
+            Left = 233
+            Height = 17
+            Top = 18
+            Width = 96
+            Caption = 'Monitor Port Nr.'
+            TabOrder = 1
+          end
         end
       end
     end
     object Tab2: TTabSheet
       Caption = 'Server'
-      ClientHeight = 586
-      ClientWidth = 1101
+      ClientHeight = 591
+      ClientWidth = 1119
       object Bevel2: TBevel
         Left = 0
         Height = 24
         Top = 112
-        Width = 1101
+        Width = 1119
         Align = alTop
       end
       object Label6: TLabel
@@ -200,9 +315,9 @@ object monitor: Tmonitor
       end
       object Logout: TMemo
         Left = 0
-        Height = 450
+        Height = 455
         Top = 136
-        Width = 948
+        Width = 966
         Align = alClient
         Font.Color = clWindowText
         Font.Height = -12
@@ -216,10 +331,10 @@ object monitor: Tmonitor
         Left = 0
         Height = 112
         Top = 0
-        Width = 1101
+        Width = 1119
         Align = alTop
         ClientHeight = 112
-        ClientWidth = 1101
+        ClientWidth = 1119
         TabOrder = 1
         object BdoServer: TButton
           Left = 396
@@ -249,8 +364,8 @@ object monitor: Tmonitor
         end
       end
       object clientList: TListBox
-        Left = 948
-        Height = 450
+        Left = 966
+        Height = 455
         Top = 136
         Width = 153
         Align = alRight
@@ -263,37 +378,12 @@ object monitor: Tmonitor
         TabOrder = 2
       end
     end
-    object TabSheet1: TTabSheet
-      Caption = 'WPcap'
-      ClientHeight = 586
-      ClientWidth = 1101
-      object PanelPcap: TPanel
-        Left = 0
-        Height = 128
-        Top = 0
-        Width = 1101
-        Align = alTop
-        Caption = 'PanelPcap'
-        ClientHeight = 128
-        ClientWidth = 1101
-        TabOrder = 0
-        object Button1: TButton
-          Left = 252
-          Height = 25
-          Top = 64
-          Width = 75
-          Caption = 'close App'
-          OnClick = Button1Click
-          TabOrder = 0
-        end
-      end
-    end
   end
   object ActionList1: TActionList
     left = 432
-    object Actionmonitor: TAction
-      Caption = 'Actionmonitor'
-      OnExecute = ActionmonitorExecute
+    object ActionRawmonitor: TAction
+      Caption = 'ActionRawmonitor'
+      OnExecute = ActionrawmonitorExecute
     end
     object ActionServer: TAction
       Caption = 'ActionServer'
@@ -301,13 +391,13 @@ object monitor: Tmonitor
       OnExecute = ActionServerExecute
     end
     object ActionWPCAP: TAction
-      Caption = 'ActionWPCAP'
-      OnExecute = ActionWPCAPExecute
+      Caption = 'ActionWPCAPmonitor'
+      OnExecute = ActionWINPcapmonitorExecute
     end
   end
   object Timer: TTimer
     OnTimer = TimerTimer
-    left = 660
-    top = 20
+    left = 520
+    top = 8
   end
 end

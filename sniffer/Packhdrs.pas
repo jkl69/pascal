@@ -49,7 +49,7 @@ type
         SendFlag: boolean ;    // true if packet being sent from local IP
         IcmpType: byte ;       // ICMP packet type
         DataLen: integer ;     // length of data (less headers)
-        bytebuff: array [0..2000] of byte ;
+        bytebuff: array [0..5000] of byte ;
         DataBuf: string ;      // packet data (may be blank even if datalen<>0)
         PacketDT: TDateTime ;  // when packet was captured
   end ;

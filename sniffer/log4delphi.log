@@ -10,6 +10,7 @@ DEBUG: TAppender#Create
 DEBUG: TFileAppender#Create
 DEBUG: TRollingFileAppender created.
 DEBUG: TRollingFileAppender - MaxBackupIndex
+DEBUG: Set max file size to KB
 DEBUG: TRollingFileAppender - MaxFileSize
 DEBUG: TRollingFileAppender - Append
 DEBUG: TRollingFileAppender - AppDir
@@ -30,6 +31,22 @@ INFO: Category MONITOR set to DEBUG
 DEBUG: TLogger.RemoveAllAppenders
 DEBUG: Parsing appender named "fileAppender".
 DEBUG: Appender added to MONITOR, named fileAppender
+DEBUG: Logger created - name=RawMon, level=ALL
+DEBUG: Parsing for [RawMon] with value=[DEBUG, fileAppender].
+DEBUG: Level token is [DEBUG].
+DEBUG: TLogger.SetLevel: DEBUG
+INFO: Category RawMon set to DEBUG
+DEBUG: TLogger.RemoveAllAppenders
+DEBUG: Parsing appender named "fileAppender".
+DEBUG: Appender added to RawMon, named fileAppender
+DEBUG: Logger created - name=WinPcap, level=ALL
+DEBUG: Parsing for [WinPcap] with value=[DEBUG, fileAppender].
+DEBUG: Level token is [DEBUG].
+DEBUG: TLogger.SetLevel: DEBUG
+INFO: Category WinPcap set to DEBUG
+DEBUG: TLogger.RemoveAllAppenders
+DEBUG: Parsing appender named "fileAppender".
+DEBUG: Appender added to WinPcap, named fileAppender
 DEBUG: Logger created - name=IECServer, level=ALL
 DEBUG: Parsing for [IECServer] with value=[INFO, fileAppender].
 DEBUG: Level token is [INFO].
@@ -43,7 +60,12 @@ DEBUG: TAppender#Create
 DEBUG: TAppender#SetThreshold: INFO
 DEBUG: Appender added to MONITOR, named TAppAppender
 DEBUG: TRollingFileAppender#Append
-DEBUG: Logger created - name=WinPcap, level=ALL
+DEBUG: TAppender#Create
+DEBUG: TAppender#SetThreshold: DEBUG
+DEBUG: Appender added to RawMon, named TAppAppender
+DEBUG: TAppender#Create
+DEBUG: TAppender#SetThreshold: DEBUG
+DEBUG: Appender added to WinPcap, named TAppAppender
 DEBUG: TRollingFileAppender#Append
 DEBUG: TAppender#Create
 DEBUG: TAppender#SetThreshold: INFO
@@ -59,4 +81,54 @@ DEBUG: TAppender#SetThreshold: INFO
 DEBUG: TRollingFileAppender#Append
 DEBUG: TRollingFileAppender#Append
 DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TRollingFileAppender#Append
+DEBUG: TAppender#SetThreshold: DEBUG
+DEBUG: TAppender#SetThreshold: DEBUG
+DEBUG: TAppender#SetThreshold: DEBUG
 DEBUG: TRollingFileAppender#Append
