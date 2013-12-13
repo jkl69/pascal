@@ -270,7 +270,7 @@ var
                 DataLen := Header^.Len - OFFSET_IP - offset;
             if DataLen = 0 then exit ;
             SetLength (DataBuf, DataLen) ;
-            logger.debug('getDATA  '+inttostr(DataLen));
+ //           logger.debug('getDATA  '+inttostr(DataLen));
             Move (datastart^,PacketInfo.ByteBuff[0], DataLen) ;
         end ;
     end;
@@ -282,13 +282,13 @@ begin
  if PacketLen <= 0 then exit ;
  ethernethdr := PHdrEthernet (PackPtr) ;
  PacketInfo.EtherProto := ntohs (ethernethdr^.protocol) ;
- s:=('Protokoll =  '+GetEtherProtoName(PacketInfo.EtherProto));
- if PacketLen < 8 then
-    s:=s+'  DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(PackPtr,PacketLen)
- else
-    s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(PackPtr,8)+'..';
+ s:=('Protokoll : '+GetEtherProtoName(PacketInfo.EtherProto));
+ //if PacketLen < 8 then
+ //   s:=s+'  DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(PackPtr,PacketLen)
+ //else
+ //   s:=s+'  DATA  '+inttostr(PacketLen)+' '+ BufferToHexStr(PackPtr,8)+'..';
+ s:=s+' ['+inttostr(PacketLen)+']';
 
- logger.debug(s);
  PacketInfo.EtherSrc := ethernethdr^.smac ;
  PacketInfo.EtherDest := ethernethdr^.dmac ;
  PacketInfo.SendFlag := CompareMem(@FAdapterMAC, @PacketInfo.EtherSrc, SizeOf(MACAddr));
@@ -296,33 +296,34 @@ begin
      inc (FTotSendPackets)
  else
      inc (FTotRecvPackets) ;
+ PacketInfo.PacketDT := now();
 
-
-//  inc (FTotPackets) ;
-  PacketInfo.PacketDT := now();
-
- if Assigned (FOnPacketEvent) and (PacketInfo.EtherProto = PROTO_IP) then
-  begin
-      iphdr := PHdrIP(Pchar(PackPtr) + OFFSET_IP) ;  // IP header is past ethernet header
-      PacketInfo.AddrSrc := iphdr^.saddr ;        // 32-bit IP addresses
-      PacketInfo.AddrDest := iphdr^.daddr ;
+ //PacketInfo.PortSrc;
+ logger.debug(s);
+if (PacketInfo.EtherProto = PROTO_IP) then
+   begin
+     iphdr := PHdrIP(Pchar(PackPtr) + OFFSET_IP) ;  // IP header is past ethernet header
+     PacketInfo.AddrSrc := iphdr^.saddr ;        // 32-bit IP addresses
+     PacketInfo.AddrDest := iphdr^.daddr ;
 //      SendFlag := (FInAddr.S_addr = AddrSrc.S_addr) ;  // did we sent this packet
-      PacketInfo.ProtoType := iphdr^.protocol ;   // TCP, UDP, ICMP
+     PacketInfo.ProtoType := iphdr^.protocol ;   // TCP, UDP, ICMP
 //      PacketInfo.ProtoType := iphdr.protocol ;   // TCP, UDP, ICMP
-      ipver:=GetIHver(iphdr^);
-      hdrlen := GetIHlen (iphdr^) ;
-      if (PacketInfo.ProtoType = IPPROTO_TCP)and (ipver=4) then
-      begin
-          tcphdr := PHdrTCP (PChar(iphdr) + hdrlen) ;
-          PacketInfo.PortSrc := ntohs (tcphdr^.source) ;
-          PacketInfo.PortDest := ntohs (tcphdr^.dest) ;
-          PacketInfo.TcpFlags := ntohs (tcphdr^.flags) ;
+     ipver:=GetIHver(iphdr^);
+     hdrlen := GetIHlen (iphdr^) ;
+     if (PacketInfo.ProtoType = IPPROTO_TCP)and (ipver=4) then
+     begin
+         tcphdr := PHdrTCP (PChar(iphdr) + hdrlen) ;
+         PacketInfo.PortSrc := ntohs (tcphdr^.source) ;
+         PacketInfo.PortDest := ntohs (tcphdr^.dest) ;
+         PacketInfo.TcpFlags := ntohs (tcphdr^.flags) ;
 //          logger.debug('getdataoffset:  '+inttostr(hdrlen + GetTHdoff (tcphdr^))) ;
-          GetDataByOffset (hdrlen + GetTHdoff (tcphdr^)) ;
-          logger.debug('TCPIP_DATA  '+inttostr(PacketLen)+': '+ BufferToHexStr(@PacketInfo.bytebuff[0],10)) ;
-          FOnPacketEvent (Self, PacketInfo) ;
-      end;
- end;
+         GetDataByOffset (hdrlen + GetTHdoff (tcphdr^)) ;
+         logger.Info('['+inttostr(PacketLen)+'] TCPIPData  Port:'+inttoStr(PacketInfo.PortSrc)) ;
+
+         if Assigned (FOnPacketEvent) then
+             FOnPacketEvent (Self, PacketInfo) ;
+         end;
+    end;
 end;
 
 constructor TWPcap.Create(AOwner: TComponent);

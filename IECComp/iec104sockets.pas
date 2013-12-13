@@ -5,7 +5,8 @@ unit IEC104Sockets;
 interface
 
 uses
-  Classes, SysUtils, lNetComponents, LNet, LEvents, ExtCtrls,TLoggerUnit, simplelog;
+  Classes, SysUtils, lNetComponents, LNet, LEvents, ExtCtrls,TLoggerUnit,
+  TLevelUnit;
 //
 Type
 
@@ -80,7 +81,7 @@ TIEC104Server = class(TLTCPComponent)
      public
        constructor Create(AOwner: Tcomponent);override;
        destructor destroy; override;
-       procedure ClientClose(Client: TIEC104Socket);
+       procedure ClientClose(index :integer);
 //       procedure clientClose(Name:string);
        property Clients:TList read FClientList;
        property Client[Index: Integer]: TIEC104Socket read GetCLient;
@@ -128,7 +129,7 @@ TIEC104Socket = class(TObject)
     FStatus:    TIECStatusinfo;
 //    FOnTraceEvent: TGetStrProc;
 //      Flog:Tlog;
-      Flogger:Tlogger;
+    Flogger:Tlogger;
     FOnRXData: TRTXEvent;
     FOnTXData: TRTXEvent;
     FOn0nTimerEvent:  TNotifyEvent;
@@ -139,6 +140,7 @@ TIEC104Socket = class(TObject)
     Fwrite:boolean;
     procedure confirm;
     procedure setName(AValue: String);
+    procedure log(l:TLevel;s:String);
   protected
     LogRStr:String;
     LogSStr:String;
@@ -162,8 +164,10 @@ TIEC104Socket = class(TObject)
     procedure settimeractive(val:boolean);
     procedure setSocketType(s:TIECSocketType);
   public
-    constructor Create;
+    constructor Create; overload;
+//    constructor Create(Loggerinstance:String); overload;
     destructor destroy; override;
+    procedure setLogger(s:String);
     procedure SendStart;
     procedure SendStop;
 //    procedure showSetupDialog;
@@ -197,8 +201,7 @@ TIEC104Socket = class(TObject)
 
 implementation
 
-uses
-  TLevelUnit;
+//uses TAppAppenderunit;
 
 var
   shutdown:Boolean=false;
@@ -256,19 +259,19 @@ end;
    inherited destroy;
  end;
 
- procedure TIEC104Server.ClientClose(Client: TIEC104Socket);
+procedure TIEC104Server.ClientClose(index : integer);
+//procedure TIEC104Server.ClientClose(Client: TIEC104Socket);
 var
  x,i:integer;
+ socket: TIEC104Socket;
 begin
- i:=Fclientlist.IndexOf(client);
-{
-For x:=0 to serverSocket.Count-1 do
-    if GetClientAddress(serverSocket.Socks[x]) = client.FName then
-        begin
-        FserverSocket.Socks[i].Disconnect(true);
-        FserverSocket.Socks[i].Destroy;
-        end;
-}
+ socket := Client[index];
+ logger.Warn('Client close: '+socket.Name) ;
+ socket.FSocket:=nil;
+ FClientlist.delete(index);
+ if assigned(FonclientDisconnect) then
+       FonclientDisConnect(self,socket);
+ socket.destroy;
 end;
 
 procedure TIEC104Server.DisconnectEvent(aSocket: TLHandle);
@@ -378,6 +381,8 @@ var
  iecsock:TIEC104Socket;
  socket: TLSocket;
  adr:string;
+// sockAppender: TAppAppender;
+
 begin
   socket:=TLSocket(asocket);
   adr:=getclientAddress(socket);
@@ -423,7 +428,8 @@ begin
    IECSock.StreamCount:=Get(IP_RX,1500,socket);
    if IECSock.StreamCount>0 then
      begin
-     logger.debug(inttostr(iecsock.FIP_RX_count)+' IP Stream-Bytes recived from ID:'+inttostr(iecsock.ID)+' '+getclientAddress(socket));
+//     logger.debug(inttostr(iecsock.FIP_RX_count)+' IP Stream-Bytes recived from ID:'+inttostr(iecsock.ID)+' '+getclientAddress(socket));
+     logger.debug(inttostr(iecsock.StreamCount)+','+inttostr(iecsock.FIP_RX_count)+' IP Stream-Bytes recived from ID:'+inttostr(iecsock.ID)+' '+getclientAddress(socket));
      IECSock.DecodeStream(IP_RX);
      end;
   inherited ReceiveEvent(aSocket);
@@ -436,9 +442,7 @@ procedure TIEC104Server.SetActive(val:boolean);
      begin
      while clients.Count > 0 do
         begin
-        client[clients.Count-1].FSocket:=nil;
-        client[clients.Count-1].destroy;
-        Fclientlist.Delete(clients.Count-1);
+        ClientClose(clients.Count-1);
         end;
      Disconnect(true);
      logger.info('stop server.');
@@ -479,31 +483,42 @@ end;
  constructor TIEC104Socket.Create;
  //constructor TIEC104Socket.Create(settings:TIEC104Settings);
  begin
-   inherited Create;
-   inc(sockcount);
-   Ftimer:=TTimer.create(nil);
-   Ftimer.OnTimer:=@irq;
-   Ftimer.Enabled:=False;
-   FIECSocketType:= TIECUnkwon;
-   FAPDU_RX_count:=-1;
-   FIP_TX_count:=0;
-   Fvr:=0;
-   FVS:=0;
-   FTIFilter:=0;
-   FLinkStatus:=IECOFF;
-   FtimerSet:=DefaultTimerset;
-   FcounterSet.T1:=OFF;
+  inherited Create;
+  inc(sockcount);
+  Ftimer:=TTimer.create(nil);
+  Ftimer.OnTimer:=@irq;
+  Ftimer.Enabled:=False;
+  FIECSocketType:= TIECUnkwon;
+  FAPDU_RX_count:=-1;
+  FIP_TX_count:=0;
+  Fvr:=0;
+  FVS:=0;
+  FTIFilter:=0;
+  FLinkStatus:=IECOFF;
+  FtimerSet:=DefaultTimerset;
+  FcounterSet.T1:=OFF;
 //   Flog:= Tlog.Create;
-   flogger := TLogger.GetInstance('SOCK'+inttostr(sockcount));
+//   flogger := TLogger.GetInstance('IEC_Socket');
  end;
 
  Destructor TIEC104Socket.destroy;
  begin
    FTimer.Free;
-   logger.debug('Destroy Socket');
-   flogger.Destroy;
+   log(DEBUG,'Destroy Socket');
+//   flogger.Destroy;
    inherited destroy;
  end;
+
+ procedure TIEC104Socket.setLogger(s:String);
+ begin
+  logger := TLogger.GetInstance(s);
+ end;
+
+procedure TIEC104Socket.log(l:TLevel;s:String);
+begin
+  if logger <> nil then
+      logger.Log(l,Fname+' '+s);
+end;
 
 procedure TIEC104Socket.confirm;
 begin
@@ -573,7 +588,7 @@ var
  t0:integer;
 
 begin
-//log.debug('IRQ');
+//logger.debug('IRQ');
 t0:=datetimetotimestamp(now).time;
 
 // Try reconnect after t0
@@ -588,7 +603,7 @@ if (t0 > FcounterSet.T0) and (FPortactive = true) then
 if (t0>Fcounterset.T1) then //Time untill my sendings has to be confirned is expired
    if (FLinkStatus<>IECINIT) then
        begin
-       logger.warn('_Missing confirmation (T1)_should close IP connection');
+       log(WARN,'_Missing confirmation (T1)_should close IP connection');
        Fcounterset.T1:=off;
        end;
 
@@ -596,7 +611,7 @@ if (t0>Fcounterset.T1) then //Time untill my sendings has to be confirned is exp
 if (t0>Fcounterset.T2)and (FLinkStatus=iecStartDT) then
 //Time i should send confirnetions is expired
    begin
-   logger.debug('(T2) expired send Quitt');
+   log(DEBUG,'(T2) expired send Quitt');
    sendQuitt;
    end;
 
@@ -604,14 +619,14 @@ if (t0>Fcounterset.T3) and (Flinkstatus<>IECINIT) then
    begin
    if (FIECSocketType=TIECClient) then
       begin
-      logger.debug('(T3) expired send poll');
+      log(DEBUG,'(T3) expired send poll');
       Sendpoll;
       Fcounterset.T1:=datetimetotimestamp(now).time+Ftimerset.T1; //wait for poll_ack;
       Fcounterset.T3:=datetimetotimestamp(now).time+Ftimerset.T3; //reload next polltime;
       end;
    if (FIECSocketType=TIECServer) then
       begin
-      logger.warn(' Missing Polling fron client(T3)');
+      log(WARN,'Missing Polling fron client(T3)');
       Fcounterset.T3:=datetimetotimestamp(now).time+Ftimerset.T3; //polltime;
       end;
    end;
@@ -623,7 +638,7 @@ if (Fip_tx_count >0) and (Fwrite=False) then
 
 if Fcounterset.k>FTimerset.k then  //too much sendings without ackwolegement
    begin
-   logger.warn(' missing confirmation (w)__should close IP connection');
+   log(WARN,'missing confirmation (w)__should close IP connection');
    Fcounterset.k:=0;
    end;
 end;
@@ -635,7 +650,7 @@ if not shutdown then
    if FlinkStatus<>IECOFF then
       begin
       if FlinkStatus<>IECINIT then
-          logger.debug('Lost Connection to '+FSocket.peerAddress+':'+inttostr(Fsocket.peerPort));
+          log(DEBUG,'Lost Connection to '+FSocket.peerAddress+':'+inttostr(Fsocket.peerPort));
       FlinkStatus:=IECINIT;
       FCounterset.T0:=datetimetotimestamp(now).time+Ftimerset.T0; //reconnecttime;
 //      StatusToDataOut(False);
@@ -649,6 +664,8 @@ begin
  IP_bufpos:=0;
  while ip_bufpos < Fip_rx_count do     // there could be moe than 1 APDU in a IP-Stream
     begin
+    if (ip_bufpos >0 ) then
+       log(DEBUG,'NEXT APDU');
     readAPDU(IP_RX,IP_Bufpos);          //Read 1 IEC_APDU message out of the IP-stream
     end;
 
@@ -683,29 +700,31 @@ begin
         readAPCI;
         FAPDU_RX_count:=-1;   // APDU complet reset APDU length counter
 
-        if (logger.GetLevel.equals(INFO)) AND (FAPDUlength >6) then
+//         if (logger.GetLevel.equals(DEBUG)) then
+//            begin
+            s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
+            log(DEBUG,'R'+logRstr+'['+inttostr(FAPDUlength)+'/'+offsetstr+'] '+s);
+//            end;
+
+//         if ((logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
+         if (FAPDUlength >6) then
             begin
             s:=BufferToHexStr(FAPDU_RX[6],FAPDUlength-6);
-            logger.info('R['+inttostr(FAPDUlength-6)+'] '+s);
-            end;
-         if (logger.GetLevel.equals(DEBUG)) then
-            begin
-            s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
-            logger.debug('R'+logRstr+'['+inttostr(FAPDUlength)+'/'+offsetstr+'] '+s);
+            log(INFO,'R['+inttostr(FAPDUlength-6)+'] '+s);
             end;
 
         if Fsend then send;
         end      //END APDU complet
      else
         begin       // APDU NOt Yet Complet
-        logger.warn('_!_IP_Stream to short_!_');
-        logger.debug('_'+inttostr(FIP_RX_Count)+' IP Stream-Bytes recived');
-        logger.debug('_need '+inttostr(FAPDU_RX_Count)+' more bytes from next IP Stream: ');
+        log(WARN,'_!_IP_Stream to short_!_');
+        log(DEBUG,'_'+inttostr(FIP_RX_Count)+' IP Stream-Bytes recived');
+        log(DEBUG,'_need '+inttostr(FAPDU_RX_Count)+' more bytes from next IP Stream: ');
         end;
      end       // END first byte OK
  else
      begin
-     logger.fatal('APDU NOT starts with Byte $68 idx:'+inttostr(IP_bufpos)+' '+BuffertoHexStr(ip_rx[IP_bufpos],6)+' ...--> exit');
+     log(FATAL,'APDU NOT starts with Byte $68 idx:'+inttostr(IP_bufpos)+' '+BuffertoHexStr(ip_rx[IP_bufpos],6)+' ...--> exit');
      ip_bufpos:=Fip_rx_count;
      end;
 end;
@@ -721,7 +740,7 @@ procedure TIEC104Socket.ReadASDU;
    tvr:=(FAPDU_RX[2]+FAPDU_RX[3]*256)shr 1;  //read sendsequenc
    if (tvr<>fvr) and (FIECSocketType<>TIECMonitor) then
       begin
-      logger.error(' Sequenc recived '+inttostr(tvr)+' expect '+inttostr(Fvr));
+      log(ERROR,'Sequenc recived '+inttostr(tvr)+' expect '+inttostr(Fvr));
       fvr:= tvr;  //fix Sequenz value
       end;
    inc(fvr);         //inc incomming since my last confirmation
@@ -861,16 +880,17 @@ begin
  Fwrite:=True;  // Block timmer straemsend  action while update stream
 
  LogSStr:='i'+inttostr(Fvs);
- if (logger.GetLevel.equals(INFO)) AND (FAPDU_TX_Count >6) then
+//  if (logger.GetLevel.equals(INFO)) AND (FAPDU_TX_Count >6) then
+  if  (FAPDU_TX_Count >6) then
       begin
       s:=BufferToHexStr(FAPDU_TX[6],FAPDU_TX_Count-6);
-      logger.info('S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
+      log(INFO,'S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
       end;
-   if (logger.GetLevel.equals(DEBUG)) then
-      begin
+ //  if (logger.GetLevel.equals(DEBUG)) then
+ //     begin
       s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
-      logger.debug('S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'/'+inttostr(Fip_TX_Count)+'] '+s);
-      end;
+      log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'/'+inttostr(Fip_TX_Count)+'] '+s);
+//      end;
  move(FAPDU_TX,FIP_TX[Fip_TX_Count],FAPDU_TX_Count);
  Fip_TX_Count:=Fip_TX_Count+FAPDU_TX_Count;
  if  Fip_TX_Count>1000 then
@@ -887,7 +907,7 @@ if Fsocket<>nil then
    Fsocket.Send(Fip_TX,Fip_TX_Count);
 
 // Logging
-logger.debug('Send IP_TX_Length: '+inttostr(Fip_tx_Count));
+log(DEBUG,'Send IP_TX_Length: '+inttostr(Fip_tx_Count));
 Fip_TX_Count:=0;
 
  if (FAPDU_TX_Count > 6) and assigned(FonTXData) then
@@ -903,16 +923,15 @@ if Fsocket<>nil then
    Fsocket.Send(FAPDU_TX,FAPDU_TX_Count);
 
 // Logging
-if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
+if  (FAPDU_TX_Count >6) then
+//if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
     begin
     s:=BufferToHexStr(FAPDU_TX[6],FAPDU_TX_Count-6);
-    logger.info('S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
+    log(INFO,'S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
     end;
- if (logger.GetLevel.equals(DEBUG)) then
-    begin
+
     s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
-    logger.debug('S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
-    end;
+    log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
 
  Fsend:= false;
 

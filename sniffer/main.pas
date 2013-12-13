@@ -41,7 +41,7 @@ type
     Logout: TMemo;
     PageControl1: TPageControl;
     Panelmonitor: TPanel;
-    Panelmonitor1: TPanel;
+    PanelPcap: TPanel;
     PanelServer: TPanel;
     RawMonitorTab: TTabSheet;
     ServerPort: TSpinEdit;
@@ -51,6 +51,7 @@ type
     Timer: TTimer;
     StatusBar: TStatusBar;
     monloglevel: TLevelGroup;
+    PcapLogLevel: TLevelGroup;
     serverLoglevel: TLevelGroup;
     PcapMonitorTab: TTabSheet;
     procedure ActionrawmonitorExecute(Sender: TObject);
@@ -60,8 +61,11 @@ type
     procedure clientListDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure LogoutChange(Sender: TObject);
+    procedure mainlogChange(Sender: TObject);
     procedure monlistClick(Sender: TObject);
     procedure monlistDblClick(Sender: TObject);
+    procedure RawLogChange(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
 //  private
     { private declarations }
@@ -71,6 +75,7 @@ type
 
     procedure IECServerClientConnect(Sender: TObject;Socket: TIEC104Socket);
     procedure IECServerClientDisConnect(Sender: TObject;Socket: TIEC104Socket);
+    procedure winpcaplogChange(Sender: TObject);
   private
      procedure doIniFile(properties:Tstringlist);
   public
@@ -174,20 +179,20 @@ begin
     with PacketInfo do
     begin
     if (EtherProto = PROTO_IP) and (DataLen >0) then
-       begin
-       logger.debug('receive '+inttostr(Datalen)+' Bytes for port '+inttostr(PortSrc));
        if (PortSrc=monitorport)  then
         begin
-          logger.debug('Port '+inttoStr(monitorport)+' receive '+inttostr(Datalen)+' Bytes');
           srcip:= IPToStr (AddrSrc);
           destip:= IPToStr (AddrDest);
+ //         logger.debug('['+inttostr(Datalen)+'] '+srcip+' > '+destip);
+          logger.Info('['+inttostr(Datalen)+'] '+srcip+' > '+destip);
           monlistadd(srcip,destip);
 
           IECSocket.StreamCount:=DataLen;
           IECSocket.DecodeStream(bytebuff);
         end
+       else
+          logger.debug('receive '+inttostr(Datalen)+' Bytes for port '+inttostr(PortSrc));
       end ;
-   end;
 end ;
 
 procedure Tmonitor.RXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
@@ -203,6 +208,7 @@ end;
 Function Tmonitor.monlistadd(s,d:string):TIEC104Socket;
 var
   x:integer;
+  AppAppender: TAppAppender  ;
 begin
 if monlist.Items.Count>0 then
    Begin
@@ -218,16 +224,19 @@ if monlist.Items.Count>0 then
    until x=monlist.Items.Count;
    end;
 
-IECSocket:= TIEC104Socket.Create;
-logger.info('new Source found');
+//IECSocket:= TIEC104Socket.Create('IEC_in');
+IECSocket:= TIEC104Socket.Create();
+logger.info('ADD new  Source '+s);
 IECSocket.SocketType:=TIECMonitor;
-IECSocket.Name:=s+' > '+d;
+IECSocket.Name:=s;//+' > '+d;
 IECSocket.onRXData := @RXEvent;
-//IECSocket.Log.LogLevel:=lDEBUG;
-//IECSocket.Log.LogAppender:=logAppender;
-//IECSocket.Log.LogLevel:=lFATAL;
-//IECSocket.Log.LogLevel:=lFATAL;
-//IECSocket.Log.code:=logmonsock;
+IECSocket.setLogger('IEC_IN');
+AppAppender:= TAppAppender.Create(@mainLog.Lines);
+AppAppender.SetThreshold(WARN);
+AppAppender.SetName('TRACE');
+//AppAppender.SetThreshold(DEBUG);
+if (iecsocket.logger <> nil) then
+   IECSocket.Logger.AddAppender(AppAppender);
 
 monlist.Items.AddObject(s,IECsocket);
 result := IECSocket;
@@ -239,6 +248,7 @@ var
 begin
   logger := TLogger.GetInstance('MONITOR');
    AppAppender:= TAppAppender.Create(@mainLog.Lines);
+   AppAppender.SetName('TRACE');
    AppAppender.SetThreshold(INFO);
 
 //   logger.addAppender(TAppAppender.Create(@RawLog.Lines));
@@ -247,6 +257,7 @@ begin
 
    monLogLevel:=TLevelGroup.Create(Panel2,AppAppender);
    monLogLevel.Parent:=Panel2;
+   monLogLevel.Width:= 174;
 
   // raw sockets monitoring
    RawMonitor := TMonitorSocket.Create (self) ;
@@ -264,6 +275,12 @@ begin
 //    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,PcapMonitorTab.Log);
 //    WPLogLevel.Parent:=PanelPCap;
     PcapMonitor.Logger.AddAppender(AppAppender);
+
+    PcapLogLevel:=TLevelGroup.Create(Panel2,AppAppender);
+    PcapLogLevel.Parent:=PanelPcap;
+    PcapLogLevel.Width:= 174;
+    PcapLogLevel.setName('PCAP_LOG');
+
     PcapMonitor.onPacketEvent := @PacketEvent ;
     AdapterList.Items.Assign (Wpcap.AdapterDescList) ;
     if AdapterList.Items.Count > 0 then AdapterList.ItemIndex := 0 ;
@@ -273,18 +290,33 @@ begin
    IECServer.Name:='Server';
 //   IECServer.Log.code:=logserv;
 //   IECServer.Log.LogAppender:=logAppender;
-AppAppender:= TAppAppender.Create(@logout.Lines);
-AppAppender.SetThreshold(INFO);
-     IECServer.Logger.AddAppender(AppAppender);
+   AppAppender:= TAppAppender.Create(@logout.Lines);
+   AppAppender.SetThreshold(INFO);
+   AppAppender.SetName('TRACE');
+
+   IECServer.Logger.AddAppender(AppAppender);
    IECServer.Port := 2404 ;
-   IECServer.Active := False;
+//   IECServer.Active := False;
    IECServer.onClientConnect := @IECServerClientConnect;
    IECServer.onClientDisConnect := @IECServerClientDisConnect;
+
    ServerLogLevel:=TLevelGroup.Create(PanelServer,AppAppender);
    serverLoglevel.Parent:=PanelServer;
 
    chkpw();
 //   close;
+end;
+
+procedure Tmonitor.LogoutChange(Sender: TObject);
+begin
+  if logout.Lines.Count>800 then
+     logout.Clear;
+end;
+
+procedure Tmonitor.mainlogChange(Sender: TObject);
+begin
+    if mainlog.Lines.Count>800 then
+     mainlog.Clear;
 end;
 
 
@@ -305,7 +337,8 @@ freeandnil(RawMonitor);
 freeandnil(PcapMonitor);
 
 logger.info('stopApplication:');
-TLogger.freeInstances;
+//TLogger.freeInstances;
+
 end;
 
 procedure Tmonitor.ActionrawmonitorExecute(Sender: TObject);
@@ -382,26 +415,14 @@ var
 begin
  ix:=clientlist.ItemIndex;
  if ix=0 then
-    begin
-    for i:=1 to clientlist.Count-1 do
-       begin
-       IECSock:=TIEC104Socket(clientlist.Items.Objects[i]);
-//       IECsock.Log.LogLevel:=lFATAL;
-       end;
-//    ServerLogLevel.setlog(IECServer.log);
-    end;
+    ServerLogLevel.setAppender(IECServer.Logger.GetAppender('TRACE'));
 
  if ix>0 then
    begin
-   for i:=1 to clientlist.Count-1 do
-     begin
-         IECSock:=TIEC104Socket(clientlist.Items.Objects[i]);
-         if i<>ix then
-//           IECsock.Log.LogLevel:=IECServer.Log.LogLevel
-//         else
-//           IECsock.Log.LogLevel:=lFATAL;
-    end;
-//   ServerLogLevel.setlog(TIEC104Socket(clientlist.Items.Objects[ix]).log);
+   IECSock:=TIEC104Socket(clientlist.Items.Objects[ix]);
+   IECServer.logger.Info('Server clinet '+IECSock.Name+' selectet');
+//   if (iecsock.logger <> nil )then
+//      ServerLogLevel.setAppender(IECSock.Logger.GetAppender('TRACE'));
    end;
 end;
 
@@ -423,8 +444,24 @@ end;
 
 
 procedure Tmonitor.IECServerClientConnect(Sender: TObject;Socket: TIEC104Socket);
+var
+  AppAppender: TAppAppender  ;
+
 begin
+logger.Info('add Serversocket'+socket.Name);
 clientlist.AddItem(socket.name,socket);
+
+socket.setLogger('IEC_OUT');
+
+//t:= IECServer.logger.GetAppender('TRACE');
+//AppAppender := TAppAppender.Create(t.getLines);
+AppAppender:= TAppAppender.Create(@logout.Lines);
+//AppAppender.SetThreshold(DEBUG);
+AppAppender.SetThreshold(WARN);
+AppAppender.SetName('TRACE');
+if (socket.logger <>nil) then
+   Socket.Logger.AddAppender(AppAppender);
+
 //socket.Log.LogLevel:=lFATAL;
 //socket.Log.code:=logservsock;
 end;
@@ -432,12 +469,24 @@ end;
 procedure Tmonitor.IECServerClientDisConnect(Sender: TObject;Socket: TIEC104Socket);
 var
  x:integer;
+ s: TIEC104Socket;
 begin
-for x:=1 to clientlist.Items.Count-1 do
-  if clientlist.Items.Objects[x]= socket then
+ for x:=1 to clientlist.Items.Count-1 do
+   begin
+   s := clientlist.Items.Objects[x] as TIEC104Socket ;
+//   s := (TIEC104Socket) clientlist.Items.Objects[x];
+   if s= socket then
+      begin
       clientlist.Items.Delete(x);
-
+      end;
+   end;
 //if clientlist.Items.Count=0 then
+end;
+
+procedure Tmonitor.winpcaplogChange(Sender: TObject);
+begin
+  if winpcaplog.Lines.Count>80 then
+     winpcaplog.Clear;
 end;
 
 procedure Tmonitor.chkpw();
@@ -520,7 +569,11 @@ begin
 
  Val (properties.Values['ServerPort'],i,errorcode);
  If errorcode=0 then
-           serverport.Value:=i;
+              serverport.Value:=i;
+
+ Val (properties.Values['MonitorPort'],i,errorcode);
+ If errorcode=0 then
+           monport.Value:=i;
 
  value :=properties.Values['MonitorStart'];
  if value ='' then value:= 'false';
@@ -530,11 +583,12 @@ begin
     else ActionWPCAP.Execute;
     end;
 
+ ActionServer.Enabled:=true;
  value :=properties.Values['ServerStart'];
  if value ='' then value:= 'false';
- if (StrToBool(value)) then    ActionServer.Execute;
+ if (StrToBool(value)) then
+     ActionServer.Execute;
 
- ActionServer.Enabled:=true;
 
 end;
 
@@ -546,28 +600,16 @@ var
 begin
   ix:=monlist.ItemIndex;
   if ix=0 then
-    begin
-    for i:=1 to monlist.Count-1 do
-        begin
-        IECSock:=TIEC104Socket(monlist.Items.Objects[i]);
-//        IECsock.Log.LogLevel:=lFATAL;
-        end;
- //   monLogLevel.setlog(log);
-    end;
+     monLogLevel.setAppender(Logger.GetAppender('TRACE'));
 
   if ix>0 then
-    begin
-    for i:=1 to monlist.Count-1 do
-      begin
-          IECSock:=TIEC104Socket(monlist.Items.Objects[i]);
-          if i<>ix then
-//            IECsock.Log.LogLevel:=log.LogLevel
-//          else
-//            IECsock.Log.LogLevel:=lFATAL;
+     begin
+     IECSock:=TIEC104Socket(monlist.Items.Objects[ix]);
+     logger.Info('Monitor socket '+IECSock.Name+' selectet');
+//     if (IECSock.Logger<>nil) then
+//        monLogLevel.setAppender(IECSock.Logger.GetAppender('TRACE'));
      end;
-//    monLogLevel.setlog(TIEC104Socket(monlist.Items.Objects[ix]).log);
 
-    end;
 end;
 
 procedure Tmonitor.monlistDblClick(Sender: TObject);
@@ -584,6 +626,12 @@ begin
     iecsockdlg.ShowModal;
     iecsockdlg.Close;
     end;
+end;
+
+procedure Tmonitor.RawLogChange(Sender: TObject);
+begin
+  if Rawlog.Lines.Count>80 then
+     Rawlog.Clear;
 end;
 
 procedure Tmonitor.TimerTimer(Sender: TObject);

@@ -23,6 +23,8 @@ TLevelGroup = Class(TCustomRadioGroup)
    { public declarations }
   constructor Create(TheOwner: TComponent;log :Tlogger);
   constructor Create(TheOwner: TComponent;Appender :TAppender); overload;
+  procedure setName(s:String);
+  procedure setAppender(Appender :TAppender);
   procedure setlog(log :Tlogger);
 end;
 
@@ -53,9 +55,23 @@ begin
 
 end;
 
+procedure TLevelGroup.setName(s: String);
+begin
+ Caption:=s;
+end;
+
 procedure TLevelGroup.setlog(log :Tlogger);
 begin
   self.Flog := log;
+ self.FAppender := nil;
+ setLoglevel();
+end;
+
+procedure TLevelGroup.setAppender(Appender :TAppender);
+begin
+ self.Flog := nil;
+ self.FAppender := Appender;
+ setLoglevel();
 end;
 
 procedure TLevelGroup.setlogLevel();

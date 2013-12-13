@@ -29,6 +29,7 @@ type
       procedure Append(AEvent : TLoggingEvent); Override;
       procedure SetLayout(ALayout : TLayout); Virtual;
       function RequiresLayout() : Boolean; Override;
+      Function getLines() : TStrings;
    end;
 
 
@@ -58,6 +59,11 @@ end;
 procedure TAppAppender.SetLayout(ALayout : TLayout);
 begin
 
+end;
+
+function TAppAppender.getLines() : TStrings;
+begin
+  getLines := FLines;
 end;
 
 function TAppAppender.RequiresLayout() : Boolean;

@@ -59,8 +59,8 @@ implementation
 
 procedure TSockDlg.FormCreate(Sender: TObject);
 begin
-  lg.Parent:=PanelLog;
-    lg.Align:=alClient;
+ //  lg.Parent:=PanelLog;
+ //   lg.Align:=alClient;
 
   if (socket.SocketType=TIECServer) or (socket.SocketType=TIECMonitor) then
      begin
@@ -110,7 +110,7 @@ end;
 
 destructor TSockDlg.destroy;
 begin
-  lg.Destroy;
+//  lg.Destroy;
   inherited destroy;
 end;
 

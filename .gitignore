@@ -1,12 +1,16 @@
+.gitignore
 LazColorPalette
 log4delphi_0.7
 msock
 msock11
 rawsock1
 s1
+*.obj
 *.o
 *.ppu
 *.exe
 *.bak
 *.log
 TracePlayer/backup
+sniffer/lib/*
+sniffer/dist

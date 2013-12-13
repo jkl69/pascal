@@ -1,5 +1,5 @@
 const
-  Vstr='0.2.';
+  Vstr='0.3.';
   cstr='(c) Jaen';
   dstr='2013';
   rstr= {$i revision.inc};

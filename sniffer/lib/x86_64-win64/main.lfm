@@ -1,7 +1,7 @@
 object monitor: Tmonitor
-  Left = 314
+  Left = 224
   Height = 642
-  Top = 121
+  Top = 113
   Width = 1127
   Caption = 'IECmonitor'
   ClientHeight = 642
@@ -72,17 +72,17 @@ object monitor: Tmonitor
         Left = 0
         Height = 591
         Top = 0
-        Width = 196
+        Width = 180
         Align = alLeft
         Caption = 'Panel2'
         ClientHeight = 591
-        ClientWidth = 196
+        ClientWidth = 180
         TabOrder = 0
         object monlist: TListBox
           Left = 12
           Height = 443
           Top = 136
-          Width = 171
+          Width = 155
           Anchors = [akTop, akLeft, akRight, akBottom]
           Items.Strings = (
             'source IPs'
@@ -94,24 +94,25 @@ object monitor: Tmonitor
         end
       end
       object Panel3: TPanel
-        Left = 196
+        Left = 180
         Height = 591
         Top = 0
-        Width = 923
+        Width = 939
         Align = alClient
         Caption = 'Panel3'
         ClientHeight = 591
-        ClientWidth = 923
+        ClientWidth = 939
         TabOrder = 1
         object mainlog: TMemo
           Left = 1
           Height = 278
           Top = 312
-          Width = 921
+          Width = 937
           Align = alBottom
           Lines.Strings = (
             'mainlog'
           )
+          OnChange = mainlogChange
           ScrollBars = ssAutoBoth
           TabOrder = 0
         end
@@ -119,27 +120,27 @@ object monitor: Tmonitor
           Left = 1
           Height = 264
           Top = 48
-          Width = 921
-          ActivePage = RawMonitorTab
+          Width = 937
+          ActivePage = PcapMonitorTab
           Align = alClient
-          TabIndex = 0
+          TabIndex = 1
           TabOrder = 1
           TabPosition = tpRight
           object RawMonitorTab: TTabSheet
             Caption = 'RawMonitor'
             ClientHeight = 256
-            ClientWidth = 890
+            ClientWidth = 906
             object Panelmonitor: TPanel
               Left = 0
               Height = 112
               Top = 0
-              Width = 890
+              Width = 906
               Align = alTop
               ClientHeight = 112
-              ClientWidth = 890
+              ClientWidth = 906
               TabOrder = 0
               object B_doRawMonitor: TButton
-                Left = 339
+                Left = 355
                 Height = 28
                 Top = 75
                 Width = 123
@@ -163,7 +164,8 @@ object monitor: Tmonitor
                 Width = 536
                 Color = clForm
                 Lines.Strings = (
-                  'RawSocket is to capture  only IP frames on an selected IP-Addresse'
+                  'RawSocket is to capture  only IP frames on an selected IP-Address.'
+                  ''
                 )
                 ReadOnly = True
                 TabOrder = 2
@@ -173,7 +175,7 @@ object monitor: Tmonitor
               Left = 0
               Height = 144
               Top = 112
-              Width = 890
+              Width = 906
               Align = alClient
               Font.CharSet = ANSI_CHARSET
               Font.Height = -11
@@ -183,6 +185,7 @@ object monitor: Tmonitor
               Lines.Strings = (
                 'RawLog'
               )
+              OnChange = RawLogChange
               ParentFont = False
               ScrollBars = ssAutoBoth
               TabOrder = 1
@@ -192,20 +195,20 @@ object monitor: Tmonitor
           object PcapMonitorTab: TTabSheet
             Caption = 'PcapMonitor'
             ClientHeight = 256
-            ClientWidth = 890
-            object Panelmonitor1: TPanel
+            ClientWidth = 906
+            object PanelPcap: TPanel
               Left = 0
               Height = 112
               Top = 0
-              Width = 890
+              Width = 906
               Align = alTop
               ClientHeight = 112
-              ClientWidth = 890
+              ClientWidth = 906
               TabOrder = 0
               object B_doPcapMonitor: TButton
-                Left = 403
+                Left = 555
                 Height = 28
-                Top = 76
+                Top = 75
                 Width = 123
                 Action = ActionWPCAP
                 Anchors = [akTop, akRight]
@@ -213,24 +216,25 @@ object monitor: Tmonitor
                 TabOrder = 0
               end
               object AdapterList: TListBox
-                Left = 5
+                Left = 179
                 Height = 99
                 Top = 4
-                Width = 390
+                Width = 368
                 ItemHeight = 0
                 TabOrder = 1
               end
               object Memo1: TMemo
-                Left = 403
+                Left = 555
                 Height = 72
                 Top = 4
-                Width = 466
+                Width = 338
                 Color = clForm
                 Lines.Strings = (
-                  'WinPcap is an ThirdParty LIB to captue ALL type of Netprotocolls on an selected '
-                  'Network-Interface.'
-                  'Therefor Winpcap has to be installed on this maschine '
-                  'Donlad : http://www.winpcap.org/'
+                  'WinPCap is a Third Party LIB to capture ALL type of '
+                  'network protocols on a '
+                  'selected Network-Interface.'
+                  'Therefore WinPCap has to be installed on this machine.'
+                  'Download : http://www.winpcap.org/'
                 )
                 ReadOnly = True
                 ScrollBars = ssVertical
@@ -241,7 +245,7 @@ object monitor: Tmonitor
               Left = 0
               Height = 144
               Top = 112
-              Width = 890
+              Width = 906
               Align = alClient
               Font.CharSet = ANSI_CHARSET
               Font.Color = clBlack
@@ -252,6 +256,7 @@ object monitor: Tmonitor
               Lines.Strings = (
                 'WinPcapLog'
               )
+              OnChange = winpcaplogChange
               ParentFont = False
               ScrollBars = ssAutoBoth
               TabOrder = 1
@@ -263,10 +268,10 @@ object monitor: Tmonitor
           Left = 1
           Height = 47
           Top = 1
-          Width = 921
+          Width = 937
           Align = alTop
           ClientHeight = 47
-          ClientWidth = 921
+          ClientWidth = 937
           TabOrder = 2
           object monport: TSpinEdit
             Left = 385
@@ -304,7 +309,7 @@ object monitor: Tmonitor
         Height = 17
         Top = 115
         Width = 218
-        Caption = 'time    Client addres     Data '
+        Caption = 'Time    Client addres     Data '
         Font.CharSet = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -12
@@ -322,6 +327,7 @@ object monitor: Tmonitor
         Font.Color = clWindowText
         Font.Height = -12
         Font.Name = 'Courier New'
+        OnChange = LogoutChange
         ParentFont = False
         ScrollBars = ssBoth
         TabOrder = 0
