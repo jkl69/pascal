@@ -101,6 +101,13 @@ TIEC104Server = class(TLTCPComponent)
 //       property onLogEvent: TGetStrProc write SetLogEvent;
     end;
 
+{ TIEC104Client }
+
+TIEC104Client = class(TLTCPComponent)
+     private
+     protected
+     public
+    end;
 
 { TIEC104Socket }
 
@@ -117,7 +124,7 @@ TIEC104Socket = class(TObject)
     FTimerSet:   TIEC104Timerset;
     FcounterSet: TIEC104Timerset;
     FAPDU_tx:   array[0..255]of byte;
-    Fip_tx:   array[0..1500]of byte;
+    Fip_tx:   array[0..5000]of byte;
     FAPDU_TX_Count:integer;
     FAPDU_Rx:   array[0..255]of byte;
     FAPDU_RX_Count:integer;
@@ -167,7 +174,7 @@ TIEC104Socket = class(TObject)
     constructor Create; overload;
 //    constructor Create(Loggerinstance:String); overload;
     destructor destroy; override;
-    procedure setLogger(s:String);
+    procedure setLogger(const s:String);
     procedure SendStart;
     procedure SendStop;
 //    procedure showSetupDialog;
@@ -397,6 +404,7 @@ begin
   iecsock.onRXData:=FOnClientRead;
   iecsock.onTXData:=FOnClientSend;
   iecsock.Ftimer.Enabled:=TRUE;
+  iecsock.TimerSet:=timers;
 
   logger.info('ClientConect: '+adr+'  ID: '+inttostr(iecsock.Fid));
 //log.info('ClientConect: '+adr);
@@ -509,9 +517,10 @@ end;
    inherited destroy;
  end;
 
- procedure TIEC104Socket.setLogger(s:String);
+ procedure TIEC104Socket.setLogger(const s:String);
  begin
   logger := TLogger.GetInstance(s);
+//  logger := TLogger.Create;
  end;
 
 procedure TIEC104Socket.log(l:TLevel;s:String);
@@ -633,10 +642,12 @@ if (t0>Fcounterset.T3) and (Flinkstatus<>IECINIT) then
 
 if Fsend= true then
      send;
+
+// Fwrite idicates if some Data are writen in senstream (procedure writestream)
 if (Fip_tx_count >0) and (Fwrite=False) then
    sendStream;
 
-if Fcounterset.k>FTimerset.k then  //too much sendings without ackwolegement
+if Fcounterset.k  >FTimerset.k then  //too much sendings without ackwolegement
    begin
    log(WARN,'missing confirmation (w)__should close IP connection');
    Fcounterset.k:=0;
@@ -700,14 +711,13 @@ begin
         readAPCI;
         FAPDU_RX_count:=-1;   // APDU complet reset APDU length counter
 
-//         if (logger.GetLevel.equals(DEBUG)) then
-//            begin
+         if (logger.GetLevel.equals(DEBUG)) then
+            begin
             s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
             log(DEBUG,'R'+logRstr+'['+inttostr(FAPDUlength)+'/'+offsetstr+'] '+s);
-//            end;
-
-//         if ((logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
-         if (FAPDUlength >6) then
+            end;
+         if ((logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
+//         if (FAPDUlength >6) then
             begin
             s:=BufferToHexStr(FAPDU_RX[6],FAPDUlength-6);
             log(INFO,'R['+inttostr(FAPDUlength-6)+'] '+s);
@@ -745,7 +755,8 @@ procedure TIEC104Socket.ReadASDU;
       end;
    inc(fvr);         //inc incomming since my last confirmation
    inc(Fcounterset.w);
-   if Fcounterset.w>FTimerSet.w-1 then
+
+   if Fcounterset.w > FTimerSet.w-1 then
       begin
       Fcounterset.T2:=0;
       Fcounterset.w:=0;
@@ -790,7 +801,8 @@ begin
   if APCI=S_Frame then
     begin
     update_Vs;
-    LogRStr:='s'+inttostr(Fvr);
+//    LogRStr:='s'+inttostr(Fvr);
+    LogRStr:=format('s%.5d',[Fvr]);
     end;
   if (APCI and $01)=I_Frame then
     begin
@@ -879,7 +891,9 @@ var
 begin
  Fwrite:=True;  // Block timmer straemsend  action while update stream
 
- LogSStr:='i'+inttostr(Fvs);
+// LogSStr:='i'+inttostr(Fvs);
+LogSStr:=Format('i%.5d',[Fvs]);
+
 //  if (logger.GetLevel.equals(INFO)) AND (FAPDU_TX_Count >6) then
   if  (FAPDU_TX_Count >6) then
       begin
@@ -919,19 +933,23 @@ procedure TIEC104Socket.send;
 var
   s:String;
 begin
-if Fsocket<>nil then
-   Fsocket.Send(FAPDU_TX,FAPDU_TX_Count);
-
 // Logging
-if  (FAPDU_TX_Count >6) then
-//if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
+// LogSStr:='i'+inttostr(Fvs);
+ LogSStr:=Format('i%.5d',[Fvs]);
+if (logger.GetLevel.equals(DEBUG)) then
+   begin
+    s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
+    log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
+   end;
+
+//if  (FAPDU_TX_Count >6) then
+if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
     begin
     s:=BufferToHexStr(FAPDU_TX[6],FAPDU_TX_Count-6);
     log(INFO,'S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
     end;
-
-    s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
-    log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
+if Fsocket<>nil then
+   Fsocket.Send(FAPDU_TX,FAPDU_TX_Count);
 
  Fsend:= false;
 

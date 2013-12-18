@@ -19,15 +19,18 @@ type
     ActionRawmonitor: TAction;
     ActionList1: TActionList;
     AdapterList: TListBox;
+    Socketconfig: TButton;
     B_doRawMonitor: TButton;
     B_doPcapMonitor: TButton;
     BdoServer: TButton;
     Bevel2: TBevel;
+    useFilter: TCheckBox;
     Memo1: TMemo;
     Memo2: TMemo;
     monport: TSpinEdit;
     Panel1: TPanel;
     RawLog: TMemo;
+    SpinTK: TSpinEdit;
     StaticText1: TStaticText;
     winpcaplog: TMemo;
     mainlog: TMemo;
@@ -66,6 +69,7 @@ type
     procedure monlistClick(Sender: TObject);
     procedure monlistDblClick(Sender: TObject);
     procedure RawLogChange(Sender: TObject);
+    procedure SocketconfigClick(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
 //  private
     { private declarations }
@@ -78,6 +82,7 @@ type
     procedure winpcaplogChange(Sender: TObject);
   private
      procedure doIniFile(properties:Tstringlist);
+     function isinFilter(tk: byte):boolean;
   public
     { public declarations }
     procedure chkpw();
@@ -184,7 +189,7 @@ begin
           srcip:= IPToStr (AddrSrc);
           destip:= IPToStr (AddrDest);
  //         logger.debug('['+inttostr(Datalen)+'] '+srcip+' > '+destip);
-          logger.Info('['+inttostr(Datalen)+'] '+srcip+' > '+destip);
+//          logger.Info('['+inttostr(Datalen)+'] '+srcip+' > '+destip);
           monlistadd(srcip,destip);
 
           IECSocket.StreamCount:=DataLen;
@@ -195,14 +200,31 @@ begin
       end ;
 end ;
 
+function Tmonitor.isinFilter(tk: byte):boolean;
+begin
+ if (tk = Spintk.value) then
+    begin
+    isinFilter := true;
+    exit;
+    end;
+ isInFilter := false;
+end;
+
 procedure Tmonitor.RXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
 var
-   x:integer;
+   x,tk:integer;
 begin
- if IECServer.Clients.Count =0 then exit;
+ Tk := buffer[0];
+ if (useFilter.Checked) and (not isinFilter(tk)) then
+ begin
+   logger.Info(IECSocket.Name+' TK:'+inttoStr(tk));
+   exit;
+ end;
+logger.Info(IECSocket.Name+' TK:'+inttoStr(tk)+' -->');
+if IECServer.Clients.Count =0 then exit;
  for x:=0 to IECServer.Clients.Count-1 do
 //   IECServer.Client[x].sendBuf(buffer,count,true);
-   IECServer.Client[x].sendBuf(buffer,count,false);
+     IECServer.Client[x].sendBuf(buffer,count,false);
 end;
 
 Function Tmonitor.monlistadd(s,d:string):TIEC104Socket;
@@ -235,8 +257,8 @@ AppAppender:= TAppAppender.Create(@mainLog.Lines);
 AppAppender.SetThreshold(WARN);
 AppAppender.SetName('TRACE');
 //AppAppender.SetThreshold(DEBUG);
-if (iecsocket.logger <> nil) then
-   IECSocket.Logger.AddAppender(AppAppender);
+//if (iecsocket.logger <> nil) then
+//   IECSocket.Logger.AddAppender(AppAppender);
 
 monlist.Items.AddObject(s,IECsocket);
 result := IECSocket;
@@ -288,15 +310,14 @@ begin
    logger.debug('Create server:');
    IECServer:= TIEC104Server.Create(self);
    IECServer.Name:='Server';
-//   IECServer.Log.code:=logserv;
-//   IECServer.Log.LogAppender:=logAppender;
    AppAppender:= TAppAppender.Create(@logout.Lines);
-   AppAppender.SetThreshold(INFO);
+//   AppAppender.SetThreshold(INFO);
+   AppAppender.SetThreshold(DEBUG);
    AppAppender.SetName('TRACE');
-
    IECServer.Logger.AddAppender(AppAppender);
    IECServer.Port := 2404 ;
-//   IECServer.Active := False;
+
+   //   IECServer.Active := False;
    IECServer.onClientConnect := @IECServerClientConnect;
    IECServer.onClientDisConnect := @IECServerClientDisConnect;
 
@@ -415,7 +436,10 @@ var
 begin
  ix:=clientlist.ItemIndex;
  if ix=0 then
+    begin
     ServerLogLevel.setAppender(IECServer.Logger.GetAppender('TRACE'));
+    IECServer.Logger.Info('IEC Server selectet');
+    end;
 
  if ix>0 then
    begin
@@ -456,8 +480,8 @@ socket.setLogger('IEC_OUT');
 //t:= IECServer.logger.GetAppender('TRACE');
 //AppAppender := TAppAppender.Create(t.getLines);
 AppAppender:= TAppAppender.Create(@logout.Lines);
-//AppAppender.SetThreshold(DEBUG);
-AppAppender.SetThreshold(WARN);
+AppAppender.SetThreshold(DEBUG);
+//AppAppender.SetThreshold(WARN);
 AppAppender.SetName('TRACE');
 if (socket.logger <>nil) then
    Socket.Logger.AddAppender(AppAppender);
@@ -575,6 +599,18 @@ begin
  If errorcode=0 then
            monport.Value:=i;
 
+  Val (properties.Values['MonitorFilter'],i,errorcode);
+ If errorcode=0 then
+           spintk.Value:=i;
+
+ value :=properties.Values['MonitorFilterActiv'];
+ if value ='' then value:= 'false';
+ if (StrToBool(value)) then
+    usefilter.Checked:=true
+ else
+  usefilter.Checked:=false;
+
+
  value :=properties.Values['MonitorStart'];
  if value ='' then value:= 'false';
  if (StrToBool(value)) then
@@ -632,6 +668,18 @@ procedure Tmonitor.RawLogChange(Sender: TObject);
 begin
   if Rawlog.Lines.Count>80 then
      Rawlog.Clear;
+end;
+
+procedure Tmonitor.SocketconfigClick(Sender: TObject);
+var
+ dlg : TSockDlg;
+begin
+  dlg := TSockDlg.Create(self,IECserver.Timers);
+  dlg.ShowModal;
+  IECserver.Timers :=dlg.Timerset;
+  dlg.Close;
+  dlg.destroy;
+//  IECserver.Timers;
 end;
 
 procedure Tmonitor.TimerTimer(Sender: TObject);

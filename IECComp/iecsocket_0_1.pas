@@ -7,7 +7,7 @@ unit iecsocket_0_1;
 interface
 
 uses
-  IEC104Sockets, simplelog, LazarusPackageIntf;
+  IEC104Sockets, LazarusPackageIntf;
 
 implementation
 

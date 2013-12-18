@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Spin, IEC104Sockets, simplelog;
+  StdCtrls, Spin, IEC104Sockets;
 
 type
 
@@ -38,14 +38,17 @@ type
   private
       { private declarations }
       Fsock: TIEC104Socket;
-      log: Tlog;
-      lg: TLogLevelGroup;
+      Ftimerset:TIEC104TimerSet;
+//      log: Tlog;
+//      lg: TLogLevelGroup;
   public
     { public declarations }
-      constructor Create(TheOwner: TComponent; var iecsocket:TIEC104Socket);
-      destructor destroy; override;
+    constructor Create(TheOwner: TComponent; var iecsocket:TIEC104Socket);
+    constructor Create(TheOwner: TComponent; const timerset:TIEC104TimerSet); overload;
+    destructor destroy; override;
 
-      property Socket: TIEC104Socket read FSock write FSock;
+    property Socket: TIEC104Socket read FSock write FSock;
+    property Timerset: TIEC104TimerSet read FTimerset write FTimerset;
   end;
 
 var
@@ -61,7 +64,16 @@ procedure TSockDlg.FormCreate(Sender: TObject);
 begin
  //  lg.Parent:=PanelLog;
  //   lg.Align:=alClient;
-
+  if (socket=nil) then
+     begin
+       groupBox.Caption:= '"default"';
+       t0.Value :=  FTimerSet.T0/1000;
+       t1.Value :=  FTimerSet.T1/1000;
+       t2.Value :=  FTimerSet.T2/1000;
+       t3.Value :=  FTimerSet.T3/1000;
+       k.Value :=  FTimerSet.k;
+       w.Value :=  FTimerSet.w;        exit;
+     end;
   if (socket.SocketType=TIECServer) or (socket.SocketType=TIECMonitor) then
      begin
        if socket.SocketType=TIECServer then
@@ -71,11 +83,7 @@ begin
        t0.Visible:= false;
        label1.Visible:=false;
        labelt0.Visible:=false;
-     end
-  else
-    begin
-
-    end;
+     end;
 
    t0.Value :=  Socket.TimerSet.T0/1000;
    t1.Value :=  FSock.TimerSet.T1/1000;
@@ -95,14 +103,24 @@ begin
   tset.T3:=t3.Value*1000;
   tset.k:= k.Value;
   tset.w:= w.Value;
-
-  Socket.TimerSet := tset;
+  if (socket=nil) then
+     Ftimerset := tset
+  else
+    Socket.TimerSet := tset;
 end;
 
 
 constructor TSockDlg.Create(TheOwner: TComponent; var iecsocket: TIEC104Socket);
 begin
   FSock:=iecsocket;
+  inherited Create(TheOwner);
+//  log:=iecsocket.Log;
+//  lg:=TLogLevelGroup.create(self,log);
+end;
+
+constructor TSockDlg.Create(TheOwner: TComponent; const timerset:TIEC104TimerSet);
+begin
+  Ftimerset:=timerset;
   inherited Create(TheOwner);
 //  log:=iecsocket.Log;
 //  lg:=TLogLevelGroup.create(self,log);
