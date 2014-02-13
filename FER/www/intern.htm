@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>cssTest</title>
+  <link rel="stylesheet" type="text/css" href="css1.css">
+</head>
+<body>
+<h1>My Intern Heading</h1>
+<div id="main">
+<p class="one">Some text.</p>
+
+<hr>
+<br>
+<h2>Server</h2>
+<ul>
+<li><dt>Client 0</dt>
+<dd>- 127.0.0.1:2404</dd></li>
+<dt>Client 0</dt>
+<li><dd>- 127.0.0.1</dd></li>
+<li><dd>- 2404</dd></li>
+<dt>Client 0</dt>
+<dd>- 127.0.0.1:2404</dd>
+<dt>Client 0</dt>
+<dd>- 127.0.0.1:2404</dd>
+</ul>
+<p id="demo">TIME:??    </p>
+<span id="counter"> test</span> 
+<script>
+var count=100;
+function myCount()
+{
+count--;
+document.getElementById("counter").innerHTML=count;
+}
+function myFunction()
+{
+setInterval(function(){alert("Hello")},3000);
+}
+var myTimer1 = setInterval(function(){myCount()},1111);
+var myTimer2 = setInterval(function(){myTimer()},1000); 
+
+<!-- var myTimer=setInterval(function(){myTimer()},1000); --!>
+
+function myTimer()
+{
+var d=new Date();
+var t=d.toLocaleTimeString();
+document.getElementById("demo").innerHTML=t;
+}
+
+</script>
+<button onclick="myFunction()">Try it</button>
+<button onclick="myTimer()">Set Time</button>
+</body>
+</html>

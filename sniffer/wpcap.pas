@@ -27,6 +27,7 @@ type
   TWPcap = class(TComponent)
   protected
     Flogger :TLogger;
+    FFilterString : String;
     FMonAdapter:TPcap_If;
 //    FAdapterMac: array[0..5]of byte;
     FAdapterMac: TMacAddr;
@@ -43,9 +44,11 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure setFilter(f: String);
     procedure Start;
     procedure Stop;
 //  published
+    property FilterString:String read FFilterString write FFilterString;
     property MonAdapter:TPcap_If read FMonAdapter write FMonAdapter;
 //    property Log :Tlog read  Flog write FLog;
     property Logger :TLogger read  Flogger write FLogger;
@@ -68,6 +71,7 @@ type
       Fbuf       : Pchar;
       procedure GetPackets ;
   public
+      procedure setFilter;
       procedure Execute; override;
   end;
 
@@ -77,7 +81,8 @@ type
     SymbolicLink : array [0..63] of char;
   end;
 
-function AdapterDescList:TStringlist;
+  function getLibVersion: String;
+  function AdapterDescList:TStringlist;
 function getAdapter(index:integer):TPcap_If;
 function getmacStr(MonAdapter:TPcap_If):string;
 
@@ -142,6 +147,14 @@ begin
   result:=if_array[index];
 end;
 
+//function pcap_lib_version: PChar; cdecl; external PCAP_LIB_NAME;
+function getLibVersion: String;
+var
+ s:String;
+// pchar p;
+begin
+  result:= String(pcap_lib_version);
+end;
 
 procedure CaptureCallBack (User: Pointer; const Header: Ppcap_pkthdr ; const PackPtr: Pchar) ; cdecl;
 begin
@@ -153,6 +166,10 @@ end ;
 procedure TWPcapThread.GetPackets;
 begin
   pcap_loop(fp, 0,Fcallback, nil);
+end;
+
+procedure TWPcapThread.setFilter;
+begin
 end;
 
 procedure TWPcapThread.Execute;
@@ -330,6 +347,7 @@ constructor TWPcap.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   logger := TLogger.GetInstance('WinPcap');
+  FFilterString:= '';
   FTotRecvPackets:=0;
   FTotSendPackets:=0;
   FOnPacketEvent:= nil;
@@ -343,12 +361,17 @@ begin
   inherited Destroy;
 end;
 
-procedure TWPcap.Start;
+procedure TWPcap.setFilter(f: String);
+begin
+end;
 
+procedure TWPcap.Start;
 
 var
    p:PPcap;
-//   s:string;
+   l:longint;
+   pbpf : PBPF_Program;
+   BPF : TBPF_Program;
 
 begin
   if getmac(FMonAdapter)<>NIL then
@@ -362,6 +385,24 @@ begin
     begin
         exit;
     end;
+
+  if FFilterstring <>'' then
+    begin
+      logger.Info('Filter: '+FFilterstring);
+      pbpf := @BPF;
+      if (pcap_compile(p,pbpf,pchar(FFilterString),0,0) =-1) then
+          begin
+            logger.Error('ERROR:pcap_compile: -> disable Filter');
+            FFilterstring := '';
+          end;
+    end;
+
+  if FFilterstring <>'' then
+   if (pcap_setfilter(p,pbpf) = -1) then
+      begin
+        logger.Error('ERROR:_setfilter: -> EXIT ');
+        exit;
+      end;
 
 //  proc:=@handler;
   FTotRecvPackets:=0;

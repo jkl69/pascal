@@ -63,7 +63,7 @@
             </CompilerMessages>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
-              <Command Value="d:\ids\Lazarus\Projekte\cmd\iRevision.exe $(ProjPath)revision.inc"/>
+              <Command Value="d:\source\pascal\cmd\iRevision.exe $(ProjPath)revision.inc"/>
             </ExecuteBefore>
           </Other>
         </CompilerOptions>

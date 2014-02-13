@@ -1,0 +1,446 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="31">
+      <Unit0>
+        <Filename Value="IECGW.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECGW"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="216"/>
+        <CursorPos X="18" Y="234"/>
+        <UsageCount Value="158"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IEC104Clientlist"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="175"/>
+        <CursorPos X="74" Y="180"/>
+        <UsageCount Value="150"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="../lib/log/cliexecute.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cliexecute"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="219"/>
+        <CursorPos X="15" Y="236"/>
+        <FoldState Value=" T3qI0h."/>
+        <UsageCount Value="146"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="gwappender.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GWAppender"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="4" Y="12"/>
+        <UsageCount Value="128"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IEC104Server"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="123"/>
+        <CursorPos X="10" Y="171"/>
+        <UsageCount Value="125"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/jsonparser.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jsonparser"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="16"/>
+        <CursorPos X="3" Y="28"/>
+        <UsageCount Value="86"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="../lib/IEC/clientcli.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ClientCLI"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="3"/>
+        <CursorPos X="27" Y="99"/>
+        <UsageCount Value="73"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="../lib/json/jsonparser.pas"/>
+        <UnitName Value="JSONParser"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="352"/>
+        <CursorPos X="5" Y="394"/>
+        <UsageCount Value="17"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../lib/IEC/iec104client.pas"/>
+        <UnitName Value="IEC104Client"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="6"/>
+        <CursorPos X="101" Y="175"/>
+        <UsageCount Value="77"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../lib/sockets/blcksock.pas"/>
+        <UnitName Value="blcksock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="949"/>
+        <CursorPos X="15" Y="966"/>
+        <UsageCount Value="29"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../lib/log/tfileappenderunit.pas"/>
+        <UnitName Value="TFileAppenderUnit"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="117"/>
+        <CursorPos X="1" Y="135"/>
+        <UsageCount Value="33"/>
+        <Loaded Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="../lib/log/twriterappenderunit.pas"/>
+        <UnitName Value="TWriterAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="10"/>
+        <CursorPos X="17" Y="32"/>
+        <UsageCount Value="16"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="../fertest/iec104client.pas"/>
+        <UnitName Value="IEC104Client"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="49"/>
+        <CursorPos X="32" Y="80"/>
+        <UsageCount Value="2"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="../fertest/iec104socket.pas"/>
+        <UnitName Value="IEC104Socket"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="29"/>
+        <CursorPos X="4" Y="48"/>
+        <UsageCount Value="1"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <UnitName Value="IEC104Socket"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="611"/>
+        <CursorPos X="41" Y="629"/>
+        <UsageCount Value="75"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="../lib/sockets/synsock.pas"/>
+        <UnitName Value="synsock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="39"/>
+        <CursorPos X="6" Y="62"/>
+        <UsageCount Value="1"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="../lib/log/tloggerunit.pas"/>
+        <UnitName Value="TLoggerUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="35"/>
+        <CursorPos X="17" Y="53"/>
+        <UsageCount Value="33"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="../lib/log/tlevelunit.pas"/>
+        <UnitName Value="TLevelUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="140"/>
+        <CursorPos X="55" Y="159"/>
+        <UsageCount Value="28"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/inc/socketsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="147"/>
+        <CursorPos X="18" Y="171"/>
+        <UsageCount Value="2"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="../lib/log/tloglogunit.pas"/>
+        <UnitName Value="TLogLogUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="39"/>
+        <CursorPos X="1" Y="65"/>
+        <UsageCount Value="4"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="../lib/log/tappenderunit.pas"/>
+        <UnitName Value="TAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="26"/>
+        <CursorPos X="19" Y="47"/>
+        <UsageCount Value="11"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="../lib/log/tconfiguratorunit.pas"/>
+        <UnitName Value="TConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="36"/>
+        <CursorPos X="1" Y="56"/>
+        <UsageCount Value="2"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="../IECComp/iec104sockets.pas"/>
+        <UnitName Value="IEC104Sockets"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="13"/>
+        <UsageCount Value="3"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="102"/>
+        <CursorPos X="3" Y="120"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="../lib/sockets/sswin32.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1271"/>
+        <CursorPos X="1" Y="1292"/>
+        <UsageCount Value="7"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/inc/systemh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="474"/>
+        <CursorPos X="3" Y="499"/>
+        <UsageCount Value="4"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="../lib/json/JSON.pas"/>
+        <UnitName Value="JSON"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1006"/>
+        <CursorPos X="19" Y="1027"/>
+        <UsageCount Value="7"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="38"/>
+        <CursorPos X="15" Y="58"/>
+        <UsageCount Value="6"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/fpjson.pp"/>
+        <UnitName Value="fpjson"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="268"/>
+        <CursorPos X="13" Y="257"/>
+        <UsageCount Value="43"/>
+        <Loaded Value="True"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="../json/unit1.pas"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="92"/>
+        <CursorPos X="3" Y="96"/>
+        <UsageCount Value="42"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/inc/objpash.inc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="174"/>
+        <CursorPos X="23" Y="192"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+      </Unit30>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <Caret Line="108" Column="15" TopLine="91"/>
+      </Position1>
+      <Position2>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="57" Column="56" TopLine="39"/>
+      </Position2>
+      <Position3>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="366" Column="20" TopLine="346"/>
+      </Position3>
+      <Position4>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="144" Column="25" TopLine="123"/>
+      </Position4>
+      <Position5>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="143" Column="23" TopLine="123"/>
+      </Position5>
+      <Position6>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="26" Column="15" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="215" Column="13" TopLine="192"/>
+      </Position7>
+      <Position8>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="102" Column="39" TopLine="83"/>
+      </Position8>
+      <Position9>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="57" Column="25" TopLine="40"/>
+      </Position9>
+      <Position10>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="368" Column="1" TopLine="333"/>
+      </Position10>
+      <Position11>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <Caret Line="374" Column="11" TopLine="454"/>
+      </Position11>
+      <Position12>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <Caret Line="108" Column="21" TopLine="90"/>
+      </Position12>
+      <Position13>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <Caret Line="630" Column="24" TopLine="609"/>
+      </Position13>
+      <Position14>
+        <Filename Value="../lib/IEC/iec104socket.pas"/>
+        <Caret Line="629" Column="37" TopLine="613"/>
+      </Position14>
+      <Position15>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="330" Column="20" TopLine="303"/>
+      </Position15>
+      <Position16>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="108" Column="32" TopLine="81"/>
+      </Position16>
+      <Position17>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="36" Column="51" TopLine="4"/>
+      </Position17>
+      <Position18>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="35" Column="41" TopLine="8"/>
+      </Position18>
+      <Position19>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="126" Column="13" TopLine="107"/>
+      </Position19>
+      <Position20>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="55" Column="35" TopLine="33"/>
+      </Position20>
+      <Position21>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="158" Column="39" TopLine="140"/>
+      </Position21>
+      <Position22>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="416" Column="41" TopLine="395"/>
+      </Position22>
+      <Position23>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="158" Column="39" TopLine="140"/>
+      </Position23>
+      <Position24>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="21" Column="5" TopLine="3"/>
+      </Position24>
+      <Position25>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="158" Column="41" TopLine="140"/>
+      </Position25>
+      <Position26>
+        <Filename Value="../lib/IEC/iec104clientlist.pas"/>
+        <Caret Line="185" Column="40" TopLine="166"/>
+      </Position26>
+      <Position27>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="26" Column="11" TopLine="8"/>
+      </Position27>
+      <Position28>
+        <Filename Value="../lib/IEC/iec104server.pas"/>
+        <Caret Line="362" Column="24" TopLine="355"/>
+      </Position28>
+      <Position29>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="236" Column="1" TopLine="202"/>
+      </Position29>
+      <Position30>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="228" Column="1" TopLine="213"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="2">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../cmd/project1.lpr"/>
+        <Line Value="62"/>
+      </Item1>
+      <Item2>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../lib/sockets/blcksock.pas"/>
+        <Line Value="3264"/>
+      </Item2>
+    </BreakPoints>
+    <Watches Count="5">
+      <Item1>
+        <Expression Value="false"/>
+      </Item1>
+      <Item2>
+        <Expression Value="server"/>
+      </Item2>
+      <Item3>
+        <Expression Value="end"/>
+      </Item3>
+      <Item4>
+        <Expression Value="clientRXEvent(Sender: TObject;const Buffer:array of byte;count :integer)"/>
+      </Item4>
+      <Item5>
+        <Expression Value="TMyApplication.ServerCreateEvent"/>
+      </Item5>
+    </Watches>
+  </Debugging>
+</CONFIG>

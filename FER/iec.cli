@@ -1,0 +1,8 @@
+log=debug
+#log=info
+client.add
+client.0.port=2405
+#client.0.host=172.23.30.115
+client.0.start
+server.start
+

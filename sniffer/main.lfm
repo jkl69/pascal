@@ -1,7 +1,7 @@
 object monitor: Tmonitor
   Left = 234
   Height = 647
-  Top = 243
+  Top = 231
   Width = 1127
   Caption = 'IECmonitor'
   ClientHeight = 647
@@ -198,18 +198,18 @@ object monitor: Tmonitor
             ClientWidth = 906
             object PanelPcap: TPanel
               Left = 0
-              Height = 112
+              Height = 124
               Top = 0
               Width = 906
               Align = alTop
-              ClientHeight = 112
+              ClientHeight = 124
               ClientWidth = 906
               TabOrder = 0
               object B_doPcapMonitor: TButton
                 Left = 555
                 Height = 28
-                Top = 75
-                Width = 123
+                Top = 68
+                Width = 112
                 Action = ActionWPCAP
                 Anchors = [akTop, akRight]
                 Caption = 'Start Monitor'
@@ -217,7 +217,7 @@ object monitor: Tmonitor
               end
               object AdapterList: TListBox
                 Left = 179
-                Height = 99
+                Height = 92
                 Top = 4
                 Width = 368
                 ItemHeight = 0
@@ -225,26 +225,41 @@ object monitor: Tmonitor
               end
               object Memo1: TMemo
                 Left = 555
-                Height = 72
+                Height = 64
                 Top = 4
                 Width = 338
                 Color = clForm
                 Lines.Strings = (
                   'WinPCap is a Third Party LIB to capture ALL type of '
-                  'network protocols on a '
-                  'selected Network-Interface.'
+                  'network protocols on a selected Network-Interface.'
                   'Therefore WinPCap has to be installed on this machine.'
                   'Download : http://www.winpcap.org/'
                 )
+                OnChange = Memo1Change
                 ReadOnly = True
                 ScrollBars = ssVertical
                 TabOrder = 2
               end
+              object pcapVersion: TLabel
+                Left = 179
+                Height = 16
+                Top = 100
+                Width = 71
+                Caption = 'pcapVersion: NA'
+                Font.CharSet = ANSI_CHARSET
+                Font.Color = clTeal
+                Font.Height = -11
+                Font.Name = 'Arial Narrow'
+                Font.Pitch = fpVariable
+                Font.Quality = fqDraft
+                ParentColor = False
+                ParentFont = False
+              end
             end
             object winpcaplog: TMemo
               Left = 0
-              Height = 149
-              Top = 112
+              Height = 137
+              Top = 124
               Width = 906
               Align = alClient
               Font.CharSet = ANSI_CHARSET
@@ -312,7 +327,7 @@ object monitor: Tmonitor
     end
     object Tab2: TTabSheet
       Caption = 'Server'
-      ClientHeight = 601
+      ClientHeight = 596
       ClientWidth = 1119
       object Bevel2: TBevel
         Left = 0
@@ -337,7 +352,7 @@ object monitor: Tmonitor
       end
       object Logout: TMemo
         Left = 0
-        Height = 465
+        Height = 460
         Top = 136
         Width = 966
         Align = alClient
@@ -370,7 +385,7 @@ object monitor: Tmonitor
         end
         object ServerPort: TSpinEdit
           Left = 444
-          Height = 21
+          Height = 23
           Top = 24
           Width = 105
           MaxValue = 65535
@@ -397,7 +412,7 @@ object monitor: Tmonitor
       end
       object clientList: TListBox
         Left = 966
-        Height = 465
+        Height = 460
         Top = 136
         Width = 153
         Align = alRight

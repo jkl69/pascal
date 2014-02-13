@@ -105,8 +105,28 @@ TIEC104Server = class(TLTCPComponent)
 
 TIEC104Client = class(TLTCPComponent)
      private
+       Log: TLogger;
+       Ftimer:     TTimer;
+       Factiv: Boolean;
+       Fx :integer;
+       FTimerSet:   TIEC104Timerset;  // hold the reload values
+       FcounterSet: TIEC104Timerset;  // hold the current values
+       Fiecsock : TIEC104Socket;
      protected
+       procedure irq(sender:TObject);
+       procedure setActiv(value : boolean);
+       function getActiv: boolean;
+       procedure ConnectAction(aSocket: TLHandle); override;
+       procedure DisconnectEvent(aSocket: TLHandle); override;
+       procedure ErrorEvent(aSocket: TLHandle; const msg: string); override;
+       procedure dis(aSocket: TLSocket);
+       procedure connect(aSocket: TLSocket);
      public
+       constructor Create(AOwner: Tcomponent);override;
+       destructor destroy; override;
+
+       property Logger : Tlogger read log;
+       property Activ : Boolean read getActiv write setActiv;
     end;
 
 { TIEC104Socket }
@@ -635,7 +655,7 @@ if (t0>Fcounterset.T3) and (Flinkstatus<>IECINIT) then
       end;
    if (FIECSocketType=TIECServer) then
       begin
-      log(WARN,'Missing Polling fron client(T3)');
+      log(WARN,'Missing Polling from client(T3)');
       Fcounterset.T3:=datetimetotimestamp(now).time+Ftimerset.T3; //polltime;
       end;
    end;
@@ -711,13 +731,13 @@ begin
         readAPCI;
         FAPDU_RX_count:=-1;   // APDU complet reset APDU length counter
 
-         if (logger.GetLevel.equals(DEBUG)) then
-            begin
+//         if (logger.GetLevel.equals(DEBUG)) then
+//            begin
             s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
             log(DEBUG,'R'+logRstr+'['+inttostr(FAPDUlength)+'/'+offsetstr+'] '+s);
-            end;
-         if ((logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
-//         if (FAPDUlength >6) then
+//            end;
+//         if ((logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
+         if (FAPDUlength >6) then
             begin
             s:=BufferToHexStr(FAPDU_RX[6],FAPDUlength-6);
             log(INFO,'R['+inttostr(FAPDUlength-6)+'] '+s);
@@ -807,7 +827,8 @@ begin
   if (APCI and $01)=I_Frame then
     begin
     readASDU;
-    LogRStr:='i'+inttostr(Fvr);
+//    LogRStr:='i'+inttostr(Fvr);
+    LogRStr:=format('i%.5d',[Fvr]);
     end;
 end;
 
@@ -878,6 +899,8 @@ begin
   inc(Fcounterset.k); //counter sended messages
   Fcounterset.T1:=datetimetotimestamp(now).time+Ftimerset.T1;
 
+  LogSStr:=Format('i%.5d',[Fvs]);
+
 //  Trace('now'+inttostr(datetimetotimestamp(now).time)+'_(T1)_'+inttostr(Fcounterset.T1));
   if direct then
     send
@@ -892,7 +915,8 @@ begin
  Fwrite:=True;  // Block timmer straemsend  action while update stream
 
 // LogSStr:='i'+inttostr(Fvs);
-LogSStr:=Format('i%.5d',[Fvs]);
+
+//LogSStr:=Format('i%.5d',[Fvs]);
 
 //  if (logger.GetLevel.equals(INFO)) AND (FAPDU_TX_Count >6) then
   if  (FAPDU_TX_Count >6) then
@@ -935,19 +959,23 @@ var
 begin
 // Logging
 // LogSStr:='i'+inttostr(Fvs);
- LogSStr:=Format('i%.5d',[Fvs]);
-if (logger.GetLevel.equals(DEBUG)) then
+// LogSStr:=Format('i%.5d',[Fvs]);
+if logger<>nil then
    begin
-    s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
-    log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
+   if (logger.GetLevel.equals(DEBUG)) then
+      begin
+       s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
+       log(DEBUG,'S'+logSstr+'['+inttostr(FAPDU_TX_Count)+'] '+s);
+      end;
+
+   //if  (FAPDU_TX_Count >6) then
+   if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
+       begin
+       s:=BufferToHexStr(FAPDU_TX[6],FAPDU_TX_Count-6);
+       log(INFO,'S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
+       end;
    end;
 
-//if  (FAPDU_TX_Count >6) then
-if (logger.GetLevel.equals(INFO))and (FAPDU_TX_Count >6) then
-    begin
-    s:=BufferToHexStr(FAPDU_TX[6],FAPDU_TX_Count-6);
-    log(INFO,'S['+inttostr(FAPDU_TX_Count-6)+'] '+s);
-    end;
 if Fsocket<>nil then
    Fsocket.Send(FAPDU_TX,FAPDU_TX_Count);
 
@@ -981,7 +1009,8 @@ FAPDU_TX[5]:=tvr div 256;
 FAPDU_TX_count:=6;
 Fcounterset.w:=0;
 Fcounterset.T2:=off;
-logSstr:='s'+inttostr(Fvr);
+//logSstr:='s'+inttostr(Fvr);
+logSstr:=format('s%.5d',[Fvr]);
 Fsend:=true;
 end;
 
@@ -1082,6 +1111,102 @@ begin
  if s= TIECServer then
     Ftimerset.T3:=Ftimerset.T0;
  FIECsockettype:=s;
+end;
+
+constructor TIEC104Client.Create(AOwner: Tcomponent);
+begin
+ inherited create(AOwner);
+ Log := TLogger.GetInstance('IECClient');
+ OnConnect:= @connect;
+ OnDisconnect:= @dis;
+ Ftimer:= TTImer.Create(nil);
+ Ftimer.OnTimer:=@irq;
+ Ftimer.Enabled:=False;
+ FtimerSet:=DefaultTimerset;
+ Port:=2404;
+ host:= '127.0.0.1';
+end;
+
+destructor TIEC104Client.Destroy;
+begin
+ inherited destroy;
+ Ftimer.Enabled:=false;
+ Ftimer.Destroy;
+end;
+
+procedure TIEC104Client.ConnectAction(aSocket: TLHandle);
+begin
+ log.Info('try connect to '+host+' on port '+inttostr(port));   ;
+// aSocket.OnError;
+ inherited ConnectAction(aSocket);
+end;
+//TLSocketEvent = procedure(aSocket: TLSocket) of object;
+procedure TIEC104Client.dis(aSocket: TLSocket);
+begin
+   log.info('Dis');
+end;
+
+procedure TIEC104Client.connect(aSocket: TLSocket);
+begin
+   log.info('CONNECTED');
+  Fiecsock := TIEC104Socket.Create;
+  Fiecsock.SocketType:=TIECClient;
+  Fiecsock.FSocket := TLSocket (asocket);
+// iecsock.Name:=adr;
+// Fiecsock.onRXData:=FOnClientRead;
+// Fiecsock.onTXData:=FOnClientSend;
+  Fiecsock.Ftimer.Enabled:=TRUE;
+  Fiecsock.TimerSet:=Ftimerset;
+  Fiecsock.Logger := log;
+end;
+
+procedure TIEC104Client.DisconnectEvent(aSocket: TLHandle);
+begin
+  log.info('DisconnectEvent');
+ inherited DisconnectEvent(aSocket);
+end;
+
+procedure TIEC104Client.ErrorEvent(aSocket: TLHandle; const msg: string);
+var
+   socket:TLSocket;
+begin
+  socket:=TLSocket(asocket);
+  logger.error('Event: '+msg);
+  socket.Disconnect(true);
+  Fcounterset.T0:=datetimetotimestamp(now).time +Ftimerset.T0; //reload the reconnect time
+//  log.Info('reconnect time');
+  inherited ErrorEvent(aSocket,msg);
+end;
+
+procedure TIEC104Client.setActiv(value : boolean);
+begin
+ Ftimer.Enabled:=true;
+ Fcounterset.T0:=off;  // disable reconnect check
+// log.Info('try connect to '+host+' on port '+inttostr(port));
+ connect();
+end;
+
+function TIEC104Client.getActiv : boolean;
+begin
+ getActiv := FActiv;
+end;
+
+procedure TIEC104Client.irq(sender:TObject);
+var
+ t0:integer;
+begin
+logger.debug('IRQ');
+if (Connected) then log.info('connected');
+t0:=datetimetotimestamp(now).time;
+
+if (t0>FcounterSet.T0) then  //reconnect time is expierd
+   begin
+//  log.Warn('Reconnect time (t0) expiered try reconnect to '+host+' on port '+inttostr(port));
+   Fcounterset.T0:=off;
+   connect();
+   end;
+inc(Fx);
+
 end;
 
 end.

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Compiler Value="/usr/bin/fpc" Date="1374722286"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -vewnhi -Fi/mnt/Pascal/FER/lib/i386-linux -Fu/mnt/Pascal/lib/IEC -Fu/mnt/Pascal/lib/log -Fu/mnt/Pascal/lib/sockets -Fu/mnt/Pascal/FER/ -FU/mnt/Pascal/FER/lib/i386-linux/ -l IECGW.pas"/>
+</CONFIG>

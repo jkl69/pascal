@@ -1,0 +1,1 @@
+{ "cmd" : "client.0" , "type" :"set" , "array":["host=172.23.30.115","port=2405"] }

@@ -1,0 +1,21 @@
+h1 {color:Khaki;text-align: center;
+     background-color:black;
+     padding:20px;}
+hr {color:sienna;}
+p.red{color:sienna;border-style:groove;border-width:5px;border-color:red;}
+p.one{margin-left:50px;
+     padding:10px;
+     color:green;border-style:groove;
+     border-radius:5px;border-width:5px;border-color:blue;}
+li.e {color:red;
+ background-color:Ivory;
+  }
+li.o {color:red;
+ background-color:Khaki;
+  }
+dd {color:green;
+  margin-right:50%;
+  background-color:Khaki;
+  }
+div#menu {color:blue; float:left; margin-top:2px; width:120px; background:Khaki; }
+/*div#main { position:fixed; left:140px; top:100px; width:700px; height:500px; }*/

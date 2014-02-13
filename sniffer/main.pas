@@ -19,6 +19,7 @@ type
     ActionRawmonitor: TAction;
     ActionList1: TActionList;
     AdapterList: TListBox;
+    pcapVersion: TLabel;
     Socketconfig: TButton;
     B_doRawMonitor: TButton;
     B_doPcapMonitor: TButton;
@@ -66,6 +67,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure LogoutChange(Sender: TObject);
     procedure mainlogChange(Sender: TObject);
+    procedure Memo1Change(Sender: TObject);
     procedure monlistClick(Sender: TObject);
     procedure monlistDblClick(Sender: TObject);
     procedure RawLogChange(Sender: TObject);
@@ -81,7 +83,8 @@ type
     procedure IECServerClientDisConnect(Sender: TObject;Socket: TIEC104Socket);
     procedure winpcaplogChange(Sender: TObject);
   private
-     procedure doIniFile(properties:Tstringlist);
+    procedure setPcapFilter(Sender: TObject);
+    procedure doIniFile(properties:Tstringlist);
      function isinFilter(tk: byte):boolean;
   public
     { public declarations }
@@ -100,7 +103,7 @@ var
 implementation
 
 uses
-   key,  windows, IECSockDlg , TLevelUnit, TAppAppenderunit;
+   key,  windows, IECSockDlg , TLevelUnit, TAppenderUnit, TAppAppenderunit;
 {$R *.lfm}
 {$INCLUDE version.inc}
 
@@ -284,7 +287,7 @@ begin
   // raw sockets monitoring
    RawMonitor := TMonitorSocket.Create (self) ;
    AppAppender:= TAppAppender.Create(@Rawlog.Lines);
-   AppAppender.SetThreshold(DEBUG);
+   AppAppender.SetThreshold(INFO);
    RawMonitor.Logger.AddAppender(AppAppender);
    RawMonitor.onPacketEvent := @PacketEvent ;
 
@@ -293,7 +296,7 @@ begin
 
    PcapMonitor:= TWPcap.Create(self);
    AppAppender:= TAppAppender.Create(@Winpcaplog.Lines);
-   AppAppender.SetThreshold(DEBUG);
+   AppAppender.SetThreshold(INFO);
 //    WPLogLevel:=TLogLevelGroup.Create(PanelMonitor,PcapMonitorTab.Log);
 //    WPLogLevel.Parent:=PanelPCap;
     PcapMonitor.Logger.AddAppender(AppAppender);
@@ -302,6 +305,8 @@ begin
     PcapLogLevel.Parent:=PanelPcap;
     PcapLogLevel.Width:= 174;
     PcapLogLevel.setName('PCAP_LOG');
+
+    PcapVersion.Caption:=getLibVersion();
 
     PcapMonitor.onPacketEvent := @PacketEvent ;
     AdapterList.Items.Assign (Wpcap.AdapterDescList) ;
@@ -338,6 +343,11 @@ procedure Tmonitor.mainlogChange(Sender: TObject);
 begin
     if mainlog.Lines.Count>800 then
      mainlog.Clear;
+end;
+
+procedure Tmonitor.Memo1Change(Sender: TObject);
+begin
+
 end;
 
 
@@ -445,8 +455,8 @@ begin
    begin
    IECSock:=TIEC104Socket(clientlist.Items.Objects[ix]);
    IECServer.logger.Info('Server clinet '+IECSock.Name+' selectet');
-//   if (iecsock.logger <> nil )then
-//      ServerLogLevel.setAppender(IECSock.Logger.GetAppender('TRACE'));
+   if (iecsock.logger <> nil )then
+      ServerLogLevel.setAppender(IECSock.Logger.GetAppender('TRACE'));
    end;
 end;
 
@@ -469,7 +479,8 @@ end;
 
 procedure Tmonitor.IECServerClientConnect(Sender: TObject;Socket: TIEC104Socket);
 var
-  AppAppender: TAppAppender  ;
+ AppAppender: TAppAppender  ;
+ AppApp: TAppender  ;
 
 begin
 logger.Info('add Serversocket'+socket.Name);
@@ -477,14 +488,16 @@ clientlist.AddItem(socket.name,socket);
 
 socket.setLogger('IEC_OUT');
 
-//t:= IECServer.logger.GetAppender('TRACE');
-//AppAppender := TAppAppender.Create(t.getLines);
-AppAppender:= TAppAppender.Create(@logout.Lines);
-AppAppender.SetThreshold(DEBUG);
-//AppAppender.SetThreshold(WARN);
-AppAppender.SetName('TRACE');
 if (socket.logger <>nil) then
-   Socket.Logger.AddAppender(AppAppender);
+   AppApp:= socket.Logger.GetAppender('TRACE');
+   if AppApp=nil then
+     begin
+     AppAppender:= TAppAppender.Create(@logout.Lines);
+     AppAppender.SetThreshold(DEBUG);
+     //AppAppender.SetThreshold(WARN);
+     AppAppender.SetName('TRACE');
+     Socket.Logger.AddAppender(AppAppender);
+     end;
 
 //socket.Log.LogLevel:=lFATAL;
 //socket.Log.code:=logservsock;
@@ -588,6 +601,8 @@ begin
          AdapterList.ItemIndex:=0;
          logger.Error('scan Interface not available change to 1-st available Interface');
          end;
+
+    PcapMonitor.FilterString:=properties.Values['PcapFilter'];
     monitorControl.ActivePageIndex:=1;
     end;
 
@@ -624,10 +639,12 @@ begin
  if value ='' then value:= 'false';
  if (StrToBool(value)) then
      ActionServer.Execute;
-
-
 end;
 
+procedure Tmonitor.setPcapFilter(Sender: TObject);
+begin
+
+end;
 
 procedure Tmonitor.monlistClick(Sender: TObject);
 var
