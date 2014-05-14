@@ -512,7 +512,7 @@ function TIECTCItem.getqu(index :integer):byte;
 var
  o:TIECTCOBJ;
 begin
- result:=-1;
+ result:=0;
  if (index >= iob.Count) then
     begin
     exit;

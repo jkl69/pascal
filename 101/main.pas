@@ -68,6 +68,7 @@ type
     procedure ItemGridSelection(Sender: TObject; aCol, aRow: Integer);
     procedure ItemGridValidateEntry(sender: TObject; aCol, aRow: Integer;
       const OldValue: string; var NewValue: String);
+    procedure LinkadrChange(Sender: TObject);
     procedure LinkadrEditingDone(Sender: TObject);
     procedure SimCheckChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -77,6 +78,7 @@ type
     Function save:Tstringlist;
     procedure load(l:Tstringlist);
     procedure loadcsv(l:Tstringlist);
+    procedure loadtoolbox(l:Tstringlist);
     Function itemAdd(s:String;tk:TIECSType;asdu:integer;adr:integer):TIECTCItem;
     procedure simAdd(item:TIECTCItem;activ:boolean;tinc:integer;valinc:Double);
     procedure receive(item:TIECTCItem);
@@ -303,6 +305,38 @@ else
   log('ERROR File Version');
 end;
 
+procedure TSlave.loadToolbox(l:Tstringlist);
+var
+ item:TIECTCItem;
+ st : TIECSType;
+ prop,it:TStringlist;
+ nindex,tindex,aindex,iobindex :integer;
+ i:integer;
+begin
+ log('loadToolboxFile');
+ prop := TStringlist.Create;
+ it := TStringlist.Create;
+ prop.DelimitedText:= stringreplace(l[1],' ','',[rfReplaceAll]);
+ for i:=0 to prop.Count-1 do
+     begin
+     if pos('Textword1',prop[i])<>0 then nindex := i;
+     if pos('BasicType',prop[i])<>0 then tindex := i;
+     if pos('DeviceNr',prop[i])<>0 then aindex := i;
+     if pos('Objectaddress',prop[i])<>0 then iobindex := i;
+     end;
+ log(format('Columns: typ=%d  ASDU=%d Adr=%d',[tindex,aindex,iobindex]));
+ for i:=2 to l.Count-1  do
+      begin
+      it.DelimitedText:=stringreplace(l[i],' ','',[rfReplaceAll]);
+      st:= getStype(strtoint(it[tindex]));
+      log(format('%d type%s name:%s asdu%s iob%s',[i,IECType[st].sname,it[nindex],it[aindex],it[iobindex]]));
+      item:=itemAdd(it[nindex],st,strtoint(it[aindex]),strtoint(it[iobindex]));
+      simAdd(item,false,4,1);
+      end;
+ prop.Destroy;
+ it.destroy;
+end;
+
 procedure TSlave.loadcsv(l:Tstringlist);
 var
  item:TIECTCItem;
@@ -370,6 +404,11 @@ begin
           begin
           strl.Insert(0,opendialog.FileName);
           loadcsv(strl) ;
+          end;
+       if opendialog.FilterIndex=3 then
+          begin
+          strl.Insert(0,opendialog.FileName);
+          loadToolbox(strl) ;
           end;
   end;
   Strl.destroy;
@@ -483,6 +522,11 @@ begin
     else
       newValue:=oldValue;
   end;
+end;
+
+procedure TSlave.LinkadrChange(Sender: TObject);
+begin
+   ser.LinkAdr:=linkadr.Value;
 end;
 
 procedure TSlave.LinkadrEditingDone(Sender: TObject);

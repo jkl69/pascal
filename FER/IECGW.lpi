@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -59,7 +59,7 @@
         <UnitName Value="IEC104Server"/>
       </Unit4>
       <Unit5>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/jsonparser.pp"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/jsonparser.pp"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jsonparser"/>
       </Unit5>

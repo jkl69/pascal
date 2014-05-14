@@ -63,6 +63,7 @@ type
        fonStart : TnotifyEvent;
        fonStop : TnotifyEvent;
        fonfunctionChange : TSerialFunctionEvent;
+       procedure ConfigIECSerial;
        function CalcCRC:byte;//(count:byte):byte;
        function IsCRC:boolean;
        procedure DecodeRX;
@@ -80,15 +81,17 @@ type
 //       procedure ReqLinkStatus;
     public
        Name:String;
+       baud, bits: integer;
+       parity: char;
+       stopbits: integer;
        rxcount :cardinal;
-      rxDatacount  :cardinal;
-      txcount :cardinal;
-      txDatacount  :cardinal;
+       rxDatacount  :cardinal;
+       txcount :cardinal;
+       txDatacount  :cardinal;
        Terminated:boolean;
 //       pause:boolean;
        constructor Create;
        destructor destroy;
-       procedure Config2(baudrate, dbits :integer; parity:char; sbits:byte);
        Function getConfig:TDCB;
        function getConfigStr:String;
        //( baud, bits: integer; parity: char; stop: integer;softflow, hardflow: boolean);
@@ -180,12 +183,13 @@ begin
   inherited;// create(true);
   ThreadID := 0;
   fmember := TIEC101Member.Create;
-  //  FlinkAdr:=1;
   fmember.linkadr := 1;
   fport:='COM1';
-//  Device:='COM1';
-  config(9600, 8, 'E', SB1, False, False);
-//  config(600, 8, 'E', SB1);
+//  config(9600, 8, 'E', SB1, False, False);
+   baud :=9600;
+   bits := 8;
+   parity:= 'E';
+   stopbits := SB1;
   end;
 
 Function TIEC101Serial.getConfig:TDCB;
@@ -193,9 +197,11 @@ begin
   result:=dcb;
 end;
 
-procedure TIEC101Serial.Config2(baudrate, dbits :integer; parity:char; sbits:byte);
+procedure TIEC101Serial.ConfigIECSerial;
 begin
-  config(baudrate, dbits, parity, Sbits, False, False);
+  log(info,'CONFIG MASTER');
+  config(baud, bits, parity, stopbits, False, False);
+  if LastError<>0 then begin  log(error,'LastError:'+GetErrorDesc(LastError));   end;
 end;
 
 function parityToChar(p:byte):char;
@@ -211,17 +217,38 @@ end;
 
 function TIEC101Serial.getConfigStr:String;
 //( baud, bits: integer; parity: char; stop: integer;softflow, hardflow: boolean);
-var txt,sb:String;
+var s,p,ptxt,sb:String;
+    b:Dword;
+    stb,l:byte;
 begin
-txt:=parityToChar(dcb.Parity);
-case DCB.StopBits of
-  0 : sb:= '1';
-  1 : sb:= '1.5';
-  2 : sb:= '2';
-end;
-//result:=format('Device:%s BaudRate:%d DBits:%d Parity:%s SBits:%d',
-result:=format('Device: %s %d %d%s%s',
-       [Fport,DCB.BaudRate,DCB.ByteSize,txt,sb]);
+if InstanceActive then
+   begin
+   p:=device;
+   ptxt:=parityToChar(DCB.Parity);
+   b:= DCB.BaudRate;
+   l:=DCB.ByteSize;
+   stb:= DCB.StopBits;
+   s:='[open]';
+   end
+else
+  begin
+    p:= Fport;
+    ptxt :=Parity;
+    b:=  Baud;
+    l:= Bits;
+    stb:= StopBits;
+    s:='[close]';
+  end;
+
+ case stb of
+      0 : sb:= '1';
+      1 : sb:= '1.5';
+      2 : sb:= '2';
+ end;
+
+  result:=format('Device%s: %s %d %d%s%s',
+ //   [s,p,DCB.BaudRate,DCB.ByteSize,txt,sb]);
+    [s,p,b,l,ptxt,sb]);
 end;
 
 destructor TIEC101Serial.destroy;
@@ -462,10 +489,6 @@ var  tld , tlba:integer;
 const
   tr=50; LBAMax=32;
 begin
-Tld:= round((1000 / dcb.BaudRate) + tr);
-Tlba:= round((1000 / dcb.BaudRate) *11 * LBAMax);
-Ft0:= TLD + TLBA;
-//config(600, 8, 'E', SB1, False, False);
 Connect(fport);
 if LastError<>0 then
      begin
@@ -475,7 +498,11 @@ if LastError<>0 then
      end
 else
   begin
+   configIECSerial;
    log(info,'Opened Port: '+inttoStr(dcb.BaudRate));
+   Tld:= round((1000 / dcb.BaudRate) + tr);
+   Tlba:= round((1000 / dcb.BaudRate) *11 * LBAMax);
+   Ft0:= TLD + TLBA;
    if ThreadID=0 then ThreadID:= BeginThread(@run ,self) ;
    if assigned(fonStart) then fonstart(self);
    result:=True;
@@ -635,7 +662,6 @@ constructor TIEC101Master.Create;
 begin
  inherited;
  fmember.PRM := True;  // Direction 1= master to slave  0= slave to master
-// config(600, 8, 'E', SB1, False, False);
 end;
 
 procedure TIEC101Master.SendReset;

@@ -30,8 +30,8 @@ interface
 
 uses
    SysUtils,
-   {$ifdef win32}
-           Forms,
+   {$ifdef win32 or win64}
+ //      Forms,
    {$endif}
    TLogLogUnit, TlevelUnit, TLoggerUnit
 //   TPropertyConfiguratorUnit
@@ -51,14 +51,15 @@ var
 begin
    s:= ExtractFilePath(ParamStr(0))+'log4pascal.log';
 //   s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log'
-   {$ifdef win32}
-   s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log'
+   {$ifdef win32 or win64}
+   s:= ExtractFilePath(ParamStr(0))+'log4pascal.log';
+//  s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log' ;
    {$endif}
    {$ifdef Unix}
        s:= ExtractFilePath(ParamStr(0))+'l4pascal.log';
 //     s:= ExpandFileName(ParamStr(0)+ '.log');
    {$endif}
-   TlogLogUnit.initialize(s );
+   TlogLogUnit.initialize(s);
    TLoggerUnit.initialize();
 end;
 

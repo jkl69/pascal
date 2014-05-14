@@ -1,17 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="55">
+    <Units Count="63">
       <Unit0>
         <Filename Value="IECGW.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IECGW"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="434"/>
-        <CursorPos X="76" Y="448"/>
+        <TopLine Value="422"/>
+        <CursorPos X="1" Y="457"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -46,15 +46,13 @@
         <Filename Value="../lib/IEC/iec104server.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IEC104Server"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="128"/>
-        <CursorPos X="64" Y="153"/>
+        <TopLine Value="25"/>
+        <CursorPos X="74" Y="140"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit4>
       <Unit5>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/jsonparser.pp"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/jsonparser.pp"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jsonparser"/>
         <WindowIndex Value="0"/>
@@ -93,12 +91,10 @@
         <Filename Value="iecgwevent.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IECGWEvent"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="145"/>
         <CursorPos X="2" Y="145"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="clievent.pas"/>
@@ -125,7 +121,7 @@
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
-        <CursorPos X="36" Y="21"/>
+        <CursorPos X="1" Y="28"/>
         <UsageCount Value="249"/>
         <Loaded Value="True"/>
       </Unit12>
@@ -133,10 +129,11 @@
         <Filename Value="CLI/climaster.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="climaster"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="10"/>
-        <CursorPos X="52" Y="29"/>
+        <TopLine Value="34"/>
+        <CursorPos X="34" Y="52"/>
         <UsageCount Value="239"/>
         <Loaded Value="True"/>
       </Unit13>
@@ -183,23 +180,19 @@
         <Filename Value="../lib/IEC/iectree.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IECTree"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="289"/>
+        <TopLine Value="287"/>
         <CursorPos X="1" Y="313"/>
         <UsageCount Value="202"/>
-        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="CLI/cliitems.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="CLIItems"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="204"/>
         <CursorPos X="2" Y="271"/>
         <UsageCount Value="221"/>
-        <Loaded Value="True"/>
       </Unit19>
       <Unit20>
         <Filename Value="session.pas"/>
@@ -208,7 +201,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="44"/>
         <CursorPos X="1" Y="74"/>
-        <UsageCount Value="146"/>
+        <UsageCount Value="188"/>
       </Unit20>
       <Unit21>
         <Filename Value="gwnetconnection.pas"/>
@@ -217,7 +210,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="22" Y="38"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="125"/>
       </Unit21>
       <Unit22>
         <Filename Value="../lib/IEC/iec104client.pas"/>
@@ -225,7 +218,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="23"/>
         <CursorPos X="36" Y="40"/>
-        <UsageCount Value="93"/>
+        <UsageCount Value="89"/>
       </Unit22>
       <Unit23>
         <Filename Value="../lib/log/tfileappenderunit.pas"/>
@@ -233,7 +226,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="117"/>
         <CursorPos X="1" Y="135"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="13"/>
       </Unit23>
       <Unit24>
         <Filename Value="../lib/IEC/iec104socket.pas"/>
@@ -241,7 +234,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="294"/>
         <CursorPos X="1" Y="312"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="80"/>
       </Unit24>
       <Unit25>
         <Filename Value="../lib/log/tloggerunit.pas"/>
@@ -249,7 +242,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="261"/>
         <CursorPos X="1" Y="279"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="31"/>
       </Unit25>
       <Unit26>
         <Filename Value="../lib/log/tlevelunit.pas"/>
@@ -257,22 +250,22 @@
         <WindowIndex Value="0"/>
         <TopLine Value="140"/>
         <CursorPos X="55" Y="159"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="1"/>
       </Unit26>
       <Unit27>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classesh.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classesh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="3" Y="123"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="21"/>
       </Unit27>
       <Unit28>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/fpjson.pp"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-json/src/fpjson.pp"/>
         <UnitName Value="fpjson"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1614"/>
         <CursorPos X="1" Y="1621"/>
-        <UsageCount Value="92"/>
+        <UsageCount Value="88"/>
       </Unit28>
       <Unit29>
         <Filename Value="../json/unit1.pas"/>
@@ -283,14 +276,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="92"/>
         <CursorPos X="3" Y="96"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="5"/>
       </Unit29>
       <Unit30>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/inc/objpash.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/inc/objpash.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="171"/>
         <CursorPos X="23" Y="192"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="17"/>
       </Unit30>
       <Unit31>
         <Filename Value="../lib/Tree/tree.pas"/>
@@ -298,22 +291,20 @@
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="11" Y="21"/>
-        <UsageCount Value="104"/>
+        <UsageCount Value="100"/>
       </Unit31>
       <Unit32>
         <Filename Value="CLI/clievent.pas"/>
         <UnitName Value="CLIEvent"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="132"/>
         <CursorPos X="1" Y="143"/>
         <UsageCount Value="100"/>
-        <Loaded Value="True"/>
       </Unit32>
       <Unit33>
         <Filename Value="CLI/cli.pas"/>
         <UnitName Value="CLI"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="1" Y="20"/>
@@ -326,45 +317,45 @@
         <WindowIndex Value="0"/>
         <TopLine Value="261"/>
         <CursorPos X="4" Y="361"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="7"/>
       </Unit34>
       <Unit35>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/inifiles.pp"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/inifiles.pp"/>
         <UnitName Value="IniFiles"/>
         <WindowIndex Value="0"/>
         <TopLine Value="185"/>
         <CursorPos X="4" Y="204"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="1"/>
       </Unit35>
       <Unit36>
         <Filename Value="../lib/sockets/customserver1.pas"/>
         <UnitName Value="customserver1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="50"/>
-        <CursorPos X="12" Y="74"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="488"/>
+        <CursorPos X="26" Y="502"/>
+        <UsageCount Value="19"/>
       </Unit36>
       <Unit37>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/win/tthread.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/win/tthread.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="11" Y="49"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="5"/>
       </Unit37>
       <Unit38>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/custapp.pp"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/custapp.pp"/>
         <UnitName Value="CustApp"/>
         <WindowIndex Value="0"/>
         <TopLine Value="204"/>
         <CursorPos X="20" Y="224"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="12"/>
       </Unit38>
       <Unit39>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="77"/>
         <CursorPos X="35" Y="94"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="5"/>
       </Unit39>
       <Unit40>
         <Filename Value="IECGW1.pas"/>
@@ -372,14 +363,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="187"/>
         <CursorPos X="5" Y="206"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="17"/>
       </Unit40>
       <Unit41>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/inc/systemh.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/inc/systemh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="468"/>
         <CursorPos X="3" Y="484"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="11"/>
       </Unit41>
       <Unit42>
         <Filename Value="CLI/clirouter.pas"/>
@@ -387,14 +378,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="16" Y="56"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="1"/>
       </Unit42>
       <Unit43>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/stringl.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/stringl.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="633"/>
         <CursorPos X="19" Y="654"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="1"/>
       </Unit43>
       <Unit44>
         <Filename Value="../lib/sockets/telnetsock1.pas"/>
@@ -402,7 +393,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="23"/>
         <CursorPos X="46" Y="41"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="2"/>
       </Unit44>
       <Unit45>
         <Filename Value="../lib/IEC/iecstream.pas"/>
@@ -410,7 +401,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="51"/>
         <CursorPos X="3" Y="471"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="22"/>
       </Unit45>
       <Unit46>
         <Filename Value="../lib/IEC/IECItemTest.lpr"/>
@@ -418,16 +409,16 @@
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
         <CursorPos X="1" Y="113"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="3"/>
       </Unit46>
       <Unit47>
         <Filename Value="../lib/IEC/iecmap.pas"/>
         <UnitName Value="IECMAP"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="11" Y="114"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
       </Unit47>
       <Unit48>
@@ -436,17 +427,16 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="3"/>
       </Unit48>
       <Unit49>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
         <UnitName Value="iec101serial"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="301"/>
-        <CursorPos X="1" Y="328"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="475"/>
+        <CursorPos X="1" Y="510"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit49>
       <Unit50>
@@ -454,17 +444,17 @@
         <UnitName Value="synaser"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1024"/>
-        <CursorPos X="1" Y="1033"/>
-        <UsageCount Value="23"/>
+        <TopLine Value="858"/>
+        <CursorPos X="11" Y="876"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit50>
       <Unit51>
-        <Filename Value="../../../lazarus64/fpc/2.6.2/source/rtl/win/wininc/struct.inc"/>
+        <Filename Value="../../lazarus64/fpc/2.6.2/source/rtl/win/wininc/struct.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="786"/>
         <CursorPos X="6" Y="803"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="12"/>
       </Unit51>
       <Unit52>
         <Filename Value="../lib/log/tloglogunit.pas"/>
@@ -472,7 +462,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="1" Y="69"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="8"/>
       </Unit52>
       <Unit53>
         <Filename Value="../lib/IEC/iecitems.pas"/>
@@ -480,7 +470,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="78"/>
         <CursorPos X="1" Y="100"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="6"/>
       </Unit53>
       <Unit54>
         <Filename Value="../lib/sockets/blcksock.pas"/>
@@ -488,8 +478,74 @@
         <WindowIndex Value="0"/>
         <TopLine Value="3242"/>
         <CursorPos X="39" Y="3142"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="8"/>
       </Unit54>
+      <Unit55>
+        <Filename Value="../lib/log/tconfiguratorunit.pas"/>
+        <UnitName Value="TConfiguratorUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="41"/>
+        <CursorPos X="3" Y="56"/>
+        <UsageCount Value="7"/>
+      </Unit55>
+      <Unit56>
+        <Filename Value="C:/codetyphon/fpcsrc/packages/fcl-base/src/custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="133"/>
+        <CursorPos X="11" Y="153"/>
+        <UsageCount Value="7"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="C:/codetyphon/fpcsrc/rtl/win/wininc/struct.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1462"/>
+        <CursorPos X="17" Y="1476"/>
+        <UsageCount Value="7"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="C:/codetyphon/fpcsrc/rtl/win/sysosh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="22"/>
+        <CursorPos X="3" Y="33"/>
+        <UsageCount Value="7"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="C:/codetyphon/fpcsrc/packages/fcl-base/src/syncobjs.pp"/>
+        <UnitName Value="syncobjs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="14" Y="16"/>
+        <UsageCount Value="7"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="C:/codetyphon/fpcsrc/rtl/win/wininc/struct.inc"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="801"/>
+        <CursorPos X="16" Y="827"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="../lib/sockets/iecserial.pas"/>
+        <UnitName Value="IECSerial"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="426"/>
+        <CursorPos X="11" Y="440"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit61>
+      <Unit62>
+        <Filename Value="C:/codetyphon/fpcsrc/rtl/win/wininc/redef.inc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="812"/>
+        <CursorPos X="10" Y="832"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit62>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
@@ -497,123 +553,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="116" Column="16" TopLine="97"/>
+        <Caret Line="204" Column="25" TopLine="176"/>
       </Position1>
       <Position2>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="762" Column="37" TopLine="730"/>
+        <Caret Line="493" Column="1" TopLine="462"/>
       </Position2>
       <Position3>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="734" Column="32" TopLine="704"/>
+        <Caret Line="205" Column="1" TopLine="179"/>
       </Position3>
       <Position4>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="28" Column="6" TopLine="9"/>
+        <Caret Line="490" Column="86" TopLine="474"/>
       </Position4>
       <Position5>
-        <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="346" Column="1" TopLine="327"/>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="1" Column="83" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="393" Column="31" TopLine="380"/>
+        <Caret Line="46" Column="1" TopLine="25"/>
       </Position6>
       <Position7>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="736" Column="26" TopLine="714"/>
+        <Caret Line="193" Column="1" TopLine="187"/>
       </Position7>
       <Position8>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="396" Column="5" TopLine="375"/>
+        <Caret Line="494" Column="3" TopLine="470"/>
       </Position8>
       <Position9>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="78" Column="18" TopLine="66"/>
+        <Caret Line="203" Column="38" TopLine="185"/>
       </Position9>
       <Position10>
-        <Filename Value="IECGW.pas"/>
-        <Caret Line="52" Column="16" TopLine="35"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="192" Column="12" TopLine="173"/>
       </Position10>
       <Position11>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="739" Column="17" TopLine="707"/>
+        <Caret Line="191" Column="18" TopLine="174"/>
       </Position11>
       <Position12>
-        <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="68" Column="18" TopLine="51"/>
+        <Filename Value="CLI/climaster.pas"/>
+        <Caret Line="105" Column="3" TopLine="82"/>
       </Position12>
       <Position13>
-        <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="454" Column="34" TopLine="396"/>
+        <Filename Value="CLI/climaster.pas"/>
+        <Caret Line="69" Column="3" TopLine="42"/>
       </Position13>
       <Position14>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="329" Column="12" TopLine="301"/>
+        <Caret Line="84" Column="14" TopLine="65"/>
       </Position14>
       <Position15>
         <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="406" Column="14" TopLine="389"/>
+        <Caret Line="167" Column="3" TopLine="134"/>
       </Position15>
       <Position16>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="320" Column="50" TopLine="302"/>
+        <Caret Line="86" Column="12" TopLine="69"/>
       </Position16>
       <Position17>
         <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="328" Column="1" TopLine="301"/>
+        <Caret Line="191" Column="4" TopLine="171"/>
       </Position17>
       <Position18>
-        <Filename Value="../lib/IEC/iec101serial.pas"/>
-        <Caret Line="329" Column="1" TopLine="301"/>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="446" Column="49" TopLine="422"/>
       </Position18>
       <Position19>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1011" Column="1" TopLine="994"/>
+        <Filename Value="CLI/climaster.pas"/>
+        <Caret Line="48" Column="23" TopLine="31"/>
       </Position19>
       <Position20>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1012" Column="1" TopLine="994"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="105" Column="17" TopLine="222"/>
       </Position20>
       <Position21>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1013" Column="1" TopLine="994"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="490" Column="1" TopLine="464"/>
       </Position21>
       <Position22>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1015" Column="1" TopLine="994"/>
+        <Filename Value="IECGW.pas"/>
+        <Caret Line="457" Column="1" TopLine="422"/>
       </Position22>
       <Position23>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1016" Column="1" TopLine="994"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="200" Column="11" TopLine="182"/>
       </Position23>
       <Position24>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1025" Column="1" TopLine="994"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="244" Column="10" TopLine="211"/>
       </Position24>
       <Position25>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1026" Column="1" TopLine="995"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="223" Column="15" TopLine="207"/>
       </Position25>
       <Position26>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1027" Column="1" TopLine="996"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="228" Column="3" TopLine="216"/>
       </Position26>
       <Position27>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1028" Column="1" TopLine="997"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="241" Column="19" TopLine="224"/>
       </Position27>
       <Position28>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1029" Column="11" TopLine="1005"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="86" Column="16" TopLine="68"/>
       </Position28>
       <Position29>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1032" Column="1" TopLine="1005"/>
+        <Filename Value="../lib/IEC/iec101serial.pas"/>
+        <Caret Line="223" Column="1" TopLine="217"/>
       </Position29>
       <Position30>
-        <Filename Value="../lib/sockets/synaser.pas"/>
-        <Caret Line="1033" Column="1" TopLine="1024"/>
+        <Filename Value="CLI/climaster.pas"/>
+        <Caret Line="52" Column="32" TopLine="37"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
@@ -630,28 +686,28 @@
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../lazarus64/fpc/2.6.2/source/rtl/win/tthread.inc"/>
+        <Source Value="../../lazarus64/fpc/2.6.2/source/rtl/win/tthread.inc"/>
         <Line Value="100"/>
       </Item2>
       <Item3>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
+        <Source Value="../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
         <Line Value="101"/>
       </Item3>
       <Item4>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
+        <Source Value="../../lazarus64/fpc/2.6.2/source/rtl/objpas/classes/classes.inc"/>
         <Line Value="97"/>
       </Item4>
       <Item5>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/inifiles.pp"/>
+        <Source Value="../../lazarus64/fpc/2.6.2/source/packages/fcl-base/src/inifiles.pp"/>
         <Line Value="794"/>
       </Item5>
       <Item6>
@@ -664,8 +720,9 @@
     </BreakPoints>
     <Watches Count="1">
       <Item1>
-        <Expression Value="IECTyp"/>
+        <Expression Value="Fhandle"/>
       </Item1>
     </Watches>
   </Debugging>
+  <EditorMacros Count="0"/>
 </CONFIG>

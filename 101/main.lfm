@@ -1,7 +1,7 @@
 object Slave: TSlave
-  Left = 367
+  Left = 289
   Height = 459
-  Top = 263
+  Top = 262
   Width = 1130
   Caption = 'IEC101Slave'
   ClientHeight = 459
@@ -43,11 +43,11 @@ object Slave: TSlave
     0000000000000000000000000000000000000000000000000000
   }
   OnCreate = FormCreate
-  LCLVersion = '1.0.8.0'
+  LCLVersion = '1.3'
   object StatusBar: TStatusBar
     Left = 0
-    Height = 23
-    Top = 436
+    Height = 20
+    Top = 439
     Width = 1130
     Panels = <    
       item
@@ -68,7 +68,7 @@ object Slave: TSlave
   end
   object ItemGrid: TStringGrid
     Left = 0
-    Height = 217
+    Height = 220
     Top = 56
     Width = 1130
     Align = alClient
@@ -179,18 +179,18 @@ object Slave: TSlave
     end
     object IECTypeCombo: TComboBox
       Left = 16
-      Height = 23
+      Height = 21
       Top = 20
       Width = 216
       BorderStyle = bsSingle
-      ItemHeight = 15
+      ItemHeight = 13
       TabOrder = 3
     end
     object SimCheck: TCheckBox
       Left = 416
-      Height = 19
+      Height = 17
       Top = 27
-      Width = 40
+      Width = 36
       Caption = 'Sim'
       Checked = True
       OnChange = SimCheckChange
@@ -199,18 +199,21 @@ object Slave: TSlave
     end
     object Linkadr: TSpinEdit
       Left = 616
-      Height = 23
-      Top = 20
+      Height = 21
+      Top = 19
       Width = 90
+      MaxValue = 65535
+      MinValue = 1
+      OnChange = LinkadrChange
       OnEditingDone = LinkadrEditingDone
       TabOrder = 5
       Value = 1
     end
     object Label1: TLabel
       Left = 560
-      Height = 16
+      Height = 13
       Top = 27
-      Width = 48
+      Width = 42
       Caption = 'Link Adr.'
       ParentColor = False
     end
@@ -245,7 +248,7 @@ object Slave: TSlave
   object Panel2: TPanel
     Left = 0
     Height = 153
-    Top = 283
+    Top = 286
     Width = 1130
     Align = alBottom
     Caption = 'Panel2'
@@ -263,11 +266,11 @@ object Slave: TSlave
       TabOrder = 0
       object TabSheet2: TTabSheet
         Caption = 'Events'
-        ClientHeight = 123
+        ClientHeight = 125
         ClientWidth = 1120
         object events: TMemo
           Left = 0
-          Height = 123
+          Height = 125
           Top = 0
           Width = 1120
           Align = alClient
@@ -285,11 +288,11 @@ object Slave: TSlave
       end
       object TabSheet1: TTabSheet
         Caption = 'Trace'
-        ClientHeight = 123
+        ClientHeight = 125
         ClientWidth = 1120
         object trc: TMemo
           Left = 0
-          Height = 123
+          Height = 125
           Top = 0
           Width = 939
           Align = alClient
@@ -306,11 +309,11 @@ object Slave: TSlave
         end
         object Panel3: TPanel
           Left = 939
-          Height = 123
+          Height = 125
           Top = 0
           Width = 181
           Align = alRight
-          ClientHeight = 123
+          ClientHeight = 125
           ClientWidth = 181
           TabOrder = 1
           object RadioGroup1: TRadioGroup
@@ -455,7 +458,7 @@ object Slave: TSlave
     Cursor = crVSplit
     Left = 0
     Height = 10
-    Top = 273
+    Top = 276
     Width = 1130
     Align = alBottom
     ResizeAnchor = akBottom
@@ -491,7 +494,7 @@ object Slave: TSlave
     top = 8
   end
   object OpenDialog: TOpenDialog
-    Filter = 'properties|*.properties|IDS-CVS|*.csv'
+    Filter = 'properties|*.properties|IDS-CVS|*.csv|Toolbox|*.csv'
     left = 1064
     top = 8
   end

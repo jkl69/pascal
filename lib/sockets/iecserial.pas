@@ -129,7 +129,8 @@ begin
   FlinkAdr:=1;
   fport:='COM1';
   config(9600, 8, 'E', SB1, False, False);
-  end;
+
+end;
 
 destructor TIEC101Serial.destroy;
 begin
@@ -146,8 +147,19 @@ end;
 procedure TIEC101Serial.Start;
 begin
 Connect(fport);
-if ThreadID=0 then ThreadID:= BeginThread(@run ,self) ;
-if assigned(fonStart) then fonstart(self);
+  if LastError<>0 then
+       begin
+  //      log(error,'LastError:'+inttoStr(LastError)+' '+GetErrorDesc(LastError));
+       log(error,'LastError: '+GetErrorDesc(LastError));
+//       result:=False;
+     end
+  else
+    begin
+     log(info,'Opened Port: '+inttoStr(dcb.BaudRate));
+     if ThreadID=0 then ThreadID:= BeginThread(@run ,self) ;
+     if assigned(fonStart) then fonstart(self);
+ //    result:=True;
+    end;
 end;
 
 procedure TIEC101Serial.Stop;
@@ -441,7 +453,7 @@ begin
             RecvBufferEx(@buf[index] ,Bytestowait, 500);
             DecodeRX;
            end;
-        sleep(100);
+        sleep(50);
      end;
  log(info,'Port is closed')
 end;

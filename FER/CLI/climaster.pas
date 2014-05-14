@@ -22,7 +22,13 @@ uses
 
 const
   action : Array [0..5] of String = ('list','start','stop','set', 'log', 'x');
-
+  Hint : Array [0..5] of String = (
+       'list master status and settings',
+       'start master reqests',
+       'stop master requests',
+       'change master settings e.g "master.set baudrate=1200"',
+       'change master-log-level  e.g. "master.log debug"',
+       'Exit master menu.');
 function list(asession:Tsession;uCLI:TCLI):boolean;
 var txt:String;
 begin
@@ -41,7 +47,9 @@ begin
    if key='port' then
       begin Imaster.Port:=val;  done:=true; end;
    if key='baudrate' then
-      begin cfg.BaudRate:=strtoint(val);  done:=true; end;
+      begin Imaster.baud:=strtoint(val);  done:=true; end;
+   if key='parity' then
+      begin Imaster.parity:=val[1];  done:=true; end;
    if done then
      asession.writeResult('master.set:  key:'+key+'_Val:'+val+' [OK]')
    else
@@ -60,7 +68,7 @@ begin
     begin
     for i:=1 to high(ucli.Params) do
        configset(asession,ucli.Params[i],cfg);
-    Imaster.Config2(cfg.BaudRate,cfg.ByteSize,parityToChar(cfg.Parity),cfg.StopBits);
+//    Imaster.Config2(cfg.BaudRate,cfg.ByteSize,parityToChar(cfg.Parity),cfg.StopBits);
     end;
 end;
 
@@ -95,7 +103,8 @@ var
 begin
   asession.writeResult('master commands');
   for i:=0 to high(action) do
-      asession.writeResult('   '+action[i]);
+      asession.writeResult('   '+action[i]+#9+'- '+hint[i]);
+//      asession.writeResult('   '+action[i]);
 end;
 
 procedure ExecCLI(asession:Tsession;txt:String);

@@ -129,21 +129,7 @@ var
 //  bu : TIECBUFFER;
 begin
  logger.Debug('CLient Data Recieve');
-{*
-try
-   IECitems := IECstream.CreteItems(buffer);
-   logger.debug('CRC-IEC-Stream ['+inttostr(count)+'] [ Head:6'
-         +' +(IOB.lenght:'+inttostr(LastCRC.iolenght)
-         +' * IOB.Count:'+inttostr(LastCRC.iobcount)
-         +') =lenght:'+inttoStr(LastCRC.lenght)+']');
- except
-   On Exception do
-   begin logger.Fatal('CRC-ERROR IEC-Stream ['+inttostr(count)+'] [ Head:6'
-         +' +(IOB.lenght:'+inttostr(LastCRC.iolenght)
-         +' * IOB.Count:'+inttostr(LastCRC.iobcount)
-         +') =lenght:'+inttoStr(LastCRC.lenght)+']');  exit; end;
- end;
- *}
+
  IECitems := IECstream.CreteItems(buffer);
  logger.Info('IECItems.count'+intToStr(length(IECItems)));
  for  i:=0 to high(IECItems) do
@@ -421,6 +407,7 @@ end;
 //mem.linkadr:=100;
 //mem.PRM:=true;
 master.member.linkadr:=100;
+//master.member.linkadr:=100;
 // stop program loop
   fsession.writePrompt;
   while (not terminated) do

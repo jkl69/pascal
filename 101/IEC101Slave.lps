@@ -1,20 +1,18 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="9"/>
-    <BuildModes Active="Default"/>
-    <Units Count="50">
+    <BuildModes Active="Release (WIN32)"/>
+    <Units Count="56">
       <Unit0>
         <Filename Value="IEC101Slave.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IEC101Slave"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="15"/>
-        <UsageCount Value="103"/>
-        <Loaded Value="True"/>
+        <CursorPos X="1" Y="28"/>
+        <UsageCount Value="115"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -25,9 +23,9 @@
         <UnitName Value="Main"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="601"/>
-        <CursorPos X="28" Y="626"/>
-        <UsageCount Value="103"/>
+        <TopLine Value="518"/>
+        <CursorPos X="32" Y="529"/>
+        <UsageCount Value="115"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -38,7 +36,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="356"/>
         <CursorPos X="15" Y="368"/>
-        <UsageCount Value="103"/>
+        <UsageCount Value="115"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\lib\sockets\iecserial.pas"/>
@@ -46,9 +44,9 @@
         <UnitName Value="IECSerial"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="277"/>
-        <CursorPos X="3" Y="298"/>
-        <UsageCount Value="86"/>
+        <TopLine Value="244"/>
+        <CursorPos X="45" Y="441"/>
+        <UsageCount Value="98"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -58,11 +56,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Portsetup"/>
-        <EditorIndex Value="14"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="124"/>
-        <CursorPos X="37" Y="157"/>
-        <UsageCount Value="62"/>
+        <TopLine Value="7"/>
+        <CursorPos X="5" Y="32"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit4>
@@ -73,24 +72,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Uvaldlg"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="144"/>
         <CursorPos X="1" Y="161"/>
-        <UsageCount Value="52"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="64"/>
       </Unit5>
       <Unit6>
         <Filename Value="simobj.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="simObj"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="17" Y="37"/>
-        <UsageCount Value="46"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="58"/>
       </Unit6>
       <Unit7>
         <Filename Value="usimdlg.pas"/>
@@ -99,13 +93,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uSimDlg"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="28"/>
         <CursorPos X="15" Y="57"/>
-        <UsageCount Value="45"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="57"/>
       </Unit7>
       <Unit8>
         <Filename Value="uqudlg.pas"/>
@@ -114,42 +105,46 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uqudlg"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="48"/>
         <CursorPos X="1" Y="79"/>
-        <UsageCount Value="41"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="53"/>
       </Unit8>
       <Unit9>
         <Filename Value="version.inc"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="76" Y="22"/>
-        <UsageCount Value="24"/>
+        <CursorPos X="39" Y="24"/>
+        <UsageCount Value="36"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
+        <Filename Value="revision.inc"/>
+        <IsPartOfProject Value="True"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="2" Y="1"/>
+        <UsageCount Value="36"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="portctr.pas"/>
         <UnitName Value="PortCtr"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="60" Y="1"/>
-        <UsageCount Value="51"/>
-      </Unit10>
-      <Unit11>
+        <UsageCount Value="50"/>
+      </Unit11>
+      <Unit12>
         <Filename Value="..\lib\CPort\portctl.pas"/>
         <UnitName Value="PortCtl"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="9"/>
-        <UsageCount Value="26"/>
-      </Unit11>
-      <Unit12>
+        <UsageCount Value="25"/>
+      </Unit12>
+      <Unit13>
         <Filename Value="..\lib\CPort\portconfig.pas"/>
         <ComponentName Value="Form2"/>
         <HasResources Value="True"/>
@@ -158,191 +153,187 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="9" Y="61"/>
-        <UsageCount Value="33"/>
-      </Unit12>
-      <Unit13>
+        <UsageCount Value="32"/>
+      </Unit13>
+      <Unit14>
         <Filename Value="port.pas"/>
         <UnitName Value="Port"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1766"/>
         <CursorPos X="34" Y="2003"/>
-        <UsageCount Value="15"/>
-      </Unit13>
-      <Unit14>
+        <UsageCount Value="14"/>
+      </Unit14>
+      <Unit15>
         <Filename Value="CPortCtl.pas"/>
         <UnitName Value="CPortCtl"/>
         <WindowIndex Value="0"/>
         <TopLine Value="826"/>
         <CursorPos X="14" Y="855"/>
-        <UsageCount Value="9"/>
-      </Unit14>
-      <Unit15>
+        <UsageCount Value="8"/>
+      </Unit15>
+      <Unit16>
         <Filename Value="CPortEsc.pas"/>
         <UnitName Value="CPortEsc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="435"/>
         <CursorPos X="4" Y="467"/>
-        <UsageCount Value="4"/>
-      </Unit15>
-      <Unit16>
+        <UsageCount Value="3"/>
+      </Unit16>
+      <Unit17>
         <Filename Value="D:\lazarus64\lcl\stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="24"/>
-        <UsageCount Value="14"/>
-      </Unit16>
-      <Unit17>
+        <UsageCount Value="13"/>
+      </Unit17>
+      <Unit18>
         <Filename Value="..\lib\CPort\CPort.pas"/>
         <UnitName Value="CPort"/>
         <WindowIndex Value="0"/>
         <TopLine Value="11"/>
         <CursorPos X="1" Y="22"/>
-        <UsageCount Value="4"/>
-      </Unit17>
-      <Unit18>
+        <UsageCount Value="3"/>
+      </Unit18>
+      <Unit19>
         <Filename Value="..\lib\CPort\CPortCtl.pas"/>
         <UnitName Value="CPortCtl"/>
         <WindowIndex Value="0"/>
         <TopLine Value="494"/>
         <CursorPos X="3" Y="509"/>
-        <UsageCount Value="4"/>
-      </Unit18>
-      <Unit19>
+        <UsageCount Value="3"/>
+      </Unit19>
+      <Unit20>
         <Filename Value="..\FER\IECGW.pas"/>
         <UnitName Value="IECGW"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="13" Y="13"/>
         <UsageCount Value="29"/>
-        <Loaded Value="True"/>
-      </Unit19>
-      <Unit20>
+      </Unit20>
+      <Unit21>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\packages\fcl-registry\src\registry.pp"/>
         <UnitName Value="registry"/>
         <WindowIndex Value="0"/>
         <TopLine Value="68"/>
         <CursorPos X="53" Y="93"/>
-        <UsageCount Value="16"/>
-      </Unit20>
-      <Unit21>
+        <UsageCount Value="15"/>
+      </Unit21>
+      <Unit22>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\packages\fcl-registry\src\regdef.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="10"/>
-        <UsageCount Value="4"/>
-      </Unit21>
-      <Unit22>
+        <UsageCount Value="3"/>
+      </Unit22>
+      <Unit23>
         <Filename Value="CPort.pas"/>
         <UnitName Value="CPort"/>
         <WindowIndex Value="0"/>
         <TopLine Value="420"/>
         <CursorPos X="1" Y="449"/>
-        <UsageCount Value="7"/>
-      </Unit22>
-      <Unit23>
+        <UsageCount Value="6"/>
+      </Unit23>
+      <Unit24>
         <Filename Value="portsetup.lfm"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="57" Y="41"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit23>
-      <Unit24>
+      </Unit24>
+      <Unit25>
         <Filename Value="D:\lazarus64\lcl\include\customform.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="440"/>
         <CursorPos X="1" Y="456"/>
-        <UsageCount Value="31"/>
-        <Loaded Value="True"/>
-      </Unit24>
-      <Unit25>
+        <UsageCount Value="30"/>
+      </Unit25>
+      <Unit26>
         <Filename Value="..\lib\CPort\portctr.pas"/>
         <UnitName Value="PortCtr"/>
         <WindowIndex Value="0"/>
         <TopLine Value="43"/>
         <CursorPos X="1" Y="76"/>
-        <UsageCount Value="10"/>
-      </Unit25>
-      <Unit26>
+        <UsageCount Value="9"/>
+      </Unit26>
+      <Unit27>
         <Filename Value="..\lib\CPort\port.pas"/>
         <UnitName Value="Port"/>
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="47" Y="32"/>
-        <UsageCount Value="14"/>
-      </Unit26>
-      <Unit27>
+        <UsageCount Value="13"/>
+      </Unit27>
+      <Unit28>
         <Filename Value="..\lib\CPort\comcombobox.pas"/>
         <UnitName Value="ComComboBox"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="35" Y="3"/>
-        <UsageCount Value="10"/>
-      </Unit27>
-      <Unit28>
+        <UsageCount Value="9"/>
+      </Unit28>
+      <Unit29>
         <Filename Value="..\lib\sockets\customserver1.pas"/>
         <UnitName Value="customserver1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="37" Y="68"/>
-        <UsageCount Value="10"/>
-      </Unit28>
-      <Unit29>
+        <UsageCount Value="9"/>
+      </Unit29>
+      <Unit30>
         <Filename Value="..\lib\sockets\blcksock.pas"/>
         <UnitName Value="blcksock"/>
         <WindowIndex Value="0"/>
         <TopLine Value="259"/>
         <CursorPos X="3" Y="280"/>
-        <UsageCount Value="5"/>
-      </Unit29>
-      <Unit30>
+        <UsageCount Value="4"/>
+      </Unit30>
+      <Unit31>
         <Filename Value="..\lib\sockets\bclasses.pas"/>
         <UnitName Value="BClasses"/>
         <WindowIndex Value="0"/>
         <TopLine Value="30"/>
         <CursorPos X="50" Y="43"/>
-        <UsageCount Value="10"/>
-      </Unit30>
-      <Unit31>
+        <UsageCount Value="9"/>
+      </Unit31>
+      <Unit32>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1650"/>
         <CursorPos X="15" Y="1747"/>
-        <UsageCount Value="17"/>
-      </Unit31>
-      <Unit32>
+        <UsageCount Value="16"/>
+      </Unit32>
+      <Unit33>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\classes\classes.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="92"/>
         <CursorPos X="11" Y="113"/>
-        <UsageCount Value="9"/>
-      </Unit32>
-      <Unit33>
+        <UsageCount Value="8"/>
+      </Unit33>
+      <Unit34>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\tthread.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="66"/>
         <CursorPos X="26" Y="90"/>
-        <UsageCount Value="8"/>
-      </Unit33>
-      <Unit34>
+        <UsageCount Value="7"/>
+      </Unit34>
+      <Unit35>
         <Filename Value="D:\prog\101\Unit1.pas"/>
         <UnitName Value="Unit1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="43" Y="88"/>
-        <UsageCount Value="15"/>
-      </Unit34>
-      <Unit35>
+        <UsageCount Value="14"/>
+      </Unit35>
+      <Unit36>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\sysutils\sysstrh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="17" Y="124"/>
-        <UsageCount Value="15"/>
-      </Unit35>
-      <Unit36>
+        <UsageCount Value="14"/>
+      </Unit36>
+      <Unit37>
         <Filename Value="..\lib\sockets\iecportsetup.pas"/>
         <ComponentName Value="Form3"/>
         <ResourceBaseClass Value="Form"/>
@@ -350,242 +341,280 @@
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="30" Y="6"/>
-        <UsageCount Value="17"/>
-      </Unit36>
-      <Unit37>
+        <UsageCount Value="16"/>
+      </Unit37>
+      <Unit38>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\sysosh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="19"/>
-        <UsageCount Value="11"/>
-      </Unit37>
-      <Unit38>
+        <UsageCount Value="10"/>
+      </Unit38>
+      <Unit39>
         <Filename Value="..\lib\IEC\iec104server.pas"/>
         <UnitName Value="IEC104Server"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="11"/>
-        <UsageCount Value="9"/>
-      </Unit38>
-      <Unit39>
-        <Filename Value="..\lib\IEC\iecitems.pas"/>
-        <UnitName Value="IECItems"/>
-        <EditorIndex Value="13"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="162"/>
-        <CursorPos X="3" Y="182"/>
-        <UsageCount Value="31"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="8"/>
       </Unit39>
       <Unit40>
+        <Filename Value="..\lib\IEC\iecitems.pas"/>
+        <UnitName Value="IECItems"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="302"/>
+        <CursorPos X="64" Y="175"/>
+        <UsageCount Value="37"/>
+        <Loaded Value="True"/>
+      </Unit40>
+      <Unit41>
         <Filename Value="logappender.pas"/>
         <UnitName Value="logappender"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="9" Y="26"/>
-        <UsageCount Value="13"/>
-      </Unit40>
-      <Unit41>
+        <UsageCount Value="12"/>
+      </Unit41>
+      <Unit42>
         <Filename Value="..\lib\log\tconfiguratorunit.pas"/>
         <UnitName Value="TConfiguratorUnit"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
-        <CursorPos X="1" Y="61"/>
+        <TopLine Value="38"/>
+        <CursorPos X="94" Y="58"/>
         <UsageCount Value="13"/>
-      </Unit41>
-      <Unit42>
+      </Unit42>
+      <Unit43>
         <Filename Value="D:\lazarus64\lcl\grids.pas"/>
         <UnitName Value="Grids"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8658"/>
         <CursorPos X="1" Y="8675"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
-      </Unit42>
-      <Unit43>
+        <UsageCount Value="13"/>
+      </Unit43>
+      <Unit44>
         <Filename Value="D:\lazarus64\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2134"/>
         <CursorPos X="15" Y="2149"/>
-        <UsageCount Value="11"/>
-      </Unit43>
-      <Unit44>
+        <UsageCount Value="10"/>
+      </Unit44>
+      <Unit45>
         <Filename Value="D:\lazarus64\fpc\2.6.2\source\packages\fcl-base\src\inifiles.pp"/>
         <UnitName Value="IniFiles"/>
         <WindowIndex Value="0"/>
         <TopLine Value="129"/>
         <CursorPos X="35" Y="161"/>
-        <UsageCount Value="17"/>
-      </Unit44>
-      <Unit45>
+        <UsageCount Value="16"/>
+      </Unit45>
+      <Unit46>
         <Filename Value="D:\lazarus64\lcl\include\customcombobox.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="903"/>
         <CursorPos X="1" Y="920"/>
-        <UsageCount Value="15"/>
-      </Unit45>
-      <Unit46>
+        <UsageCount Value="14"/>
+      </Unit46>
+      <Unit47>
         <Filename Value="..\lib\log\tloglogunit.pas"/>
         <UnitName Value="TLogLogUnit"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="50"/>
+        <TopLine Value="46"/>
         <CursorPos X="11" Y="46"/>
-        <UsageCount Value="8"/>
-      </Unit46>
-      <Unit47>
-        <Filename Value="..\FER\iecgwevent.pas"/>
-        <UnitName Value="IECGWEvent"/>
-        <EditorIndex Value="12"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="36"/>
-        <CursorPos X="63" Y="26"/>
-        <UsageCount Value="18"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="10"/>
       </Unit47>
       <Unit48>
+        <Filename Value="..\FER\iecgwevent.pas"/>
+        <UnitName Value="IECGWEvent"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="34"/>
+        <CursorPos X="63" Y="26"/>
+        <UsageCount Value="18"/>
+      </Unit48>
+      <Unit49>
         <Filename Value="D:\lazarus64\lcl\interfaces\win32\win32memostrings.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="1" Y="60"/>
-        <UsageCount Value="10"/>
-      </Unit48>
-      <Unit49>
-        <Filename Value="revision.inc"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="10"/>
+        <UsageCount Value="9"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="..\lib\log\tlevelunit.pas"/>
+        <UnitName Value="TLevelUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="85"/>
+        <CursorPos X="16" Y="99"/>
+        <UsageCount Value="9"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="..\lib\log\tappenderunit.pas"/>
+        <UnitName Value="TAppenderUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="106"/>
+        <CursorPos X="4" Y="120"/>
+        <UsageCount Value="9"/>
+      </Unit51>
+      <Unit52>
+        <Filename Value="..\lib\log\tloggerunit.pas"/>
+        <UnitName Value="TLoggerUnit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="32"/>
+        <CursorPos X="7" Y="46"/>
+        <UsageCount Value="9"/>
+      </Unit52>
+      <Unit53>
+        <Filename Value="..\lib\sockets\synafpc.pas"/>
+        <UnitName Value="synafpc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="66"/>
+        <CursorPos X="63" Y="80"/>
+        <UsageCount Value="9"/>
+      </Unit53>
+      <Unit54>
+        <Filename Value="..\lib\sockets\synautil.pas"/>
+        <UnitName Value="synautil"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="314"/>
+        <CursorPos X="17" Y="329"/>
+        <UsageCount Value="9"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="..\lib\IEC\iec101serial.pas"/>
+        <UnitName Value="iec101serial"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="2" Y="1"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
-      </Unit49>
+        <CursorPos X="3" Y="8"/>
+        <UsageCount Value="10"/>
+      </Unit55>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="version.inc"/>
-        <Caret Line="1" Column="16" TopLine="1"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="490" Column="34" TopLine="470"/>
       </Position1>
       <Position2>
-        <Filename Value="version.inc"/>
-        <Caret Line="2" Column="12" TopLine="1"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="626" Column="28" TopLine="601"/>
       </Position2>
       <Position3>
-        <Filename Value="version.inc"/>
-        <Caret Line="5" Column="13" TopLine="1"/>
+        <Filename Value="..\lib\sockets\iecserial.pas"/>
+        <Caret Line="85" Column="18" TopLine="72"/>
       </Position3>
       <Position4>
-        <Filename Value="version.inc"/>
-        <Caret Line="10" Column="23" TopLine="1"/>
+        <Filename Value="..\lib\sockets\iecserial.pas"/>
+        <Caret Line="158" Column="1" TopLine="137"/>
       </Position4>
       <Position5>
-        <Filename Value="main.pas"/>
-        <Caret Line="103" Column="1" TopLine="82"/>
+        <Filename Value="..\lib\sockets\iecserial.pas"/>
+        <Caret Line="9" Column="28" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="main.pas"/>
-        <Caret Line="114" Column="1" TopLine="87"/>
+        <Caret Line="294" Column="28" TopLine="273"/>
       </Position6>
       <Position7>
         <Filename Value="main.pas"/>
-        <Caret Line="115" Column="1" TopLine="88"/>
+        <Caret Line="331" Column="61" TopLine="297"/>
       </Position7>
       <Position8>
         <Filename Value="main.pas"/>
-        <Caret Line="559" Column="45" TopLine="557"/>
+        <Caret Line="310" Column="16" TopLine="292"/>
       </Position8>
       <Position9>
         <Filename Value="main.pas"/>
-        <Caret Line="566" Column="45" TopLine="564"/>
+        <Caret Line="313" Column="4" TopLine="289"/>
       </Position9>
       <Position10>
         <Filename Value="main.pas"/>
-        <Caret Line="375" Column="21" TopLine="346"/>
+        <Caret Line="312" Column="9" TopLine="295"/>
       </Position10>
       <Position11>
         <Filename Value="main.pas"/>
-        <Caret Line="132" Column="3" TopLine="129"/>
+        <Caret Line="333" Column="65" TopLine="300"/>
       </Position11>
       <Position12>
         <Filename Value="main.pas"/>
-        <Caret Line="372" Column="1" TopLine="367"/>
+        <Caret Line="328" Column="20" TopLine="304"/>
       </Position12>
       <Position13>
         <Filename Value="main.pas"/>
-        <Caret Line="63" Column="1" TopLine="43"/>
+        <Caret Line="406" Column="35" TopLine="286"/>
       </Position13>
       <Position14>
         <Filename Value="main.pas"/>
-        <Caret Line="75" Column="14" TopLine="47"/>
+        <Caret Line="318" Column="1" TopLine="292"/>
       </Position14>
       <Position15>
         <Filename Value="main.pas"/>
-        <Caret Line="250" Column="43" TopLine="230"/>
+        <Caret Line="320" Column="1" TopLine="292"/>
       </Position15>
       <Position16>
         <Filename Value="main.pas"/>
-        <Caret Line="246" Column="43" TopLine="226"/>
+        <Caret Line="321" Column="1" TopLine="292"/>
       </Position16>
       <Position17>
         <Filename Value="main.pas"/>
-        <Caret Line="248" Column="96" TopLine="228"/>
+        <Caret Line="322" Column="1" TopLine="292"/>
       </Position17>
       <Position18>
         <Filename Value="main.pas"/>
-        <Caret Line="250" Column="21" TopLine="230"/>
+        <Caret Line="323" Column="1" TopLine="292"/>
       </Position18>
       <Position19>
         <Filename Value="main.pas"/>
-        <Caret Line="422" Column="8" TopLine="378"/>
+        <Caret Line="318" Column="1" TopLine="292"/>
       </Position19>
       <Position20>
         <Filename Value="main.pas"/>
-        <Caret Line="256" Column="19" TopLine="229"/>
+        <Caret Line="325" Column="1" TopLine="292"/>
       </Position20>
       <Position21>
         <Filename Value="main.pas"/>
-        <Caret Line="244" Column="21" TopLine="224"/>
+        <Caret Line="326" Column="1" TopLine="298"/>
       </Position21>
       <Position22>
         <Filename Value="main.pas"/>
-        <Caret Line="234" Column="33" TopLine="228"/>
+        <Caret Line="26" Column="42" TopLine="84"/>
       </Position22>
       <Position23>
         <Filename Value="main.pas"/>
-        <Caret Line="399" Column="1" TopLine="394"/>
+        <Caret Line="58" Column="26" TopLine="27"/>
       </Position23>
       <Position24>
         <Filename Value="main.pas"/>
-        <Caret Line="252" Column="83" TopLine="234"/>
+        <Caret Line="125" Column="24" TopLine="100"/>
       </Position24>
       <Position25>
-        <Filename Value="main.pas"/>
-        <Caret Line="249" Column="20" TopLine="234"/>
+        <Filename Value="portsetup.pas"/>
+        <Caret Line="92" Column="26" TopLine="55"/>
       </Position25>
       <Position26>
         <Filename Value="main.pas"/>
-        <Caret Line="250" Column="20" TopLine="235"/>
+        <Caret Line="126" Column="24" TopLine="101"/>
       </Position26>
       <Position27>
-        <Filename Value="uqudlg.pas"/>
-        <Caret Line="98" Column="8" TopLine="84"/>
+        <Filename Value="version.inc"/>
+        <Caret Line="11" Column="12" TopLine="1"/>
       </Position27>
       <Position28>
         <Filename Value="main.pas"/>
-        <Caret Line="397" Column="49" TopLine="395"/>
+        <Caret Line="126" Column="24" TopLine="101"/>
       </Position28>
       <Position29>
         <Filename Value="main.pas"/>
-        <Caret Line="403" Column="36" TopLine="383"/>
+        <Caret Line="529" Column="3" TopLine="497"/>
       </Position29>
       <Position30>
         <Filename Value="main.pas"/>
-        <Caret Line="490" Column="34" TopLine="470"/>
+        <Caret Line="534" Column="3" TopLine="517"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
+  <Debugging>
+    <Watches Count="1"/>
+  </Debugging>
+  <EditorMacros Count="0"/>
 </CONFIG>
