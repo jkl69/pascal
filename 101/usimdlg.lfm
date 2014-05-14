@@ -1,0 +1,64 @@
+object SimDlg: TSimDlg
+  Left = 707
+  Height = 153
+  Top = 301
+  Width = 285
+  BorderStyle = bsNone
+  Caption = 'SimDlg'
+  ClientHeight = 153
+  ClientWidth = 285
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  LCLVersion = '1.0.8.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 153
+    Top = 0
+    Width = 285
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    BevelWidth = 3
+    ClientHeight = 153
+    ClientWidth = 285
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 40
+      Height = 16
+      Top = 47
+      Width = 60
+      Caption = 'Time Cycle'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 40
+      Height = 16
+      Top = 102
+      Width = 87
+      Caption = 'Value Increment'
+      ParentColor = False
+    end
+    object S_Time: TSpinEdit
+      Left = 146
+      Height = 23
+      Top = 40
+      Width = 96
+      MaxValue = 100000
+      OnEditingDone = S_TimeChange
+      TabOrder = 0
+    end
+    object F_value: TFloatSpinEdit
+      Left = 146
+      Height = 23
+      Top = 95
+      Width = 96
+      Increment = 1
+      MaxValue = 1000
+      MinValue = -10000
+      OnEditingDone = F_valueChange
+      TabOrder = 1
+      Value = 0
+    end
+  end
+end

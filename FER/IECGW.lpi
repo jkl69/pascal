@@ -32,7 +32,7 @@
         <LaunchingApplication PathPlusParams="/usr/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <Units Count="7">
+    <Units Count="22">
       <Unit0>
         <Filename Value="IECGW.pas"/>
         <IsPartOfProject Value="True"/>
@@ -68,6 +68,81 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ClientCLI"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="iecrouter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECRouter"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="clirouter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLIRouter"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="iecgwevent.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECGWEvent"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="clievent.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLIEvent"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="cliiecgw.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLIIECGW"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="CLI/cliclient.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLIClient"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="CLI/climaster.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="climaster"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="iecgwnetsession.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECGWnetSession"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="../lib/IEC/iecitems2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECItems2"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="iecgwtimer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECGWTimer"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="CLI/clitimer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLITimer"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="../lib/IEC/iectree.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECTree"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="CLI/cliitems.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CLIItems"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="session.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="session"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="gwnetconnection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GWNetConnection"/>
+      </Unit21>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -77,9 +152,14 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src/"/>
+      <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;../lib/Tree;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src/;CLI"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Linking>
+      <Debugging>
+        <UseExternalDbgSyms Value="True"/>
+      </Debugging>
+    </Linking>
     <Other>
       <CompilerMessages>
         <MsgFileName Value=""/>

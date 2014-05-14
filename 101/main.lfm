@@ -1,0 +1,503 @@
+object Slave: TSlave
+  Left = 367
+  Height = 459
+  Top = 263
+  Width = 1130
+  Caption = 'IEC101Slave'
+  ClientHeight = 459
+  ClientWidth = 1130
+  Icon.Data = {
+    3604000000000100020010101000000000002801000026000000202010000000
+    0000E80200004E0100002800000010000000200000000100040000000000C000
+    0000000000000000000000000000000000000000000000008000008000000080
+    800080000000800080008080000080808000C0C0C0000000FF0000FF000000FF
+    FF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFF44444FFFFFFFFFFF4
+    FFF4FFFFFF44444444F4FFFFFF4FFFF4F4F4FFFFFF4FFFF44444F4444444444F
+    F4FFF4FFFF4FFF4FF4FFF4FFFF4FFF4FF4FFF4FFFF4FFF4FF4FFF4FFFF444444
+    44FFF4FFFFFFFF4FFFFFF4FFFFFFFF4FFFFFF4FFFFFFFF4FFFFFF4FFFFFFFF4F
+    FFFFF4444444444FFFFFFFFFFFFFFFFFFFFF0000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000002800000020000000400000000100
+    0400000000008002000000000000000000000000000000000000000000000000
+    8000008000000080800080000000800080008080000080808000C0C0C0000000
+    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFDDDDDDDDDDDFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFDFFFFFFFFFFFFFF
+    FFFFFFFDFFFFFFFFFDFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFDFFFFFFFFFFFFFF
+    FFFFFFFDFFFFFFFFFDFFFFFFFFFFFFFFDDDDDDDDDDDDDDFFFDFFFFFFFFFFFFFF
+    DFFFFFFDFFFFFDFFFDFFFFFFFFFFFFFFDFFFFFFDFFFFFDFFFDFFFFFFFFFFFFFF
+    DFFFFFFDFFFFFDFFFDFFFFFFFFFFFFFFDFFFFFFDFFFFFDFFFDFFFFFFFFFFFFFF
+    DFFFFFFDDDDDDDDDDDFFFFFFFFFFFFFFDFFFFFFFFFFFFDFFFFFFFDDDDDDDDDDD
+    DDDDDDFFFFFFFDFFFFFFFDFFFFFFFFFFDFFFFDFFFFFFFDFFFFFFFDFFFFFFFFFF
+    DFFFFDFFFFFFFDFFFFFFFDFFFFFFFFFFDFFFFDFFFFFFFDFFFFFFFDFFFFFFFFFF
+    DFFFFDFFFFFFFDFFFFFFFDFFFFFFFFFFDDDDDDDDDDDDDDFFFFFFFDFFFFFFFFFF
+    FFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFF
+    FFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFF
+    FFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFF
+    FFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFF
+    FFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFDDDDDDDDDDD
+    DDDDDDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000
+  }
+  OnCreate = FormCreate
+  LCLVersion = '1.0.8.0'
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 436
+    Width = 1130
+    Panels = <    
+      item
+        Width = 150
+      end    
+      item
+        Text = 'RX -'
+        Width = 50
+      end    
+      item
+        Text = 'TX -'
+        Width = 50
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
+  end
+  object ItemGrid: TStringGrid
+    Left = 0
+    Height = 217
+    Top = 56
+    Width = 1130
+    Align = alClient
+    ColCount = 11
+    Columns = <    
+      item
+        Title.Caption = 'Name'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'ASDU'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'COT'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'IOB'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'Value'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'QU'
+        Width = 102
+      end    
+      item
+        Title.Caption = 'TIME'
+        Width = 150
+      end    
+      item
+        ButtonStyle = cbsButtonColumn
+        Title.Caption = ' '
+        Width = 80
+      end    
+      item
+        ButtonStyle = cbsCheckboxColumn
+        Title.Caption = 'Sim'
+        Width = 50
+      end    
+      item
+        ButtonStyle = cbsButtonColumn
+        Title.Caption = 'Prop'
+        Width = 106
+      end>
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goEditing, goDblClickAutoSize, goSmoothScroll, goFixedColSizing]
+    RowCount = 1
+    TabOrder = 1
+    OnClick = ItemGridClick
+    OnButtonClick = ItemGridButtonClick
+    OnMouseDown = ItemGridMouseDown
+    OnSelection = ItemGridSelection
+    OnValidateEntry = ItemGridValidateEntry
+    ColWidths = (
+      102
+      102
+      102
+      102
+      102
+      102
+      102
+      150
+      80
+      50
+      106
+    )
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 56
+    Top = 0
+    Width = 1130
+    Align = alTop
+    Caption = ' '
+    ClientHeight = 56
+    ClientWidth = 1130
+    TabOrder = 2
+    object BStop: TButton
+      Left = 712
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Stop'
+      Enabled = False
+      OnClick = BStopClick
+      TabOrder = 0
+    end
+    object BStart: TButton
+      Left = 472
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Start'
+      OnClick = BStartClick
+      TabOrder = 1
+    end
+    object Badd: TButton
+      Left = 240
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Add'
+      OnClick = BaddClick
+      TabOrder = 2
+    end
+    object IECTypeCombo: TComboBox
+      Left = 16
+      Height = 23
+      Top = 20
+      Width = 216
+      BorderStyle = bsSingle
+      ItemHeight = 15
+      TabOrder = 3
+    end
+    object SimCheck: TCheckBox
+      Left = 416
+      Height = 19
+      Top = 27
+      Width = 40
+      Caption = 'Sim'
+      Checked = True
+      OnChange = SimCheckChange
+      State = cbChecked
+      TabOrder = 4
+    end
+    object Linkadr: TSpinEdit
+      Left = 616
+      Height = 23
+      Top = 20
+      Width = 90
+      OnEditingDone = LinkadrEditingDone
+      TabOrder = 5
+      Value = 1
+    end
+    object Label1: TLabel
+      Left = 560
+      Height = 16
+      Top = 27
+      Width = 48
+      Caption = 'Link Adr.'
+      ParentColor = False
+    end
+    object Bload: TButton
+      Left = 944
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Load'
+      OnClick = BloadClick
+      TabOrder = 6
+    end
+    object bClean: TButton
+      Left = 320
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Clear'
+      OnClick = bCleanClick
+      TabOrder = 7
+    end
+    object Bsave: TButton
+      Left = 856
+      Height = 25
+      Top = 20
+      Width = 75
+      Caption = 'Save'
+      OnClick = BsaveClick
+      TabOrder = 8
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 153
+    Top = 283
+    Width = 1130
+    Align = alBottom
+    Caption = 'Panel2'
+    ClientHeight = 153
+    ClientWidth = 1130
+    TabOrder = 3
+    object PageControl1: TPageControl
+      Left = 1
+      Height = 151
+      Top = 1
+      Width = 1128
+      ActivePage = TabSheet2
+      Align = alClient
+      TabIndex = 0
+      TabOrder = 0
+      object TabSheet2: TTabSheet
+        Caption = 'Events'
+        ClientHeight = 123
+        ClientWidth = 1120
+        object events: TMemo
+          Left = 0
+          Height = 123
+          Top = 0
+          Width = 1120
+          Align = alClient
+          Color = clSilver
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clGreen
+          Font.Height = -13
+          Font.Name = 'Arial Rounded MT Bold'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentFont = False
+          ScrollBars = ssAutoBoth
+          TabOrder = 0
+        end
+      end
+      object TabSheet1: TTabSheet
+        Caption = 'Trace'
+        ClientHeight = 123
+        ClientWidth = 1120
+        object trc: TMemo
+          Left = 0
+          Height = 123
+          Top = 0
+          Width = 939
+          Align = alClient
+          Color = clBlack
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clYellow
+          Font.Height = -13
+          Font.Name = 'Arial Narrow'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentFont = False
+          ScrollBars = ssAutoBoth
+          TabOrder = 0
+        end
+        object Panel3: TPanel
+          Left = 939
+          Height = 123
+          Top = 0
+          Width = 181
+          Align = alRight
+          ClientHeight = 123
+          ClientWidth = 181
+          TabOrder = 1
+          object RadioGroup1: TRadioGroup
+            Left = 13
+            Height = 105
+            Top = 4
+            Width = 155
+            AutoFill = True
+            Caption = 'Level'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.TopBottomSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 87
+            ClientWidth = 151
+            Columns = 2
+            ItemIndex = 1
+            Items.Strings = (
+              'debug'
+              'info'
+              'warning'
+              'error'
+              'fatal'
+            )
+            TabOrder = 0
+          end
+        end
+      end
+      object TabSheet4: TTabSheet
+        Caption = 'Status'
+        ClientHeight = 123
+        ClientWidth = 1120
+        object LRXFrames: TLabel
+          Left = 195
+          Height = 16
+          Top = 29
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object StaticText1: TStaticText
+          Left = 75
+          Height = 17
+          Top = 28
+          Width = 65
+          Caption = 'RX_frames:'
+          TabOrder = 0
+        end
+        object LRXData: TLabel
+          Left = 195
+          Height = 16
+          Top = 57
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object StaticText2: TStaticText
+          Left = 75
+          Height = 17
+          Top = 57
+          Width = 89
+          Caption = 'RX_DataFrames:'
+          TabOrder = 1
+        end
+        object StaticText3: TStaticText
+          Left = 259
+          Height = 17
+          Top = 28
+          Width = 65
+          Caption = 'TX_frames:'
+          TabOrder = 2
+        end
+        object LTXFrames: TLabel
+          Left = 379
+          Height = 16
+          Top = 29
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object LTXData: TLabel
+          Left = 379
+          Height = 16
+          Top = 58
+          Width = 7
+          Caption = '0'
+          ParentColor = False
+        end
+        object StaticText4: TStaticText
+          Left = 259
+          Height = 17
+          Top = 56
+          Width = 88
+          Caption = 'TX_DataFrames:'
+          TabOrder = 3
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'About'
+        ClientHeight = 123
+        ClientWidth = 1120
+        object Label2: TLabel
+          Left = 211
+          Height = 20
+          Top = 50
+          Width = 89
+          Caption = 'IEC101Slave'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -16
+          Font.Name = 'Times New Roman'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object Lversion: TLabel
+          Left = 355
+          Height = 20
+          Top = 50
+          Width = 117
+          Caption = ' (c)2014 jaen/IDS'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -16
+          Font.Name = 'Times New Roman'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 10
+    Top = 273
+    Width = 1130
+    Align = alBottom
+    ResizeAnchor = akBottom
+  end
+  object BPort: TButton
+    Left = 0
+    Height = 22
+    Hint = 'Change Serial Port settings'
+    Top = 437
+    Width = 148
+    Anchors = [akLeft, akBottom]
+    Caption = 'BPort'
+    OnClick = BPortClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+  end
+  object Bufferusage: TProgressBar
+    Left = 256
+    Height = 16
+    Hint = 'BufferUsage (unsended messages)'
+    Top = 440
+    Width = 856
+    Anchors = [akLeft, akRight, akBottom]
+    ParentShowHint = False
+    ShowHint = True
+    Step = 1
+    TabOrder = 6
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    left = 1096
+    top = 8
+  end
+  object OpenDialog: TOpenDialog
+    Filter = 'properties|*.properties|IDS-CVS|*.csv'
+    left = 1064
+    top = 8
+  end
+  object SaveDialog: TSaveDialog
+    Filter = 'Properties|*.properties|All Files|*.*'
+    left = 1032
+    top = 8
+  end
+end

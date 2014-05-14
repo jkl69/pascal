@@ -1,8 +1,36 @@
-log=debug
-#log=info
-client.add
-client.0.port=2405
-#client.0.host=172.23.30.115
-client.0.start
-server.start
+#log warn
+log info
+
+#timer.add mwsim
+#timer:mwsim.set 100
+
+items.add /9/3/8192 /9/3/8193 /9/3/8194 /9/53/8195 
+items.add 34:5:8192 9:5:8193 9:5:8194 9:5:8195 
+#items.add 36:5:8192 9:5:8193 9:5:8194 9:5:8195 
+#items.add 9:3:8194 
+items.add 45:1:444 
+#45:3:12854
+items.log error
+
+client.add FER1
+#client.add FER1 FER2
+#client:FER1.set port=2405 host=172.23.30.115 
+
+client:FER1.set run=start
+
+#route.add FER1
+#route:FER1.add 2 3 4 5
+#route:4.add 101 102 103 
+
+#event:client.connect FER1 server.send_01_01_0300_0100_011000_01
+#event:client.dis FER1 server.send_01_01_0300_0100_011000_00
+event.item 36:5:8192 item_36:5:8192
+event.item *:5:* item_36:5:8192
+event.item 45:3:12854 server.isend_9:3:8193
+event.item 45:3:12854 server.isend_9:3:8194
+#event.item 45:3:12854 server.send_01_01_0300_0100_011000_00
+
+client.log error
+#server.start
+#server.log debug
 

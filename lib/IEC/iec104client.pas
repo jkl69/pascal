@@ -17,10 +17,11 @@ type
 
   { TIEC104Client }
 //   TIEC104Client = class(TObject)
-   TIEC104Client = class
+  TIEC104Client = class(TComponent)
+//  TIEC104Client = class
           private
             Fth:TThreadID;
-            Fcli:TcliExecute;
+//            Fcli:TcliExecute;
             Fsocket: TTCPBlockSocket;
             Fhost: String;
             Fport: integer;
@@ -30,17 +31,20 @@ type
             FcounterSet: TIEC104Timerset;  // hold the current values
             Fiecsock : TIEC104Socket;
             FOnRXData: TRTXEvent;
+            FOnConnect: TIECSocketEvent;
+            FOnDisCOnnect: TIECSocketEvent;
             procedure setTimerset(tset:TIEC104Timerset);
             procedure setlogger(l:Tlogger);
           protected
             procedure irq(sender:TObject);
+            procedure ConnectEvent;
             procedure DisconnectEvent;
             procedure connect;
             function doRecieve: integer;
           public
-            constructor Create;
+            constructor Create(AOwner: Tcomponent); override;
             destructor destroy; override;
-            procedure CLIexecute(s:string;result:TCLIResult);
+//            procedure CLIexecute(s:string;result:TCLIResult);
             procedure Start;
             procedure Stop;
             Function send(hexstr:String):integer;
@@ -48,6 +52,8 @@ type
             Property Socket:TTCPBlockSocket read Fsocket write Fsocket;
             Property iecSocket:TIEC104Socket read Fiecsock write Fiecsock;
             property onRXData: TRTXEvent read FonRXData write FonRXData;
+            property onConnect: TIECSocketEvent read FOnConnect write FOnConnect;
+            property onDisConnect: TIECSocketEvent read FOnDisConnect write FOnDisConnect;
             Property host:String read Fhost write Fhost;
             Property Port:Integer read FPort write FPort;
             property TimerSet:TIEC104Timerset read FTimerSet write setTimerSet;
@@ -78,17 +84,18 @@ end;
 
     { TIEC104Client }
 
-//constructor TIEC104Client.Create(AOwner: Tcomponent);
-constructor TIEC104Client.Create;
+constructor TIEC104Client.Create(AOwner: Tcomponent);
+//constructor TIEC104Client.Create;
     begin
-    inherited create;
+    inherited create(Aowner);
     FtimerSet:=IEC104Socket.DefaultTimerset;
     Port:=2404;
     host:= '127.0.0.1';
-    Fcli:=TClientCLI.Create(self,
+{*
+Fcli:=TClientCLI.Create(self,
       ['start','stop','close','host','port','send',
         'startDt','stopdt','list','timer']);
-    Fcli.name:='Client';
+    Fcli.name:='Client';*}
 
   Fiecsock := TIEC104Socket.Create;
   Fiecsock.SocketType:=TIECClient;
@@ -101,8 +108,7 @@ destructor TIEC104Client.Destroy;
     log(debug,'destroy');
     stop;
     Freeandnil(Fiecsock);
-    if (FCLI<>nil) then
-        Fcli.destroy;
+//    if (FCLI<>nil) then   Fcli.destroy;
     log(debug,'destroy_');
     inherited destroy;
     end;
@@ -119,15 +125,14 @@ begin
   Flog:=l;
   Fiecsock.Logger:=Flog;
 end;
-
+{*
 Procedure TIEC104Client.cliexecute(s:string;result:TCLIResult);
 begin
-   if (FCLI<>nil) then
-        Fcli.ParseCMD(nil,s,result)
-  else
+//   if (FCLI<>nil) then  Fcli.ParseCMD(nil,s,result)
+//  else
      log(error,'CLI Not Assigned');
   end;
-
+  *}
 procedure TIEC104Client.log(ALevel : TLevel; const AMsg : String);
 var
  s:String;
@@ -180,6 +185,7 @@ begin
       log(info,'Could not connect to server.')
     else
       begin
+      ConnectEvent;
       sockresult:=doRecieve;
       DisconnectEvent;
       end;
@@ -187,9 +193,18 @@ begin
 //   fsocket.Destroy; fsocket:=nil;
    end;
 
+procedure TIEC104Client.ConnectEvent;
+    begin
+    log(info,'ConnectEvent');
+     if assigned(FOnConnect) then
+        FOnConnect(self,Fiecsock);
+    end;
+
 procedure TIEC104Client.DisconnectEvent;
     begin
-     log(info,'DisconnectEvent');
+    log(info,'DisconnectEvent');
+     if assigned(FOnDisConnect) then
+        FOnDisConnect(self,Fiecsock);
     end;
 
 

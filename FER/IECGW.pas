@@ -6,208 +6,155 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, CustApp, sockets, blcksock, IEC104Client, IEC104ClientList,
-  IEC104Socket, IEC104Server, TConfiguratorUnit, TLoggerUnit, TLevelUnit,
-  TFileAppenderUnit, cliexecute, GWAppender, jsonparser;
+  Classes, SysUtils, CustApp, sockets, IEC104Client, IEC104ClientList,
+  IEC104Socket, IEC101Serial,  IEC104Server, IECMap, IECStream, TConfiguratorUnit, TLoggerUnit,
+  TLevelUnit, TFileAppenderUnit, CLI, GWAppender, IECRouter,
+
+  IECGWEvent, IECTree,tree, fpjson,
+  session, INIFiles, GWNetConnection;
 
 type
 
-  tcli=class(Tcliexecute)
-    private
-//      netsession : Tsession;
-    public
-       procedure execute(ix:integer); override;
-       procedure executeX; override;
-  end;
-
-
-
   { TMyApplication }
-  //TRTXEvent = procedure(Sender: TObject;const Buffer:array of byte;count :integer) of object;
 
   TMyApplication = class(TCustomApplication)
   protected
-    Fth:TThreadID;
-    session: Tsession;
-    Fexit: boolean;
-    Clients: TIEC104Clientlist ;
-    Server : TIEC104Server;
-    cmdIN: String;
+
+//    Fexit: boolean;
+    Fsession:Tsession;
+//   cmdIN: String;
     procedure DoRun; override;
+    procedure Terminate; override;
   private
+//   procedure threadExit;
+    procedure init;
+    procedure writeConsole(const s:String);
     procedure clientRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
+    procedure TimerEvent(const S: string) ;
     procedure clientCreateEvent(Sender: TObject;Socket: TIEC104Socket);
+    procedure clientConnectEvent(Sender: TObject;Socket: TIEC104Socket);
+    procedure clientDisconectEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure serverRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
     procedure serverCreateEvent(Sender: TObject;Socket: TIEC104Socket);
+    procedure ItemEvent(Sender: TObject);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
-    procedure Dofile(f:String);
-    procedure termStart;
-    procedure termStop;
 //    Procedure DoLog(EventType : TEventType; const Msg : String); override;
     procedure WriteHelp; virtual;
-//    procedure Dofile(f:String);
   end;
 
 var
   Application: TMyApplication;
-  cli :Tcli;
-  CLIResult:TCLIResult;
-  Logger,Slogger,clogger : TLogger;
-  netRun:  boolean;
-  GWapp:TGWAppender;
+  NetServer : TIECGWNetServer;
+  Clients: TIEC104Clientlist ;
+  Server : TIEC104Server;
+  Master :TIEC101Master;
+  Items : TIECTree;
+  Router : TIECRouter;
+  GWEvent: TIECGWEvent;
+//  Timer:   TIECGWTimer;
+  Logger : TLogger;
 
-//procedure net_session(sock:Tsocket);
-function net_session(p: Pointer): ptrint;
+
+function Executemain(p: Pointer): ptrint;
 var
-  session:Tsession;
-  ssock:TTCPBlockSocket ;
-  res,txt:string;
-const
-  CR = #13;  LF = #10;  CRLF = CR + LF;
-
+  Session:TSession;
+  s:String;
 begin
-txt:='';
-session:= Tsession(p);
-try
-//  Bsock:=TTCPBlockSocket.create;
-   ssock := session.sock;
-//  Bsock.socket:=sock;
-  ssock.GetSins;
-  with ssock do
-   begin
-//    sessionexit :=false;
-    res := RecvPacket(1800);
-    if lastError<>0 then
-       begin
-       logger.debug('ASCII Session');
-       sendString('Welkome to IECGW'+crlf);
-       session.Json:=false;
-       end
-    else
-      begin
-      logger.debug('JSON Session');
-      session.Json:=true;
-      end;
-    session.exit:=false;
-    repeat
-      if (session.Json) then
-         res := RecvPacket(1000)
-      else
-         begin
-         res := RecvPacket(300000);
-         SendString(res) ;
-         end;
-      txt:=txt+res;
-      if (session.Json) then
-          begin
-          Logger.debug('JASON receiv:'+txt);
-          end
-      else
-         begin
-          if pos(lf,txt)<>0 then   ///ASCI CMD received
-              begin
-              while pos(cr,txt)<>0 do delete(txt,pos(cr,txt),1);
-              while pos(lf,txt)<>0 do delete(txt,pos(lf,txt),1);
-//              Logger.debug('receive:'+txt+crlf);
-              cli.ParseCMD(session,txt,CLIResult);
-              txt:='';
-              end;
-         end;
-
-      if lastError <>0 then
-            begin
-            if (session.Json) then
-               begin
-               Logger.debug('sock_Event:'+inttostr(lastError)+'JASON_RECV:'+txt);
-               if (lastError=10054) then session.exit:=true;
-               if (txt<>'') then
-                   begin
-                   cli.ParseCMD(session,txt,CliResult);
-                   Logger.debug(CliResult.awnser.AsJSON);
-                   txt:='';
-                   end;
-               end
-            else
-               begin
-               logger.error('socket_ERROR:'+inttostr(lastError));
-               sendString('ERROR');
-               break;
-               end;
-            end;
-    until session.exit;
-    end;
-  finally
-   ssock.CloseSocket;
-  end;
-logger.info('EXIT-NET-SESSION');
-freeandnil(ssock);
-freeandnil(session);
-end;
-
-function frun(p: Pointer): ptrint;
-var
- s:TSocket;
- netses:Tsession;
- bsock,sock: TTCPBlockSocket;
-begin
-  sock := TTCPBlockSocket.Create;
-  sock.Bind('0.0.0.0','5001');
-  logger.Info(' listen on port '+inttostr(sock.GetLocalSinPort));
-  sock.Listen;
-    repeat
-    s:=sock.Accept;
-    logger.Info('accept');
-    netses:=Tsession.Create;
-    Bsock:=TTCPBlockSocket.create;
-    Bsock.socket:=s;
- //    netses.sock:=s;
-    netses.sock:=Bsock;
-//    net_session(netses);
-    BeginThread(@net_session,netses);
-   until netrun;
-   logger.Debug('EXIT-Listen');
-   sock.CloseSocket;
-   freeandnil(sock);
- end;
-
-procedure tcli.executeX;
-begin
-  CliResult.did:=true;
-  CliResult.cmdmsg := 'logout';
-  Fsession.exit:=true;
-end;
-
-procedure tcli.execute(ix:integer);
-  begin
-//  (['exit','client','log',load]);
-//  execute:= inherited execute(ix);
-  case (ix) of
-   0: begin Application.Fexit:=true;exit; end;
-   1: begin Application.clients.cliexecute(cmdChild,CLIResult); exit;  end;
-   2: begin if (TLevelUnit.tolevel(Parameter) <> nil) then
-          logger.setLevel(TLevelUnit.tolevel(Parameter)); Exit; end;
-   3: begin Application.dofile(Parameter); Exit; end;
-   4: begin Application.server.cliexecute(cmdChild,CLIResult); exit;  end;
-  end;
+ Session := TSession(p);
+ while not Session.Terminated do
+     begin
+     Session.writePrompt;
+     Readln (s);
+     session.EcexuteCmd(s);
+     end;
+ Application.Terminate;
 end;
 
 { TMyApplication }
 
 //TIECSocketEvent = procedure (Sender: TObject; Socket: TIEC104Socket) of object;
+procedure TMyApplication.clientConnectEvent(Sender: TObject;Socket: TIEC104Socket);
+var
+ i:integer;
+ cl:TIEC104Client;
+ eva:TEventarray;
+begin
+  cl:= TIEC104Client (sender);
+  logger.Debug('CLient Connect Event '+cl.Name);
+{*
+eva := GWEvent.getConnectEvent(cl.name);
+  for i:=0 to high(eva) do
+     begin
+     logger.Debug('doConnectEvent:'+eva[i]);
+ //    exec(cli.Parse(eva[i]));
+     end;*}
+end;
+
+procedure TMyApplication.writeConsole(const s:String);
+begin
+  write(s);
+end;
+
+procedure TMyApplication.TimerEvent(const S: string);
+begin
+   logger.Error('****'+S);
+end;
+
+procedure TMyApplication.clientDisconectEvent(Sender: TObject;Socket: TIEC104Socket);
+var
+ i:integer;
+ cl:TIEC104Client;
+ eva:TEventarray;
+begin
+  cl:= TIEC104Client (sender);
+  logger.Debug('CLient DisConnect Event '+cl.Name);
+end;
+
 procedure TMyApplication.clientCreateEvent(Sender: TObject;Socket: TIEC104Socket);
 begin
- logger.Error('CLient Create Event');
+ logger.Debug('CLient Create Event');
  Socket.onRXData:=@clientRXEvent;
+ TIEC104Client (sender).onDisConnect:=@clientDisconectEvent;
+ TIEC104Client (sender).onConnect:=@clientConnectEvent;
 end;
 
 procedure TMyApplication.clientRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
 var
   CL:TIEC104Socket;
   i:integer;
+  iecItems : TiecItems;
+  item : TIECItem;
+//  bu : TIECBUFFER;
 begin
- logger.Error('CLient Data Recieve');
+ logger.Debug('CLient Data Recieve');
+{*
+try
+   IECitems := IECstream.CreteItems(buffer);
+   logger.debug('CRC-IEC-Stream ['+inttostr(count)+'] [ Head:6'
+         +' +(IOB.lenght:'+inttostr(LastCRC.iolenght)
+         +' * IOB.Count:'+inttostr(LastCRC.iobcount)
+         +') =lenght:'+inttoStr(LastCRC.lenght)+']');
+ except
+   On Exception do
+   begin logger.Fatal('CRC-ERROR IEC-Stream ['+inttostr(count)+'] [ Head:6'
+         +' +(IOB.lenght:'+inttostr(LastCRC.iolenght)
+         +' * IOB.Count:'+inttostr(LastCRC.iobcount)
+         +') =lenght:'+inttoStr(LastCRC.lenght)+']');  exit; end;
+ end;
+ *}
+ IECitems := IECstream.CreteItems(buffer);
+ logger.Info('IECItems.count'+intToStr(length(IECItems)));
+ for  i:=0 to high(IECItems) do
+    begin
+      item := TIECItem (IECItems[i]);
+      logger.info(item.ToHexStr);
+      items.update(item);
+    end;
+
+
+
  for  i:=0 to server.Connections.Count-1 do
      begin
      cl := server.Connection[i];
@@ -217,65 +164,205 @@ end;
 
 procedure TMyApplication.ServerCreateEvent(Sender: TObject ;Socket: TIEC104Socket);
 begin
- logger.Error('Server Create Event');
+ logger.debug('Server Create Event');
  socket.onRXData:=@serverRXEvent;
 end;
 
+//TRxBufEvent = procedure(Sender: TObject;Buffer: array of byte; Count: Integer) of object;
+
 procedure TMyApplication.serverRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
 var
+  i:integer;
   CL:TIEC104Client;
-  asdu,i:integer;
+  item : TIECItem;
 begin
- asdu := buffer[4]+buffer[5]*256;
- logger.Error('Connection Recieve Event from ASDU:'+inttostr(asdu));
-  for  i:=0 to server.Connections.Count-1 do
-     begin
-     cl := clients.Client[i];
-     cl.iecSocket.sendBuf(buffer,count,false);
-     end;
+ logger.Info('MAIN:RX_'+hextostr(buffer,count));
+// logger.debug('Server-Connection Recieve Event');
+{*
+try
+   item := TIECItem.create(Buffer,count);
+ except
+   On Exception do
+      begin logger.Fatal('CRC-ERROR in received IEC-Stream');  exit; end;
+ end;
+ if (item.getType<>TIECSType.IEC_NULL_TYPE) then
+   begin
+   logger.info('_serverRXEvent_'+item.Name+' '+IECType[item.getType].name+' asdu:'+inttostr(item.ASDU)+
+             ' adr:'+inttostr(item.Adr[0])+' :'+BufferToHexStr(bu));
+   if items<>nil then items.update(item);
+   end
+ else
+   logger.info('_serverRXEvent_BUFFER: '+BufferToHexStr( item.getStream));
+*}
 end;
 
-procedure TMyApplication.Dofile(f:String);
+procedure TMyApplication.ItemEvent(Sender: TObject);
 var
- File1: TextFile;
- Str: String;
+  i:integer;
+  item : TIECItem;
+  eva:TEventarray;
+  txt: String;
 begin
-  logger.Debug('File Reading:');
-  AssignFile(File1, f);
-  {$I+}
-  try
-    Reset(File1);
-    repeat
-      Readln(File1, Str); // Reads the whole line from the file
-      Writeln(str);
-//      cli.ParseCMD(session,Str,CLIResult); // Writes the line read
-      cli.ParseCMD(nil,Str,CLIResult); // Writes the line read
-    until(EOF(File1)); // EOF(End Of File) The the program will keep reading new lines until there is none.
-    CloseFile(File1);
-  except
-    on E: EInOutError do
+   item := TIECItem (sender);
+//  o := TIECTCObj(sender);
+// item := TIECTCItem (Sender);
+// item := o.asdu;
+ txt:='Item Update:'+item.name+' '+item.toString;
+ logger.info(txt);
+
+if GWevent<>nil then
+//   GWevent.ItemEvent(item);
+
+if server<>nil then
+//   server.sendBuf(item.getStream);
+
+// fsession.writeResult(txt); fsession.writeResult(IECType[item.getType].name);
+end;
+
+procedure TMyApplication.Terminate;
+begin
+   logger.info('Application Exit:');
+   NetServer.Stop;
+   inherited ;
+end;
+
+procedure TMyApplication.init;
+var
+ INI:TINIFile;
+ GWapp:TGWAppender;
+ Fapp:TFileAppender;
+ lines:Tstrings;
+ i:integer;
+begin
+
+ INI:= TIniFile.Create(ExtractFilePath(ParamStr(0))+'iecgw.ini');
+// items.readSTypeName(INI);
+logger := TLogger.getInstance;
+// logger.setLevel(TLevelUnit.Warn);
+logger.setLevel(TLevelUnit.INFO);
+
+Fapp:=nil;
+if ini.ReadBool('logging','logToFile',false) then
     begin
-     Writeln('File handling error occurred. Details: '+E.ClassName+'/'+E.Message);
-    end;
+      Fapp := TFileAppender.Create(ini.ReadString('logging','File',ExtractFilePath(ParamStr(0))+'IECGW.log'));
+      logger.addAppender(Fapp);
+    end ;
+GWapp := TGWAppender.Create;
+
+fSession:=tsession.Create;
+fsession.Name:='LocalConsole';
+fsession.onexecResult:=@writeconsole;
+fsession.onexec:=@CLI.execCLI;
+
+Clients:=nil;
+if  ini.ReadBool('client','activ',false) then
+  begin
+  Clients:= TIEC104Clientlist.Create;
+  clients.Logger:=TLogger.getInstance('Clients');
+  clients.Logger.setLevel(TLevelUnit.INFO);
+  if assigned(Fapp) then
+     clients.Logger.AddAppender(Fapp);
+  clients.Logger.AddAppender(Gwapp);
+  Clients.onClientCreate:=@clientCreateEvent;
+  addProcess(Clients);
   end;
-end;
 
-procedure TMyApplication.TermStart;
-begin
- Fth:=BeginThread(@frun);
- NetRun:=False;
-end;
+server:=nil;
+if  ini.ReadBool('server','activ',false) then
+  begin
+  Server := TIEC104Server.Create(self);
+  Server.Logger:= TLogger.getInstance('Server');
+  Server.Logger.setLevel(TLevelUnit.INFO);
+  if assigned(Fapp) then
+      Server.Logger.AddAppender(Fapp);
+  Server.Logger.AddAppender(Gwapp);
+  Server.Name:='GWSERVER';
+  Server.onClientConnect:=@ServerCreateEvent;
+//  server.start;
+  addProcess(Server);
+  end;
 
-procedure TMyApplication.TermStop;
-begin
-   NetRun:=False;
-end;
+Master:=nil;
+if  ini.ReadBool('master','activ',false) then
+  begin
+  Master := TIEC101Master.Create();
+  Master.Logger:= TLogger.getInstance('Master');
+  Master.Logger.setLevel(TLevelUnit.info);
+  if assigned(Fapp) then
+      Master.Logger.AddAppender(Fapp);
+  Master.Logger.AddAppender(Gwapp);
+  Master.Name:='101Master';
+  Master.onDataRx:= @serverRXEvent;
+  addProcess(Master);
+  end;
 
+items:=nil;
+if  ini.ReadBool('items','activ',false) then
+  begin
+  Items := TIECTree.create();
+  Items.Logger:=TLogger.getInstance('Item');
+  Items.Logger.setLevel(TLevelUnit.INFO);
+  if assigned(Fapp) then
+    Items.Logger.AddAppender(Fapp);
+  Items.Logger.AddAppender(Gwapp);
+  Items.onChange:=@ItemEvent;
+//  addProcess('item');
+  addProcess(items);
+  end;
+
+GWEvent:=nil;
+if  ini.ReadBool('events','activ',false) then
+  begin
+  GWEvent := TIECGWEvent.create;
+  //  GWEvent.addConnectEvent('fer1','server.send 03 02 01');
+  //  GWEvent.addDisConnectEvent('fer1','server.send 03 02 00');
+  GWEvent.Logger:=TLogger.getInstance('Event');
+  GWEvent.Logger.AddAppender(Gwapp);
+  GWEvent.Logger.SetLevel(info);
+  addProcess(GWEvent);
+  end;
+
+Router:=nil;
+if  ini.ReadBool('router','activ',false) then
+  begin
+   Router := TIECRouter.create;
+   Router.Logger:=logger;
+//Router.addRoot('fer1');
+//Router.addRoute('fer1',[4,5,6]);
+    addProcess(Router);
+  end;
+
+lines:=TstringList.Create;
+lines.Add('ff');
+//ini.ReadSection('CLI',lines);
+ini.ReadSectionRaw('CLI',lines);
+for i:=0 to lines.Count-1 do
+     begin // writeln('LINE:'+lines[i]);
+     fsession.EcexuteCmd(lines[i]);
+     fsession.path:='';
+     fsession.onexec:=@CLI.execCLI;
+     end;
+lines.Destroy;
+
+
+NetServer := TIECGWNetServer.Create('127.0.0.1','5001');
+NetServer.Start;
+
+//ses.ThreadID:=
+BeginThread(@Executemain,fSession);
+logger.addAppender(GWApp);
+logger.info('Application Start');
+ini.Destroy;
+end;
 
 procedure TMyApplication.DoRun;
 var
-  ErrorMsg: String;
-//  s:String;
+  i:integer;
+  Stradr,ErrorMsg:String;
+  item : TIECItem;
+  iecItems : TiecItems;
+  Stream : array of byte;
+  mem:TIEC101Member;
 begin
   // quick check parameters
   ErrorMsg:=CheckOptions('h','help');
@@ -293,59 +380,77 @@ begin
   end;
 
   { add your program here }
-  termstart;
+  setlength(Stream,17);
+  Stream[0]:=01; Stream[1]:=03;
+  Stream[2]:=03;Stream[3]:=00;
+  Stream[4]:=01;Stream[5]:=01;
+  Stream[6]:=01;Stream[7]:=16;Stream[8]:=00;  Stream[9]:=01;
+  Stream[10]:=12;Stream[11]:=16;Stream[12]:=00;  Stream[13]:=01;
+  Stream[14]:=42;Stream[15]:=16;Stream[16]:=00;  Stream[17]:=01;
 
-  clogger := TLogger.getInstance('Clients');
-  clogger.setLevel(TLevelUnit.INFO);
-  clogger.AddAppender(Gwapp);
-  Clients:= TIEC104Clientlist.Create;
-  clients.Logger:=clogger;
-  Clients.onClientCreate:=@clientCreateEvent;
+//  item := TIECTCItem.create([01,01,03,00,01,00,01,10,00],10);
+//writeln (BufferToHexStr(Stream,18));
+ iecItems:= CreteItems([$01, $03, 03,00,  1,1,  01,16,0,1,  12,16,0,1,  42,16,0,1]);
+// iecItems := iecStream.CreteItems(Stream);
 
-  Slogger := TLogger.getInstance('Server');
-  slogger.setLevel(TLevelUnit.INFO);
-  Slogger.AddAppender(Gwapp);
-  Server := TIEC104Server.Create(self);
-  Server.Name:='GWSERVER';
-  Server.Logger:= Slogger;
-  Server.onClientConnect:=@ServerCreateEvent;
-//  server.start;
+//  logger.info('[18] '+LastCRC.txt);
+//  item := TIECTCItem.create();
+//  item.setType(M_ME_TB);
+  stradr:='';
+ // IECItems.TypeAsNumber:=true;
+  for i:=0 to high(IecItems)-1 do
+      begin
+      item := TIECItem (iecItems[i]);
+      writeln('item Path:'+item.toString);
+      end;
+  writeln(item.Name+' '+MAP[item.IECTyp].name+' asdu:'+inttostr(item.ASDU)+stradr);
+//  readJSONFile('d:\source\pascal\FER\j2.json');
+//  execJson(StrtoJSON(readJSONFile('d:\source\pascal\FER\j2.json')));
+//  writeln('JSON  '+items.toJson(items.root).AsJSON);
+//  writeln('Items:'+item.Name+' asdu:'+inttostr(item.ASDU)+' adr:'+inttostr(item.Adr[1]));
+//  bu:= item.getStream;
+//  writeln (BufferToHexStr(bu));
+//  Items.add(M_ME_TB,3,8193);
+//item:= items.getIecItem('9:5:8193');
+if item=nil then logger.error('Node no found')
+else  begin
+  logger.info('Node in Tree -->OK');
+  logger.info('Item name:'+item.Name);
+end;
 
-  dofile('iec.cli');
-  // stop program loop
-  while (not FExit) do
-        begin
-        Readln (cmdIN);
-        cli.ParseCMD(nil,cmdIN,CLIResult);
-//        write(CLIResult.cmdmsg+nl);
-        write(CLIResult.read()+nl);
-        end;
-//  Fclient.Activ:=False;
-  Terminate;
+//mem.linkadr:=100;
+//mem.PRM:=true;
+master.member.linkadr:=100;
+// stop program loop
+  fsession.writePrompt;
+  while (not terminated) do
+      begin
+        sleep(1000);
+      end;
 end;
 
 constructor TMyApplication.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
-//  writeln('HERE');
-  cli :=Tcli.Create(self,
-      ['exit','client','log','load','server']);
-  Cli.Name:='MAIN';
-  Session:=TSession.create;
-  fexit:=false;
-  CLIResult:=TCLIResult.Create;
 end;
 
 destructor TMyApplication.Destroy;
 begin
-//  FClient.destroy;
-  CLIResult.destroy;
-  session.Destroy;;
-  clients.destroy;
+if (clients<>nil) then
+    clients.destroy;
+if (Server<>nil) then
   Server.destroy;
-  cli.destroy;
-  TLogger.freeInstances;
+if (Items<>nil) then
+  Items.destroy;
+if (GWEvent<>nil) then
+  GWEvent.destroy;
+if (Router<>nil) then
+  Router.destroy;
+
+  Fsession.Destroy;
+//  NetServer.Destroy;
+//  TLogger.freeInstances;
   inherited Destroy;
 end;
 
@@ -358,18 +463,9 @@ end;
 begin
   Application:=TMyApplication.Create(nil);
   tconfiguratorunit.doBasicConfiguration;
-
-  logger := TLogger.getInstance;
-//  logger.setLevel(TLevelUnit.Warn);
-  logger.setLevel(TLevelUnit.INFO);
-//  logger.setLevel(TLevelUnit.debug);
-  logger.addAppender(TFileAppender.Create(ExtractFilePath(ParamStr(0))+'FER1.log'));
-  GWapp := TGWAppender.Create;
-  logger.addAppender(GWApp);
-  //  logger.addAppender(TGWAppender.Create());
-  logger.info('Start');
+  Application.init;
   Application.Run;
-  logger:=nil;
+//  TLogger.freeInstances;
   Application.Free;
 end.
 

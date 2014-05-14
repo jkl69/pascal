@@ -1,0 +1,26 @@
+ [ { title: 'Meldung' ,
+     children: [ 
+		{ title: 'ASDU 10' ,
+		  children: [
+                { title: '4097' },
+                { title: '4098'}
+				] },
+		{ title: 'ASDU 5',
+		  children: [
+                { title: '4097' },
+                { title: '4098'}
+				]}
+		]},
+   { title: 'Messwert',
+  	  children: [
+		{ title: 'ASDU 10' ,
+		  children: [
+                { title: '8193' }
+				] },
+		{ title: 'ASDU 8',
+		  children: [
+                { title: '8197' }
+				]}
+		]},
+	{title: 'Zaehlwert'}]
+		

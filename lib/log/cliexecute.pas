@@ -28,6 +28,7 @@ type
     return:String;
     hasArray:boolean;
     Arraysize:integer;
+    msgList: TStringList;
     msg :array[0..10] of String;
     awnser: TJSONObject;
   public
@@ -59,6 +60,7 @@ type
     destructor destroy; override;
 //    Procedure ParseCMD(session:TSession;s:String);
     Procedure ParseCMD(session:TSession;s:String;Result:TCLIResult);
+    function getindex(cstr:String):integer; virtual;
     Procedure execute(ix:integer); virtual;
     procedure executeX; virtual;
   end;
@@ -91,12 +93,14 @@ var
 constructor TCLIResult.Create;
 begin
 inherited create;
+msgList := TStringList.Create;
 awnser:= TJSONObject.Create;
 end;
 
 destructor TCLIResult.destroy;
 begin
 awnser.Destroy;
+freeandnil(MsgList);
 inherited destroy;
 end;
 
@@ -247,6 +251,7 @@ end;
 Procedure Tcliexecute.ParseCMD(session:TSession;s:string;Result:TCLIResult);
 begin
     Fsession:=session;
+//    CLIResult.msgList.Clear;
     CLIResult:=Result;
     CLIResult.return:='';
     CLIResult.hasArray:=false;
@@ -262,6 +267,18 @@ begin
 
     doCMD;
     if (Fsession<>nil) then Fsession.sock.SendString(CLIResult.read()+nl);
+end;
+
+function Tcliexecute.getindex(cstr:string):integer;
+var
+  c,clix:integer;
+begin
+result:=-1;
+val(cmd,clix,c);
+if c=0 then   // CMD is an number
+  begin
+  result:=100+clix;
+  end;
 end;
 
 Procedure TcliExecute.doCMD;
@@ -284,13 +301,15 @@ begin
        begin  cmd:=copy(cmd,1,po-1); cmdChild:=copy(txtin,po+1,length(txtin));  end
     else cmdChild:='';
 
-    cmdix:=FCmds.IndexOf(cmd);
-    val(cmd,clix,c);
-    if c=0 then   // CMD is an number
-      begin
-      cmdix:=100+clix;
-//      writeln('Client:'+inttoStr(cmdix));
-      end;
+//    cmdix:=getindex(cmd);
+    cmdix:=FCmds.IndexOf(cmd);  // search cmdNo
+    if (cmdix=-1) then   //command not found maybe an number?
+        cmdix:=getindex(cmd);
+//    val(cmd,clix,c);
+//    if c=0 then   // CMD is an number
+//      begin
+//      cmdix:=100+clix;
+//      end;
 
     if (cmd='?') then
         begin
@@ -369,6 +388,7 @@ begin
            i:=0;
            CLIResult.hasArray:=true;
            CLIResult.cmdmsg := 'client_settings: ';
+//           CLIResult.msg[i]:='name='+client.host; inc(i);
            CLIResult.msg[i]:='host='+client.host; inc(i);
            CLIResult.msg[i]:='port='+inttoStr(client.port); inc(i);
            if client.Activ then

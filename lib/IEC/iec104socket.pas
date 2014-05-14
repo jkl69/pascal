@@ -51,6 +51,8 @@ TIEC104Socket = class(TObject)
     FcounterSet: TIEC104Timerset;
     FAPDU_tx:   array[0..255]of byte;
     Fip_tx:   array[0..5000]of byte;
+    IPinitpos :Integer;
+    FIP_bufpos: integer;
     FAPDU_TX_Count:integer;
     FAPDU_Rx:   array[0..255]of byte;
     FAPDU_RX_Count:integer;
@@ -79,7 +81,8 @@ TIEC104Socket = class(TObject)
     Procedure irq(Sender: TObject);
 //    procedure connect(Sender: TObject;Socket: TCustomWinSocket);
     procedure DisConnect;
-    procedure readAPDU(ip_rx:array of byte;var IP_Bufpos:integer);
+//    procedure readAPDU(ip_rx:array of byte;var IP_Bufpos:integer);
+    procedure readAPDU(ip_rx:array of byte);
     procedure readAPCI;
     procedure ReadASDU;
     procedure update_VS;
@@ -227,8 +230,8 @@ procedure TIEC104Socket.log(l:TLevel;s:String);
 begin
  if logger <> nil then
       begin
-      s:='-IECSOCKET'+inttostr(Fid)+'_'+s;
-      logger.Log(l,Fname+s);
+      s:='SOCK_'+inttostr(Fid)+'_'+s;
+      logger.Log(l,Fname+s);     //
       end;
 end;
 
@@ -372,40 +375,42 @@ if not shutdown then
 end;
 
 Procedure TIEC104Socket.DecodeStream(ip_rx:array of byte);
-var
-   IP_bufpos: integer;
+//var
+//   IP_bufpos: integer;
 begin
- IP_bufpos:=0;
- while ip_bufpos < Fip_rx_count do     // there could be moe than 1 APDU in a IP-Stream
+ FIP_bufpos:=0;
+ while Fip_bufpos < Fip_rx_count do     // there could be moe than 1 APDU in a IP-Stream
     begin
-    if (ip_bufpos >0 ) then
+    if (Fip_bufpos >0 ) then
        log(DEBUG,'NEXT APDU');
-    readAPDU(IP_RX,IP_Bufpos);          //Read 1 IEC_APDU message out of the IP-stream
+//    readAPDU(IP_RX,FIP_Bufpos);          //Read 1 IEC_APDU message out of the IP-stream
+    readAPDU(IP_RX);          //Read 1 IEC_APDU message out of the IP-stream
     end;
 
 end;
 
 
-procedure TIEC104Socket.readAPDU(ip_rx:array of byte;var IP_Bufpos:integer);  //copy 1 IEC message out of the IP-stream
-var
-   offsetstr,s:string;
+//procedure TIEC104Socket.readAPDU(ip_rx:array of byte;var IP_Bufpos:integer);  //copy 1 IEC message out of the IP-stream
+procedure TIEC104Socket.readAPDU(ip_rx:array of byte);  //copy 1 IEC message out of the IP-stream
+//var
+//   offsetstr,s:string;
 begin
-
- if ip_rx[IP_bufpos]=ID_104 then
+ IPinitpos:=FIp_bufPos;
+ if ip_rx[FIP_bufpos]=ID_104 then
     begin
     if FAPDU_RX_Count<= -1 then // a new APDU should start
       begin
-      FAPDUlength:=ip_rx[ip_bufpos+1]+2;   //get length of new APDU message in IP stream
+      FAPDUlength:=ip_rx[Fip_bufpos+1]+2;   //get length of new APDU message in IP stream
       FAPDU_RX_Count:=Fapdulength;         // count how many Bytes are missed for the complet APDU
       end;
 
-      offsetstr:=inttostr(IP_bufpos);
+//      offsetstr:=inttostr(IP_bufpos);
       repeat
-         FAPDU_RX[FAPDUlength-FAPDU_RX_count]:=ip_RX[IP_bufpos];
-         inc(IP_bufpos);
+         FAPDU_RX[FAPDUlength-FAPDU_RX_count]:=ip_RX[FIP_bufpos];
+         inc(FIP_bufpos);
          dec(FAPDU_RX_count);
       until (FAPDU_RX_count=0)  // End fo IEC message reached
-            or (IP_bufpos = Fip_rx_count);  //end of IP stream reached (Fip_rx_count= length of IP stream)
+            or (FIP_bufpos = Fip_rx_count);  //end of IP stream reached (Fip_rx_count= length of IP stream)
 
      if FAPDU_RX_count=0 then  //End fo IEC message reached --> APDU Complet ??
         begin
@@ -413,19 +418,6 @@ begin
 
         readAPCI;
         FAPDU_RX_count:=-1;   // APDU complet reset APDU length counter
-
-         if (logger<>nil) and(logger.GetLevel.equals(DEBUG)) then
-            begin
-            s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
-            log(DEBUG,'R'+logRstr+'['+inttostr(FAPDUlength)+'/'+offsetstr+'] '+s);
-            end;
-         if ((logger<>nil) and (logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
-//         if (FAPDUlength >6) then
-            begin
-            s:=BufferToHexStr(FAPDU_RX[6],FAPDUlength-6);
-            log(INFO,'R['+inttostr(FAPDUlength-6)+'] '+s);
-            end;
-
         if Fsend then send;
         end      //END APDU complet
      else
@@ -437,8 +429,8 @@ begin
      end       // END first byte OK
  else
      begin
-     log(FATAL,'APDU NOT starts with Byte $68 idx:'+inttostr(IP_bufpos)+' '+BuffertoHexStr(ip_rx[IP_bufpos],6)+' ...--> exit');
-     ip_bufpos:=Fip_rx_count;
+     log(FATAL,'APDU NOT starts with Byte $68 idx:'+inttostr(IPinitpos)+' '+BuffertoHexStr(ip_rx[IPinitpos],6)+' ...--> exit');
+     Fip_bufpos:=Fip_rx_count;
      end;
 end;
 
@@ -447,6 +439,7 @@ procedure TIEC104Socket.ReadASDU;
     tvr:integer;
     x:integer;
     asdu:array[0..249] of byte;
+    s:String;
 //    res:T104_Res;
    begin
    update_VS;
@@ -473,6 +466,18 @@ procedure TIEC104Socket.ReadASDU;
   //   trace('data recived');
    Fcounterset.T3:=datetimetotimestamp(now).time+FTimerSet.T3; //polltime; //update pollingtime
 
+   if (logger<>nil) and(logger.GetLevel.equals(DEBUG)) then
+       begin
+       s:=BufferToHexStr(FAPDU_RX,FAPDUlength);
+       log(DEBUG,'R'+logRstr+'['+inttostr(FAPDUlength)+'/'+inttostr(IPinitpos)+'] '+s);
+       end;
+   if ((logger<>nil) and (logger.GetLevel.equals(INFO)) AND (FAPDUlength >6)) then
+//         if (FAPDUlength >6) then
+       begin
+       s:=BufferToHexStr(FAPDU_RX[6],FAPDUlength-6);
+       log(INFO,'R['+inttostr(FAPDUlength-6)+'] '+s);
+       end;
+
 //TRXEvent = procedure(Sender: TObject;const Buffer,count :integer)
    if assigned(FonRXData) then
         FonRXData(self,ASDU,FASDULength);
@@ -493,6 +498,7 @@ end;
 procedure TIEC104Socket.readAPCI;
 var
    APCI:byte;
+   s:String;
 begin
   Fsend := false;
   APCI:=FAPDU_RX[2] and $03;
@@ -511,7 +517,13 @@ begin
     begin
     readASDU;
     LogRStr:='i'+inttostr(Fvr);
-    end;
+    end
+  else
+     if (logger<>nil) and(logger.GetLevel.equals(DEBUG)) then
+       begin
+       s:=BufferToHexStr(FAPDU_RX,6);
+       log(DEBUG,'R'+logRstr+'[6/'+inttostr(IPinitpos)+'] '+s);
+       end;
 end;
 
 procedure TIEC104Socket.start;
@@ -534,8 +546,9 @@ begin
  if (Frun) then
     begin
     LinkStatus:=IECOFF;
-    WaitForThreadTerminate( Fth,1200);
     Frun:=false;
+    Socket.CloseSocket;
+    WaitForThreadTerminate( Fth,1200);
     end;
 end;
 
@@ -643,9 +656,7 @@ procedure TIEC104Socket.send;
 var
   s:String;
 begin
-// Logging
-// LogSStr:='i'+inttostr(Fvs);
- LogSStr:=Format('i%.5d',[Fvs]);
+ if (logSstr='uQuitt') then LogSStr:=Format('i%.5d',[Fvs]);
 if (logger<>nil) and (logger.GetLevel.equals(DEBUG)) then
    begin
     s:=BufferToHexStr(FAPDU_TX,FAPDU_TX_Count);
@@ -695,6 +706,7 @@ FAPDU_TX_count:=6;
 Fcounterset.w:=0;
 Fcounterset.T2:=off;
 logSstr:='s'+inttostr(Fvr);
+logSstr:='uQuitt';
 Fsend:=true;
 end;
 

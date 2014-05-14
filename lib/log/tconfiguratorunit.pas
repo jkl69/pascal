@@ -49,8 +49,10 @@ procedure doBasicConfiguration;
 var
  s:string;
 begin
+   s:= ExtractFilePath(ParamStr(0))+'log4pascal.log';
+//   s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log'
    {$ifdef win32}
-      s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log'
+   s:=  ExtractFileDir(Application.ExeName)+ '\log4delphi.log'
    {$endif}
    {$ifdef Unix}
        s:= ExtractFilePath(ParamStr(0))+'l4pascal.log';
@@ -71,4 +73,4 @@ begin
 end;
 
 end.
- 
+ 

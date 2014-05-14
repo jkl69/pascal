@@ -1,0 +1,5 @@
+Name(name),Description(description),Device address(ASDUA),Object address(IPA),time(time),processState(processState),eventState(eventState),processStatus(processStatus),eventStatus(eventStatus),Setpoint out of service(OutOfService),Object type(SetPointType),Archive group(ArGroup),Output range(ContainsSetPointParam.BEREICH),Scaling value at 0(ContainsSetPointParam.X0),Scaling value at maximum value(ContainsSetPointParam.XMAX)
+MOV44701_POS_CO,,4470,20485,,,,,,0,NORM,,2,0.0,32767.0
+R447M:MV44701:ZC:C,VALVE POSITION SETPOINT,4470,20502,,,,,,0,NORM,,2,0.0,32767.0
+R447M:PT44701:PICY:YO,UPSTRM. PRESS. IND. SP,4470,20504,,,,,,0,NORM,,2,0.0,32767.0
+R447M:PT44701:PY:YO,LEAK PROTC. ACK. TIME SP,4470,20506,,,,,,0,NORM,,2,0.0,32767.0

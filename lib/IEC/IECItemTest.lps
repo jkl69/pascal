@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="14">
+      <Unit0>
+        <Filename Value="IECItemTest.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECItemTest"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="95"/>
+        <CursorPos X="3" Y="113"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="iecstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECStream"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="80"/>
+        <CursorPos X="10" Y="133"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="iecmap.pas"/>
+        <UnitName Value="IECMAP"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="3" Y="55"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\inc\objpash.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="172"/>
+        <CursorPos X="23" Y="192"/>
+        <UsageCount Value="44"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="862"/>
+        <CursorPos X="14" Y="880"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\classes\streams.inc"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="744"/>
+        <CursorPos X="13" Y="756"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\sysutils\sysutilh.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="87"/>
+        <CursorPos X="4" Y="101"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\sysutils\filutilh.inc"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="72"/>
+        <CursorPos X="10" Y="86"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\sysutils.pp"/>
+        <UnitName Value="sysutils"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="249"/>
+        <CursorPos X="27" Y="266"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\win\wininc\redef.inc"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="964"/>
+        <CursorPos X="10" Y="978"/>
+        <UsageCount Value="58"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\sysutils\datih.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="73"/>
+        <CursorPos X="11" Y="108"/>
+        <UsageCount Value="57"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="D:\lazarus64\fpc\2.6.2\source\rtl\objpas\dateutil.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="292"/>
+        <CursorPos X="10" Y="303"/>
+        <UsageCount Value="57"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="iecitems.pas"/>
+        <UnitName Value="IECItems"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="499"/>
+        <CursorPos X="65" Y="85"/>
+        <UsageCount Value="47"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="iecitems2.pas"/>
+        <UnitName Value="IECItems2"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="750"/>
+        <CursorPos X="1" Y="765"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit13>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="322" Column="1" TopLine="302"/>
+      </Position1>
+      <Position2>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="323" Column="1" TopLine="302"/>
+      </Position2>
+      <Position3>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="246" Column="1" TopLine="232"/>
+      </Position3>
+      <Position4>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="247" Column="1" TopLine="232"/>
+      </Position4>
+      <Position5>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="248" Column="1" TopLine="232"/>
+      </Position5>
+      <Position6>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="249" Column="1" TopLine="232"/>
+      </Position6>
+      <Position7>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="250" Column="1" TopLine="232"/>
+      </Position7>
+      <Position8>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="240" Column="1" TopLine="232"/>
+      </Position8>
+      <Position9>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="242" Column="1" TopLine="232"/>
+      </Position9>
+      <Position10>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="245" Column="1" TopLine="232"/>
+      </Position10>
+      <Position11>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="246" Column="1" TopLine="232"/>
+      </Position11>
+      <Position12>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="245" Column="17" TopLine="226"/>
+      </Position12>
+      <Position13>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="238" Column="1" TopLine="226"/>
+      </Position13>
+      <Position14>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="244" Column="3" TopLine="226"/>
+      </Position14>
+      <Position15>
+        <Filename Value="IECItemTest.lpr"/>
+        <Caret Line="128" Column="3" TopLine="112"/>
+      </Position15>
+      <Position16>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="241" Column="1" TopLine="226"/>
+      </Position16>
+      <Position17>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="242" Column="25" TopLine="223"/>
+      </Position17>
+      <Position18>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="241" Column="1" TopLine="223"/>
+      </Position18>
+      <Position19>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="244" Column="1" TopLine="223"/>
+      </Position19>
+      <Position20>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="241" Column="1" TopLine="223"/>
+      </Position20>
+      <Position21>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="242" Column="1" TopLine="223"/>
+      </Position21>
+      <Position22>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="241" Column="1" TopLine="223"/>
+      </Position22>
+      <Position23>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="244" Column="27" TopLine="223"/>
+      </Position23>
+      <Position24>
+        <Filename Value="IECItemTest.lpr"/>
+        <Caret Line="111" Column="3" TopLine="97"/>
+      </Position24>
+      <Position25>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="619" Column="1" TopLine="601"/>
+      </Position25>
+      <Position26>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="246" Column="1" TopLine="224"/>
+      </Position26>
+      <Position27>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="241" Column="1" TopLine="224"/>
+      </Position27>
+      <Position28>
+        <Filename Value="IECItemTest.lpr"/>
+        <Caret Line="112" Column="31" TopLine="97"/>
+      </Position28>
+      <Position29>
+        <Filename Value="iecstream.pas"/>
+        <Caret Line="223" Column="51" TopLine="91"/>
+      </Position29>
+      <Position30>
+        <Filename Value="IECItemTest.lpr"/>
+        <Caret Line="119" Column="81" TopLine="98"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

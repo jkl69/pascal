@@ -1,0 +1,164 @@
+object ValDlg: TValDlg
+  Left = 782
+  Height = 240
+  Top = 315
+  Width = 320
+  BorderStyle = bsNone
+  BorderWidth = 3
+  Caption = 'ValDlg'
+  ClientHeight = 240
+  ClientWidth = 320
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  LCLVersion = '1.0.8.0'
+  object Panel1: TPanel
+    Left = 3
+    Height = 234
+    Top = 3
+    Width = 314
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    BevelWidth = 3
+    BorderWidth = 1
+    Caption = 'Panel1'
+    ClientHeight = 234
+    ClientWidth = 314
+    TabOrder = 0
+    object Notebook: TNotebook
+      Left = 7
+      Height = 220
+      Top = 7
+      Width = 300
+      PageIndex = 1
+      Align = alClient
+      TabOrder = 0
+      TabStop = True
+      object PageML: TPage
+        object R_ON: TRadioButton
+          Left = 54
+          Height = 19
+          Top = 94
+          Width = 38
+          Caption = 'ON'
+          OnClick = MLClick
+          TabOrder = 0
+        end
+        object R_OFF: TRadioButton
+          Left = 158
+          Height = 19
+          Top = 94
+          Width = 41
+          Caption = 'OFF'
+          OnClick = MLClick
+          TabOrder = 1
+        end
+      end
+      object PageMW: TPage
+        object T_MW: TTrackBar
+          Left = 38
+          Height = 48
+          Top = 110
+          Width = 216
+          OnChange = T_MWChange
+          Position = 5
+          ShowSelRange = False
+          TickMarks = tmBoth
+          TickStyle = tsManual
+          OnMouseUp = T_MWMouseUp
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object LMin: TLabel
+          Left = 12
+          Height = 16
+          Top = 94
+          Width = 28
+          Caption = 'LMin'
+          ParentColor = False
+        end
+        object LMax: TLabel
+          Left = 254
+          Height = 16
+          Top = 94
+          Width = 29
+          Caption = 'LMax'
+          ParentColor = False
+        end
+        object S_MW: TSpinEdit
+          Left = 102
+          Height = 23
+          Top = 44
+          Width = 70
+          OnEditingDone = MWClick
+          TabOrder = 1
+        end
+      end
+      object PageDML: TPage
+        object R_11: TRadioButton
+          Left = 118
+          Height = 19
+          Top = 38
+          Width = 35
+          Caption = ' 11'
+          OnChange = DMLClick
+          TabOrder = 0
+        end
+        object R_10: TRadioButton
+          Left = 118
+          Height = 19
+          Top = 78
+          Width = 38
+          Caption = 'ON'
+          OnChange = DMLClick
+          TabOrder = 1
+        end
+        object R_01: TRadioButton
+          Left = 118
+          Height = 19
+          Top = 118
+          Width = 41
+          Caption = 'OFF'
+          OnChange = DMLClick
+          TabOrder = 2
+        end
+        object R_00: TRadioButton
+          Left = 118
+          Height = 19
+          Top = 158
+          Width = 35
+          Caption = ' 00'
+          OnChange = DMLClick
+          TabOrder = 3
+        end
+      end
+      object PageMWIEEE: TPage
+        object F_MW: TFloatSpinEdit
+          Left = 46
+          Height = 23
+          Top = 70
+          Width = 210
+          Increment = 1
+          MaxValue = 100
+          MinValue = 0
+          OnEditingDone = MWClick
+          TabOrder = 0
+          Value = 0
+        end
+      end
+      object PageZW: TPage
+        object S_zw: TSpinEdit
+          Left = 78
+          Height = 23
+          Top = 86
+          Width = 134
+          MaxValue = 100000000
+          OnEditingDone = S_zwEditingDone
+          TabOrder = 0
+        end
+      end
+    end
+  end
+end

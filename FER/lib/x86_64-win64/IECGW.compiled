@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<CONFIG>
-  <Compiler Value="D:\lazarus64\fpc\2.6.2\bin\x86_64-win64\fpc.exe" Date="1114729682"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -vewnhi -FiD:\source\pascal\FER\lib\x86_64-win64 -FuD:\source\pascal\lib\IEC -FuD:\source\pascal\lib\log -FuD:\source\pascal\lib\sockets -FuD:\lazarus64\fpc\2.6.2\source\packages\fcl-json\src -FuD:\source\pascal\FER\ -FUD:\source\pascal\FER\lib\x86_64-win64\ -l IECGW.pas"/>
-</CONFIG>

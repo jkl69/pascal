@@ -1,0 +1,59 @@
+Name(name),Description(description),Device address(ASDUA),Object address(IPA),time(time),processState(processState),eventState(eventState),processStatus(processStatus),Event status(eventStatus),Active(Active),Signal out of service(OutOfService),Inverted signal(Inverted),Do not announce spontaneous change(ReportSpontaneous),Do not indicate information object during general interrogation(ReportGA),Object type(SignalType),Locking or monitoring signal(SperrUebObj),Locking or monitoring status(SperrUebZust),Archive group(ArGroup),Status of Event Signal(ContainsSignalParam.Zust0),Quality of Event Signal(ContainsSignalParam.Qual0),Do not set object to IV|NT(ContainsSignalParam.QualS),Debounce time [ms](ContainsSignalParam.Entp),Transient signal extension period [100 ms](ContainsSignalParam.WiscZ),Suppression period of differential position [10 ms](ContainsSignalParam.DiffZ),Suppression time of intermediate position [10 ms](ContainsSignalParam.StoeZ),Chatter suppression: number of valid states (n)(ContainsSignalParam.EntfN),Chatter suppression t1 [100ms](ContainsSignalParam.EntfZ1),Chatter suppression t2 [100ms](ContainsSignalParam.EntfZ2),Delay time 0 -> 1 [100ms](ContainsSignalParam.VerzZ01),Delay time 1 -> 0(ContainsSignalParam.VerzZ10),For command(ContainsSignalParam.BefeIPA),System signal for device(ContainsSignalParam.DulUst)
+R447M:COM:XA1:DI,SCADA MAINS FAILURE,4470,4097,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:COM:XA3:DI,INTRUSION ALARM,4470,4098,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XS20:DI,MAINTENANCE SWITCH,4470,4099,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA10:DI,RTU TEMP HIGH ALARM,4470,4100,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA13:DI,BATTERY LOW ALARM,4470,4101,,,,,,1,0,1,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA17:DI,RECTIFIER ALARM,4470,4102,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA14:DI,AC-IN M.BREAKER TRIP,4470,4103,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Signal_A_0008,,4470,4104,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA31:DI,ETHERNET SWITCH ALARM-1,4470,4105,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:RTU:XA32:DI,ETHERNET SWITCH ALARM-2,4470,4106,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0011,4470,4107,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0012,4470,4108,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0013,4470,4109,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0014,4470,4110,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0015,4470,4111,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M,Signal_A_0016,4470,4112,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+MV44701_REM,,4470,4129,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+MV44701_LOC,,4470,4130,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+MV44702_REM,,4470,4131,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+MV44702_LOC,,4470,4132,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:MV44701:COMM:XI,MV 44701 Comm. Error,4470,4209,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:MV44701:ZI:DI2,VALVE 01  STATUS - IS OPEN,4470,4221,,,,,,1,0,0,0,0,DML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:MV44701:XQA:XI,Valve Operation Alarm.,4470,4902,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:PT44701:PCH:XI,Press. 01 Rate of change,4470,4904,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:PT44701:PSLL:XI,Down stream pressure indication,4470,4907,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:PT44701:PR:BV2,PT 01 Out of range,4470,4921,,,,,,1,0,0,0,0,DML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+R447M:MV44701:HI:DI2,VALVE 01 OPERATING MODE,4470,4925,,,,,,1,0,0,0,0,DML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+CU88A faulty : Frame/Slot  1/-A104,,4470,90,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+CC88A faulty : Frame/Slot  1/-A106,,4470,1,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Communications module faulty,,4470,104,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+CC88A faulty : Frame/Slot  1/-A107,,4470,2,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+DI84A faulty : Frame/Slot  1/-A108,,4470,3,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Signal acquisition module faulty,,4470,96,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+AI83A faulty : Frame/Slot  1/-A114,,4470,9,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Measured value acquisition module faulty,,4470,97,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Incorrect time initialization,,4470,130,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+WDT restart of frame 1,,4470,144,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+HW unknown card ,,4470,246,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+HW different assignment,,4470,247,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Local initializing end,,4470,254,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Global initializing end,,4470,255,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Reconfiguration via messages ,,4470,238,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Wrong parameterization,,4470,124,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Get wrong telegram,,4470,550,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Data loss,,4470,551,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Telegram was wrapped,,4470,651,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS SRAM error,,4470,239,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS error,,4470,240,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS RUN/STOP,,4470,241,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS cold start,,4470,242,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS warm restart,,4470,243,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS hot restart,,4470,244,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+SPS available,,4470,245,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Initialization of signal acquisition faulty ,,4470,112,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+Initialization of measured value acquisition faulty,,4470,113,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+"Communication to Station 32,001 disturbed",,4470,1024,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,32001
+Communication to Station -1 disturbed,,4470,529,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,-1
+"Communication to Station 32,101 disturbed",,4470,1025,,,,,,1,0,0,0,0,EML,none,INT_1,,0,65280,0,100,0,0,0,0,0,0,0,0,0,32101

@@ -11,14 +11,12 @@ uses
   TLoggerUnit, TLevelUnit, cliexecute;
 
 type
-  Tcli=class ;
 
   { TIEC104Server }
 //  TIEC104Server = class(TObject)
   TIEC104Server = class(TComponent)
        private
          Fth:TThreadID;
-         Fcli:Tcli;
          Fsocket: TTCPBlockSocket;
    //       Fname: String;
   //        FIECSettings:TIEC104Settings;  //Server asign settings to all sockets
@@ -42,16 +40,15 @@ type
          function getClientindex(sender:TIEC104Socket):integer;
          Procedure setOnClientRead(proc: TRTXEvent);
          Procedure setOnClientSend(proc: TRTXEvent);
-  //       function GetTimers: TIEC104Timerset;
-  //       procedure SetTimers(timers:TIEC104Timerset);
-  //       procedure SetLogEvent(proc:TGetStrProc);
-  //       procedure trace(s:string);
        public
          constructor Create(AOwner: Tcomponent);override;
          destructor destroy; override;
          procedure start;
          procedure stop;
-         procedure Cliexecute(s:string;Result:TCLIResult);
+         Function send(hexstr:String):integer;
+         Function send(hexstr:String;con:integer):integer;
+         procedure sendBuf(buf: array of byte);
+         procedure sendBuf(buf: array of byte;con:integer);
          procedure ClientClose(index :integer);
          property Connections:TList read FConnectionList;
          property Connection[Index: Integer]: TIEC104Socket read GetCLient;
@@ -68,14 +65,6 @@ type
          property onClientSend: TRTXEvent read FOnClientSend write SetOnClientSend;
       end;
 
-  Tcli=class(Tcliexecute)
-  private
-  protected
-    server:TIEC104Server;
-   public
-     Procedure execute(ix:integer); override;
-end;
-
 implementation
 
 type
@@ -85,42 +74,6 @@ type
       sock:Tsocket;
     end;
 
-
-Procedure tcli.execute(ix:integer);
-var
-  i:integer;
-  Connection: TIEC104Socket;
-  txt:String;
-begin
-// [,'list','start','stop']
-//    execute:='OK'+nl;
-  case (ix) of
-     0: begin
-           CLIResult.cmdmsg:= 'Connections: '+inttostr(server.Connections.Count)+nl;
-           for i:=0 to server.Connections.count-1 do
-           begin
-              connection := server.Connection[i];
-              CLIResult.cmdmsg:=CLIResult.cmdmsg+'connection.'+inttostr(i)+' '+connection.Socket.GetRemoteSinIP;
-           end;
-           Exit;
-        end;
-     1: begin server.start;
-              CLIResult.cmdmsg:= 'Server start';exit  end;
-
-     2: begin server.stop;
-                CLIResult.cmdmsg:= 'Server Stop'; exit;  end;
-     3: begin if (TLevelUnit.tolevel(Parameter) <> nil) then
-               begin
-                 server.logger.setLevel(TLevelUnit.tolevel(Parameter));
-                 CLIResult.cmdmsg:= 'change Server LogLevel';
-               end
-            else begin
-                CLIResult.cmdmsg:= 'Invalid LogLevel';
-                CLIResult.did:=false;
-               end;
-            Exit; end;
-      end;
-end;
 
 function runsock(p: Pointer): ptrint;
 var
@@ -155,7 +108,8 @@ begin
     IECSock.DecodeStream(IP_RX);
  //    sleep(2000);
   until recv<=0;
-  server.log(Error,'ThreadID:'+inttoStr(GetThreadID)+' sock_ERROR: '+inttostr(clsock.lastError));
+  if (server.Frun) then
+     server.log(Error,'ThreadID:'+inttoStr(GetThreadID)+' sock_ERROR: '+inttostr(clsock.lastError));
 
   Server.DisconnectEvent(iecsock);
 
@@ -176,6 +130,7 @@ var
  terminated:boolean;
  txt:string;
  r: TRunRun;
+ i:integer;
 begin
     server := TIEC104Server(p);
     server.socket.Listen;
@@ -183,16 +138,19 @@ begin
     repeat
        server.log(debug,'wait_accept');
        sock:=server.socket.Accept;
-       server.log(Info,'_accept_OK');
-       server.log(Error,' sock_ERROR: '+inttostr(clsock.lastError));
-      if (server.Frun) then
-          begin
-          r:= TRunRun.Create;
-          r.server:=server;
-          r.sock:=sock;
-          BeginThread(@runsock,r);
-//            Server.AcceptEvent(clsock);
-           end;
+       i := clsock.lastError;
+//       if (i=0) then begin
+         if (server.Frun) then
+            begin
+            server.log(Info,'_doAccept_');
+            r:= TRunRun.Create;
+            r.server:=server;
+            r.sock:=sock;
+            BeginThread(@runsock,r);
+  //            Server.AcceptEvent(clsock);
+//             end;
+         end
+       else server.log(Error,'_listen_ERROR: '+inttostr(i)+' '+clsock.GetErrorDesc(i));
       server.log(debug,'EXIT-accept');
    until (not server.Frun);
    server.Socket.CloseSocket;
@@ -210,18 +168,12 @@ inherited create(AOwner);
   Fiectimers:=DefaultTimerset;
   Port:=2404;
   FConnectionList:=TList.Create;
-  Fcli:=Tcli.Create(self,
-      ['list','start','stop','log']
-       );
-  Fcli.server:=self;
-  Fcli.name:='Server';
 end;
 
 Destructor TIEC104Server.destroy;
 begin
  stop;
 // FConnectionList.Destroy;
- Fcli.destroy;
  inherited destroy;
 end;
 
@@ -236,55 +188,43 @@ begin
      end;
 end;
 
-procedure TIEC104Server.ClientClose(index : integer);
-//procedure TIEC104Server.ClientClose(Client: TIEC104Socket);
+
+Function TIEC104Server.send(hexstr:String):integer;
 var
-x,i:integer;
-iecsocket: TIEC104Socket;
+  i:integer;
 begin
-iecsocket := Connection[index];
-log(Warn,'Client close: '+iecsocket.Name) ;
-
-if assigned(FonclientDisconnect) then
-        FonclientDisConnect(self,iecsocket);
-
-x:=iecsocket.ID;  //threadID
-
-iecsocket.Socket.CloseSocket;
-WaitForThreadTerminate( x,1000);
-//while (iecsocket <>nil) do;    //wait for Thread end
+ result:=-1;
+for  i:=0 to Connections.Count-1 do
+    begin
+    result:= send(hexstr,i);
+    end;
 end;
 
-procedure TIEC104Server.cliexecute(s:string;Result:TCLIResult);
+Function TIEC104Server.send(hexstr:String;con:integer):integer;
 begin
-  Fcli.ParseCMD(nil,s,result);
+   result := Connection[con].sendHexStr(hexstr);
+end;
+
+procedure TIEC104Server.sendBuf(buf: array of byte);
+var
+  i:integer;
+begin
+for  i:=0 to Connections.Count-1 do
+    begin
+    sendbuf(buf,i);
+    end;
+end;
+
+Procedure TIEC104Server.sendBuf(buf: array of byte;con:integer);
+begin
+   log(info,'ServerSend_toCon_'+inttostr(con));
+   Connection[con].sendBuf(buf,length(buf),true);
 end;
 
 (*
 procedure TIEC104Server.DisconnectEvent(aSocket: TLHandle);
-var
- iecsock:TIEC104Socket;
- s:string;
- socket:TLSocket;
-begin
-socket:=TLSocket(asocket);
-s:=getclientAddress(socket);
-iecsock:=Findclient(socket);
-logger.info('Connection closed: '+s) ;
-if iecsock <> nil then
-//if i <> 0 then
-  begin
-  logger.debug('Found client in list  ID:'+inttostr(iecsock.ID)+' DELETE');
-  Fclientlist.Delete(getclientindex(iecsock));
-  iecsock.FSocket:=nil;
-  if assigned(FonclientDisconnect) then
-      FonclientDisConnect(self,iecsock);
-  iecsock.destroy;
-  end;
-// log.debug('disconnect- sockets count:'+inttostr(count));
 end;
   *)
-
 
 Procedure TIEC104Server.setOnClientRead(proc: TRTXEvent);
 var
@@ -376,8 +316,8 @@ end;
 procedure TIEC104Server.DisconnectEvent(iSocket: TIEC104Socket);
 begin
  log(info,'ClientDisConect:');
-// iecsock.stop;
-// freeandnil(iecsock);
+// iSocket.stop;
+// freeandnil(iSocket);
 end;
 
 
@@ -397,11 +337,11 @@ procedure TIEC104Server.Stop;
 begin
 if  (Frun) then
    begin
+   Frun:=false;
    while Connections.Count > 0 do
       begin
       ClientClose(Connections.Count-1);
       end;
-    Frun:=false;
 //   Disconnect(true);
     Fsocket.CloseSocket;
     WaitForThreadTerminate( Fth,100);
@@ -410,6 +350,25 @@ if  (Frun) then
    end;
 end;
 
+procedure TIEC104Server.ClientClose(index : integer);
+//procedure TIEC104Server.ClientClose(Client: TIEC104Socket);
+var
+x,i:integer;
+iecsocket: TIEC104Socket;
+begin
+iecsocket := Connection[index];
+log(Warn,'close connection: '+iecsocket.Name) ;
+
+if assigned(FonclientDisconnect) then
+        FonclientDisConnect(self,iecsocket);
+
+x:=iecsocket.ID;  //threadID
+//iecsocket.Socket.CloseSocket;
+iecsocket.stop;
+//WaitForThreadTerminate( Fth,10);
+WaitForThreadTerminate( x,10);
+//while (iecsocket <>nil) do;    //wait for Thread end
+end;
 
 function TIEC104Server.GetClient(Index: Integer): TIEC104Socket;
 begin

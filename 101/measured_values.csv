@@ -1,0 +1,14 @@
+Name(name),Description(description),Device address(ASDUA),Object address(IPA),time(time),processState(processState),eventState(eventState),processStatus(processStatus),eventStatus(eventStatus),Measured value out of service(OutOfService),No announcement of spontaneous changes(ReportSpontaneous),No announcement of information object during general interrogation(ReportGA),Object type(MeasuredValueType),Delta-Event for event archive(Delta),Archive group(ArGroup),Output range(ContainsMeasuredValueParam.BEREICH),Delta event(ContainsMeasuredValueParam.Delta),Threshold value(ContainsMeasuredValueParam.Schw),Status of Measured Value(ContainsMeasuredValueParam.Zust0),Quality of Measured Value(ContainsMeasuredValueParam.Qual0),Do not set object to IV|NT(ContainsMeasuredValueParam.QualS),Multiplier upon selection(ContainsMeasuredValueParam.Fakt),Upper process limit(ContainsMeasuredValueParam.PLH),Lower process limit(ContainsMeasuredValueParam.PLL),Hysteresis in the event of process limit violations(ContainsMeasuredValueParam.Hyst),Life-Zero threshold(ContainsMeasuredValueParam.LifeZ),Zero suppression(ContainsMeasuredValueParam.ForceZ),Source type (only for PLC)(ContainsMeasuredValueParam.QuellTyp),Scaling value at 0(ContainsMeasuredValueParam.Y0),Scaling value at maximum value(ContainsMeasuredValueParam.YMAX)
+R447M:PT44701:PIR:AI,PRESSURE 01 INDICATION,4470,8193,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0002,,4470,8194,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0003,,4470,8195,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0004,,4470,8196,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0005,,4470,8197,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0006,,4470,8198,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0007,,4470,8199,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+Measured value_A_0008,,4470,8200,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+R447M:MV44701:ZIR:AI,VALVE 01 POSITION,4470,8210,,,,,,0,0,0,MWNORM,1,,2,320,320,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+R447M:MV44701:ZC:YI,VALVE POSITION SETPOINT AVAILABLE,4470,8215,,,,,,0,0,0,MWNORM,1,,2,320,320,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+MV_44701_RTU_SP,,4470,8355,,,,,,0,0,0,MWNORM,1,,8,100,100,0,65280,0,1,32767,-32768,0,0,0,MWNORM,0.0,32767.0
+R447M:PT44701:PICY:YI,DOWN STR. PRESS. IND. AV,4470,8357,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0
+R447M:PT44701:PY:YI,LEAK PROT. AC. TIME AV,4470,8359,,,,,,0,0,0,MWNORM,1,,2,1310,1310,0,65280,0,1,32767,0,0,0,0,MWNORM,0.0,32767.0

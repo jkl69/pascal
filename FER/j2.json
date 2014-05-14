@@ -1,0 +1,2 @@
+{ 'cmd' : 'item.add' , 'items' : [ { 'path': '/10/4/8192', 'title': 'Meldung' } ,
+  { 'path': '/9/4/8192' } ] }
