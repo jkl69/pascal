@@ -123,8 +123,8 @@ var
 procedure TSlave.BStartClick(Sender: TObject);
 var conf:TPortconfig;
 begin
-  conf:=setup.getconfig;
-  ser.config(conf.baudrate,conf.dbits,conf.parity,conf.Sbits, False, False);
+//  conf:=setup.getconfig;
+//  ser.config(conf.baudrate,conf.dbits,conf.parity,conf.Sbits, False, False);
   ser.Port:=conf.port;
   ser.linkadr:=conf.linkadr;
   ser.start;
@@ -316,6 +316,9 @@ begin
  log('loadToolboxFile');
  prop := TStringlist.Create;
  it := TStringlist.Create;
+ log('SEPERATOR'+sysutils.ListSeparator);
+ prop.Delimiter:=sysutils.ListSeparator;
+ it.Delimiter:=sysutils.ListSeparator;
  prop.DelimitedText:= stringreplace(l[1],' ','',[rfReplaceAll]);
  for i:=0 to prop.Count-1 do
      begin
@@ -348,9 +351,10 @@ var
 begin
   prop := TStringlist.Create;
   it := TStringlist.Create;
-  prop.Delimiter:=',';
-  it.Delimiter:=',';
-  log('Seperator: '+DecimalSeparator);
+//  log('Seperator: '+DecimalSeparator);
+  log('SEPERATOR'+sysutils.ListSeparator);
+  prop.Delimiter:=sysutils.ListSeparator;
+  it.Delimiter:=sysutils.ListSeparator;
   fn:= l[0];
   prop.DelimitedText:= stringreplace(l[1],' ','',[rfReplaceAll]);
   log('fn: '+fn);
@@ -394,7 +398,7 @@ var
 begin
  Strl := TStringlist.Create;
 
-// prop.NameValueSeparator:=';';
+ // prop.NameValueSeparator:=';';
   if opendialog.Execute then
      begin
      strl.LoadFromFile(opendialog.FileName);

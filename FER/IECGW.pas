@@ -33,6 +33,8 @@ type
     procedure TimerEvent(const S: string) ;
     procedure clientCreateEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure clientConnectEvent(Sender: TObject;Socket: TIEC104Socket);
+    procedure MasterConnectEvent(Sender: TObject);
+    procedure MasterDisConnectEvent(Sender: TObject);
     procedure clientDisconectEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure serverRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
     procedure serverCreateEvent(Sender: TObject;Socket: TIEC104Socket);
@@ -55,7 +57,7 @@ var
   GWEvent: TIECGWEvent;
 //  Timer:   TIECGWTimer;
   Logger : TLogger;
-
+  GWapp:TGWAppender;
 
 function Executemain(p: Pointer): ptrint;
 var
@@ -73,6 +75,16 @@ begin
 end;
 
 { TMyApplication }
+
+procedure TMyApplication.MasterConnectEvent(Sender: TObject);
+begin
+ logger.warn('MASTER connect to '+ TIEC101Member(Sender).name);
+end;
+
+procedure TMyApplication.MasterDisConnectEvent(Sender: TObject);
+begin
+ logger.Warn('MASTER Lost Connection to '+ TIEC101Member(Sender).name);
+end;
 
 //TIECSocketEvent = procedure (Sender: TObject; Socket: TIEC104Socket) of object;
 procedure TMyApplication.clientConnectEvent(Sender: TObject;Socket: TIEC104Socket);
@@ -162,7 +174,7 @@ var
   CL:TIEC104Client;
   item : TIECItem;
 begin
- logger.Info('MAIN:RX_'+hextostr(buffer,count));
+ logger.Info('__RX__ '+hextostr(buffer,count));
 // logger.debug('Server-Connection Recieve Event');
 {*
 try
@@ -207,15 +219,15 @@ end;
 
 procedure TMyApplication.Terminate;
 begin
-   logger.info('Application Exit:');
    NetServer.Stop;
+   logger.info('Application Exit:');
    inherited ;
 end;
 
 procedure TMyApplication.init;
 var
  INI:TINIFile;
- GWapp:TGWAppender;
+// GWapp:TGWAppender;
  Fapp:TFileAppender;
  lines:Tstrings;
  i:integer;
@@ -238,6 +250,7 @@ GWapp := TGWAppender.Create;
 fSession:=tsession.Create;
 fsession.Name:='LocalConsole';
 fsession.onexecResult:=@writeconsole;
+//fsession.onTerminate:=;
 fsession.onexec:=@CLI.execCLI;
 
 Clients:=nil;
@@ -278,6 +291,8 @@ if  ini.ReadBool('master','activ',false) then
       Master.Logger.AddAppender(Fapp);
   Master.Logger.AddAppender(Gwapp);
   Master.Name:='101Master';
+  Master.onConnect:= @MasterconnectEvent;
+  Master.onDisConnect:= @MasterDisconnectEvent;
   Master.onDataRx:= @serverRXEvent;
   addProcess(Master);
   end;
@@ -404,10 +419,9 @@ else  begin
   logger.info('Item name:'+item.Name);
 end;
 
-//mem.linkadr:=100;
-//mem.PRM:=true;
-master.member.linkadr:=100;
-//master.member.linkadr:=100;
+//mem := master.addmember('test',100,TLogger.getInstance('Master.test'));
+//mem.onDataRx :=  @ServerRxEvent; mem.onConnect:= @MasterconnectEvent;
+
 // stop program loop
   fsession.writePrompt;
   while (not terminated) do
@@ -426,6 +440,8 @@ destructor TMyApplication.Destroy;
 begin
 if (clients<>nil) then
     clients.destroy;
+if (Master<>nil) then
+   Master.destroy;
 if (Server<>nil) then
   Server.destroy;
 if (Items<>nil) then

@@ -1,5 +1,5 @@
 object Slave: TSlave
-  Left = 289
+  Left = 295
   Height = 459
   Top = 262
   Width = 1130
@@ -46,8 +46,8 @@ object Slave: TSlave
   LCLVersion = '1.3'
   object StatusBar: TStatusBar
     Left = 0
-    Height = 20
-    Top = 439
+    Height = 28
+    Top = 431
     Width = 1130
     Panels = <    
       item
@@ -68,7 +68,7 @@ object Slave: TSlave
   end
   object ItemGrid: TStringGrid
     Left = 0
-    Height = 220
+    Height = 212
     Top = 56
     Width = 1130
     Align = alClient
@@ -179,18 +179,18 @@ object Slave: TSlave
     end
     object IECTypeCombo: TComboBox
       Left = 16
-      Height = 21
+      Height = 28
       Top = 20
       Width = 216
       BorderStyle = bsSingle
-      ItemHeight = 13
+      ItemHeight = 20
       TabOrder = 3
     end
     object SimCheck: TCheckBox
       Left = 416
-      Height = 17
+      Height = 24
       Top = 27
-      Width = 36
+      Width = 49
       Caption = 'Sim'
       Checked = True
       OnChange = SimCheckChange
@@ -199,7 +199,7 @@ object Slave: TSlave
     end
     object Linkadr: TSpinEdit
       Left = 616
-      Height = 21
+      Height = 28
       Top = 19
       Width = 90
       MaxValue = 65535
@@ -211,9 +211,9 @@ object Slave: TSlave
     end
     object Label1: TLabel
       Left = 560
-      Height = 13
+      Height = 20
       Top = 27
-      Width = 42
+      Width = 57
       Caption = 'Link Adr.'
       ParentColor = False
     end
@@ -248,7 +248,7 @@ object Slave: TSlave
   object Panel2: TPanel
     Left = 0
     Height = 153
-    Top = 286
+    Top = 278
     Width = 1130
     Align = alBottom
     Caption = 'Panel2'
@@ -266,11 +266,11 @@ object Slave: TSlave
       TabOrder = 0
       object TabSheet2: TTabSheet
         Caption = 'Events'
-        ClientHeight = 125
+        ClientHeight = 118
         ClientWidth = 1120
         object events: TMemo
           Left = 0
-          Height = 125
+          Height = 118
           Top = 0
           Width = 1120
           Align = alClient
@@ -331,7 +331,7 @@ object Slave: TSlave
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 87
+            ClientHeight = 83
             ClientWidth = 151
             Columns = 2
             ItemIndex = 1
@@ -458,7 +458,7 @@ object Slave: TSlave
     Cursor = crVSplit
     Left = 0
     Height = 10
-    Top = 276
+    Top = 268
     Width = 1130
     Align = alBottom
     ResizeAnchor = akBottom

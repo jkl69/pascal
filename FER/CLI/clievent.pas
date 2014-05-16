@@ -110,7 +110,7 @@ procedure TimerCLI(asession:Tsession;txt:String);
 var
  cmd:String;   ucli:TCli;
 begin
-  IEvent.log(info,'TimerEventCMD: '+txt);
+//  IEvent.log(info,'TimerEventCMD: '+txt);
   asession.onexec:=@CLIEvent.TimerCLI;
   if asession.path<>'event.timer.' then asession.path:=asession.path+'timer.';
   if txt<>'' then
@@ -154,7 +154,7 @@ procedure ExecCLI(asession:Tsession;txt:String);
 var
  cmd:String;   ucli:TCli;
 begin
- IEvent.log(info,'CLIEventCMD: '+txt);
+ IEvent.log(debug,'CLIEventCMD: '+txt);
  asession.onexec:=@CLIEvent.execCLI;
  if asession.path<>'event.' then asession.path:=asession.path+'event.';
  if txt<>'' then

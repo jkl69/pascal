@@ -48,12 +48,13 @@ asession.writeResult('commands are');
 for i:=0 to high(process) do
 //   asession.writeResult('   '+process[i]);
    asession.writeResult('   '+process[i]+#9+'- '+hint[i]);
-asession.writeResult('   x');
+asession.writeResult('   x'+#9+'-EXIT Application');
 end;
 
 function setlevel(log:TLogger;level:String):boolean;
 begin
 result:=false;
+if log=nil then exit;
 if (TLevelUnit.tolevel(level)<>nil) then
     begin
     log.SetLevel(TLevelUnit.tolevel(level));
@@ -124,7 +125,7 @@ var
  cmd:string;
  ucli:Tcli;
 begin
-writeln('session:'+asession.name);
+//writeln('session:'+asession.name);
 //cmd:=asession.path+txt;
 if txt<>'' then
    begin
@@ -227,8 +228,8 @@ if cmd<>'' then
       end;
    end;
 
-    for i:= 0 to high(result.Params) do   writeln('PARAM:'+result.Params[i]+'_');
-    for i:= 0 to high(result.Path) do   writeln('PATH:'+result.Path[i]+'_');
+//    for i:= 0 to high(result.Params) do   writeln('PARAM:'+result.Params[i]+'_');
+//    for i:= 0 to high(result.Path) do   writeln('PATH:'+result.Path[i]+'_');
 end;
 
 procedure addProcess(o:TObject);
@@ -249,7 +250,8 @@ begin
      begin IClients:=TIEC104Clientlist(o); n:='client';  end;
 
   if o.ClassType=TIEC101Master then
-     begin IMaster:=TIEC101Master(o); n:='master';  end;
+     begin IMaster:=TIEC101Master(o); n:='master';
+     htxt:= 'Enter Menu to configure IEC_101 Master'; end;
 
   if o.ClassType=TIECGWEvent then
      begin IEvent:=TIECGWEvent(o); n:='event';  end;

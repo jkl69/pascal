@@ -28,6 +28,7 @@ type
     procedure EcexuteCmd(s:String);
     procedure writeResult(const txt:String); virtual;
     procedure writePrompt;
+    property onTerminate:TnotifyEvent read FonTerminate write FonTerminate;
     property onexec:TStrProc read fonexec write fonexec;
     property onexecResult:TGetStrProc read fonexecResult write fonexecResult;
   end;

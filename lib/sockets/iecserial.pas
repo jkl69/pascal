@@ -107,6 +107,8 @@ const
 
 implementation
 
+uses Portsetup;
+
 function hextoStr(b:array of byte;count:integer):String;
 var i:integer;
 begin
@@ -145,8 +147,12 @@ begin
 end;
 
 procedure TIEC101Serial.Start;
+var conf:TPortconfig;
 begin
-Connect(fport);
+ conf:=setup.getconfig;
+ Port:=conf.port;
+ linkadr:=conf.linkadr;
+ Connect(fport);
   if LastError<>0 then
        begin
   //      log(error,'LastError:'+inttoStr(LastError)+' '+GetErrorDesc(LastError));
@@ -155,6 +161,7 @@ Connect(fport);
      end
   else
     begin
+     config(conf.baudrate,conf.dbits,conf.parity,conf.Sbits, False, False);
      log(info,'Opened Port: '+inttoStr(dcb.BaudRate));
      if ThreadID=0 then ThreadID:= BeginThread(@run ,self) ;
      if assigned(fonStart) then fonstart(self);

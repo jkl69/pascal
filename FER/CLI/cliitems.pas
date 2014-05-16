@@ -157,14 +157,11 @@ var
 begin
   try
     key:=copy(s,1,pos('=',s)-1);value:=copy(s,pos('=',s)+1,length(s));
-    IIecTree.log(info,'set_'+item.name+' Key:'+key+'  value:'+value);
+    IIecTree.log(debug,'set_'+item.name+'  '+key+':'+value);
 //    IIecTree.log(info,'set_'+IECType[item.getType].name+' Key:'+key+'  value:'+value);
     if key='val' then item.Value:=(strtofloat(value));
-    IIecTree.log(info,'set_2');
     if key='inc' then item.Value:=item.Value+(strtofloat(value));
-    IIecTree.log(info,'set_3');
     if key='qu' then item.Qu:=ByteToQUSet(item,strtoint(value));
-    IIecTree.log(info,'set_4');
     asession.writeResult('item.set '+key+'='+value+' [OK]');
  except
    asession.writeResult('item.set  [ERROR]');
