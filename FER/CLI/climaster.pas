@@ -31,6 +31,7 @@ const
        'change master settings e.g "master.set baudrate=1200"',
        'change Member or Master-log-level  e.g. "master.log debug" , "master.log RTU1 debug"',
        'Exit master menu.');
+
 function list(asession:Tsession;uCLI:TCLI):boolean;
 var  i:integer;
      txt:String;

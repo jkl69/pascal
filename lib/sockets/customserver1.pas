@@ -615,6 +615,7 @@ begin
       begin
         if LastError = 0 then
         begin
+          writeln('**');
           sock := Accept;
           if lastError = 0 then
           begin
@@ -674,9 +675,6 @@ begin
     finally end;
   end;
 
-
-
-
   FreeAndNil(fCurrentSocket);
   //while fConnections.Count > 0 do sleep(500);
 end;
@@ -685,7 +683,6 @@ procedure TCustomServer.LockTermination;
 begin
   fConnectionTermLock.Enter;
 end;
-
 
 
 procedure TCustomServer.Start;

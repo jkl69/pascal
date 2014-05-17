@@ -142,7 +142,6 @@ type
     fonConnect : TnotifyEvent;
     fonDisConnect : TnotifyEvent;
     fonDataRX : TRxBufEvent;// TGetStrProc;
-//    SlaveAlive :boolean;
 //    Function  GetNextMember:TIEC101Member;
     Procedure  GetNextMember;
     procedure  doPoll;
@@ -153,9 +152,9 @@ type
     procedure SendReset;
     procedure Execute; override;
   public
+     IdleTime : word;
       constructor Create;
       destructor destroy;
-//      procedure stop;
       function GetMember(Index: Integer): TIEC101Member;
       function GetMember(aname:String): TIEC101Member;
       Function addMember(s:String;adr:word;alog:Tlogger):TIEC101Member;
@@ -774,7 +773,6 @@ begin
     buf[0]:=$10;  encodecontrolByte;
     buf[2]:=fmember.linkadr mod 256;    buf[3]:=fmember.linkadr div 256;  Blocklength:=3;
     buf[4]:=CalcCRC;  buf[5]:=$16;
-
     Send(@buf,6);
     end;
 end;
@@ -822,11 +820,13 @@ constructor TIEC101Master.Create;
 begin
  inherited;
  FMemberList:=TList.Create;
-// fmember.PRM := True;  // Direction 1= master to slave  0= slave to master
+ IdleTime:=100;
 end;
 
 destructor TIEC101Master.destroy;
 begin
+ if InstanceActive then
+     stop;
  FMemberList.destroy;
 end;
   {
@@ -1089,7 +1089,7 @@ begin
             currentMember.reset;
             end;
           end;
-       sleep(100);
+       sleep(idleTime);
        inc(loopcount);
      end;
   for i:=0 to FMemberList.Count-1 do

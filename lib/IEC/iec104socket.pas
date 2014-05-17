@@ -10,7 +10,7 @@ uses
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, fptimer,
   blcksock,
-  cliexecute,
+//  cliexecute,
   TLoggerUnit, TLevelUnit;
 
 type
@@ -41,7 +41,7 @@ TIECStatusinfo = Record
 TIEC104Socket = class(TObject)
   private
     Fth:TThreadID;
-    Fcli: Tcliexecute;
+//    Fcli: Tcliexecute;
     FName:    String;
     FIECSocketType: TIECSocketType;
     FID:      integer;
@@ -110,7 +110,7 @@ TIEC104Socket = class(TObject)
 //    procedure readAPDU(ip_rx:array of byte;var IP_Bufpos:integer);
     procedure sendBuf(buf:array of byte; count:integer;direct:boolean);
     function sendHexStr(var s:string):integer;
-    procedure CLIExecute(s:string;result:TCLIResult);
+//    procedure CLIExecute(s:string;result:TCLIResult);
     property Name:String read FName write setName;
     property SocketType:TIECSocketType read FIECSocketType write setSocketType;
     property Socket:TTCPBlockSocket read FbSocket write FbSocket;
@@ -171,7 +171,7 @@ function DefaultTimerset: TIEC104Timerset;
     result.w:=8;
   end;
 
-function run(p: Pointer): ptrint;
+function runTimer(p: Pointer): ptrint;
 var
   sock: TIEC104Socket;
 begin
@@ -179,7 +179,6 @@ begin
   while (sock.Frun) do
     begin
     sock.irq(sock);
-//    sock.log(debug,'next irq:');
     sleep(500);
     end;
   sock.log(debug,'THREAD END');
@@ -204,20 +203,18 @@ end;
   FLinkStatus:=IECOFF;
   FtimerSet:=DefaultTimerset;
   FcounterSet.T1:=OFF;
-  FCLI := nil;
+//  FCLI := nil;
  end;
 
  Destructor TIEC104Socket.destroy;
  begin
-  log(DEBUG,'Destroy Socket');
-  if (FCLI<>nil) then
-      freeandnil(FCLI);
-  stop;
-//  WaitForThreadTerminate( Fth,1200);
-  log(DEBUG,'Destroy Socket_');
+//  log(DEBUG,'Destroy');
+  stop; //  WaitsForTimerThreadTerminate;
   inherited destroy;
+  log(DEBUG,'Destroyed');
  end;
 
+{
 procedure TIEC104Socket.CLIExecute(s:string;result:TCLIResult);
 begin
  if (FCLI<>nil) then
@@ -225,13 +222,14 @@ begin
  else
    log(error,'CLI-Not assinged!');
 end;
+}
 
 procedure TIEC104Socket.log(l:TLevel;s:String);
 begin
  if logger <> nil then
       begin
-      s:='SOCK_'+inttostr(Fid)+'_'+s;
-      logger.Log(l,Fname+s);     //
+//      s:='SOCK_'+inttostr(Fid)+'_'+s;
+      logger.Log(l,Fname+' '+s);     //
       end;
 end;
 
@@ -303,7 +301,7 @@ var
  t0:integer;
 
 begin
-//logger.debug('IRQ');
+// logger.debug('IRQ');
 t0:=datetimetotimestamp(now).time;
 
 // Try reconnect after t0
@@ -361,8 +359,7 @@ if Fcounterset.k  >FTimerset.k then  //too much sendings without ackwolegement
 end;
 
 procedure TIEC104Socket.DisConnect;
-
-begin
+ begin
 if not shutdown then
    if FlinkStatus<>IECOFF then
       begin
@@ -535,7 +532,7 @@ begin
     FcounterSet.T0:=off;
     FcounterSet.T1:=off;
     LinkStatus:=IECINIT;
-    fth:=BeginThread(@run,Pointer(self));
+    fth:=BeginThread(@runTimer,Pointer(self));
     if (FIECSockettype = TIECClient) then sendStart;
     Frun:=true;
     end;
@@ -547,7 +544,7 @@ begin
     begin
     LinkStatus:=IECOFF;
     Frun:=false;
-    Socket.CloseSocket;
+//    Socket.CloseSocket;
     WaitForThreadTerminate( Fth,1200);
     end;
 end;

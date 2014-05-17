@@ -24,12 +24,14 @@ var
   IiecTree:TIECTree;  IClients:TIEC104Clientlist;  Iserver:TIEC104Server;
   IMaster:TIEC101Master;  Ievent :TIECGWEvent;
 
-procedure addProcess(o:TObject);
+procedure addProcess(o:TObject;Ahint:String);
+//procedure addProcess(o:TObject);
 procedure execCLI(asession:Tsession; txt:String);
 function Parse(cmd:String):Tcli;
 function setlevel(log:TLogger;level:String):boolean;
 function getKey(s:String):String;
 function getVal(s:String):String;
+function BoolasStr(val:Boolean):String;
 
 implementation
 
@@ -38,7 +40,7 @@ uses
 
 var
     Process : Array of String;
-    Hint : Array of String;
+    Hint :    Array of String;
 
 procedure help(asession:Tsession);
 var
@@ -49,6 +51,12 @@ for i:=0 to high(process) do
 //   asession.writeResult('   '+process[i]);
    asession.writeResult('   '+process[i]+#9+'- '+hint[i]);
 asession.writeResult('   x'+#9+'-EXIT Application');
+end;
+
+function BoolasStr(val:Boolean):String;
+begin
+result:= 'FALSE';
+if val then result:='TRUE';
 end;
 
 function setlevel(log:TLogger;level:String):boolean;
@@ -232,13 +240,13 @@ if cmd<>'' then
 //    for i:= 0 to high(result.Path) do   writeln('PATH:'+result.Path[i]+'_');
 end;
 
-procedure addProcess(o:TObject);
+procedure addProcess(o:TObject;ahint:String);
+//  procedure addProcess(o:TObject);
 var
-  n,htxt:String;
+  n:String;
 begin
   if o.ClassType=TIECTree then
-     begin  IIecTree:=TIECTree(o); n:='item';
-     htxt:= 'Enter Menu to define and configure Items'; end;
+     begin  IIecTree:=TIECTree(o); n:='item';end;
 
   if o.ClassType=TIEC104Clientlist then
      begin IClients:=TIEC104Clientlist(o); n:='client';  end;
@@ -250,8 +258,7 @@ begin
      begin IClients:=TIEC104Clientlist(o); n:='client';  end;
 
   if o.ClassType=TIEC101Master then
-     begin IMaster:=TIEC101Master(o); n:='master';
-     htxt:= 'Enter Menu to configure IEC_101 Master'; end;
+     begin IMaster:=TIEC101Master(o); n:='master'; end;
 
   if o.ClassType=TIECGWEvent then
      begin IEvent:=TIECGWEvent(o); n:='event';  end;
@@ -259,7 +266,7 @@ begin
   setlength(Process,length(Process)+1);
   Process[high(Process)]:=n;
   setlength(Hint,length(Hint)+1);
-  Hint[high(Hint)]:=htxt;
+  Hint[high(Hint)]:=aHint;
 end;
 
 Initialization

@@ -11,7 +11,7 @@ uses
   TLevelUnit, TFileAppenderUnit, CLI, GWAppender, IECRouter,
 
   IECGWEvent, IECTree,tree, fpjson,
-  session, INIFiles, GWNetConnection;
+  session, INIFiles, GWNetConnection, CustomServer1, blcksock;
 
 type
 
@@ -35,10 +35,11 @@ type
     procedure clientConnectEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure MasterConnectEvent(Sender: TObject);
     procedure MasterDisConnectEvent(Sender: TObject);
-    procedure clientDisconectEvent(Sender: TObject;Socket: TIEC104Socket);
+    procedure clientDisConnectEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure serverRXEvent(Sender: TObject;const Buffer:array of byte;count :integer);
     procedure serverCreateEvent(Sender: TObject;Socket: TIEC104Socket);
     procedure ItemEvent(Sender: TObject);
+    procedure NetsocketError(Server: TCustomServer; Socket: TTCPBlockSocket);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -94,7 +95,7 @@ var
  eva:TEventarray;
 begin
   cl:= TIEC104Client (sender);
-  logger.Debug('CLient Connect Event '+cl.Name);
+  logger.INFO('** CLient Connect Event '+Socket.Name);
 {*
 eva := GWEvent.getConnectEvent(cl.name);
   for i:=0 to high(eva) do
@@ -114,21 +115,21 @@ begin
    logger.Error('****'+S);
 end;
 
-procedure TMyApplication.clientDisconectEvent(Sender: TObject;Socket: TIEC104Socket);
+procedure TMyApplication.clientDisConnectEvent(Sender: TObject;Socket: TIEC104Socket);
 var
  i:integer;
  cl:TIEC104Client;
  eva:TEventarray;
 begin
   cl:= TIEC104Client (sender);
-  logger.Debug('CLient DisConnect Event '+cl.Name);
+  logger.Info('** CLient DisConnect Event '+Socket.Name);
 end;
 
 procedure TMyApplication.clientCreateEvent(Sender: TObject;Socket: TIEC104Socket);
 begin
  logger.Debug('CLient Create Event');
  Socket.onRXData:=@clientRXEvent;
- TIEC104Client (sender).onDisConnect:=@clientDisconectEvent;
+ TIEC104Client (sender).onDisConnect:=@clientDisConnectEvent;
  TIEC104Client (sender).onConnect:=@clientConnectEvent;
 end;
 
@@ -151,11 +152,9 @@ begin
       items.update(item);
     end;
 
-
-
  for  i:=0 to server.Connections.Count-1 do
      begin
-     cl := server.Connection[i];
+     cl := server.IecSocket[i];
      cl.sendBuf(buffer,count,false);
      end;
 end;
@@ -219,7 +218,7 @@ end;
 
 procedure TMyApplication.Terminate;
 begin
-   NetServer.Stop;
+//   NetServer.Stop;
    logger.info('Application Exit:');
    inherited ;
 end;
@@ -263,22 +262,24 @@ if  ini.ReadBool('client','activ',false) then
      clients.Logger.AddAppender(Fapp);
   clients.Logger.AddAppender(Gwapp);
   Clients.onClientCreate:=@clientCreateEvent;
-  addProcess(Clients);
+  addProcess(Clients,ini.ReadString('client','Description',''));
   end;
 
 server:=nil;
 if  ini.ReadBool('server','activ',false) then
   begin
-  Server := TIEC104Server.Create(self);
+  Server := TIEC104Server.Create;
+  Server.Port:=ini.ReadInteger('server','port',2404);
   Server.Logger:= TLogger.getInstance('Server');
   Server.Logger.setLevel(TLevelUnit.INFO);
   if assigned(Fapp) then
       Server.Logger.AddAppender(Fapp);
   Server.Logger.AddAppender(Gwapp);
   Server.Name:='GWSERVER';
-  Server.onClientConnect:=@ServerCreateEvent;
+  Server.onClientConnect:=@ClientconnectEvent;
+  Server.onClientDisConnect:=@ClientDisconnectEvent;
 //  server.start;
-  addProcess(Server);
+  addProcess(Server,ini.ReadString('server','Description',''));
   end;
 
 Master:=nil;
@@ -294,7 +295,8 @@ if  ini.ReadBool('master','activ',false) then
   Master.onConnect:= @MasterconnectEvent;
   Master.onDisConnect:= @MasterDisconnectEvent;
   Master.onDataRx:= @serverRXEvent;
-  addProcess(Master);
+  Master.IdleTime:=ini.ReadInteger('master','idleTime',100);
+  addProcess(Master,ini.ReadString('master','Description',''));
   end;
 
 items:=nil;
@@ -307,8 +309,7 @@ if  ini.ReadBool('items','activ',false) then
     Items.Logger.AddAppender(Fapp);
   Items.Logger.AddAppender(Gwapp);
   Items.onChange:=@ItemEvent;
-//  addProcess('item');
-  addProcess(items);
+  addProcess(items,ini.ReadString('items','Description',''));
   end;
 
 GWEvent:=nil;
@@ -320,7 +321,7 @@ if  ini.ReadBool('events','activ',false) then
   GWEvent.Logger:=TLogger.getInstance('Event');
   GWEvent.Logger.AddAppender(Gwapp);
   GWEvent.Logger.SetLevel(info);
-  addProcess(GWEvent);
+  addProcess(GWEvent,ini.ReadString('events','Description',''));
   end;
 
 Router:=nil;
@@ -328,14 +329,11 @@ if  ini.ReadBool('router','activ',false) then
   begin
    Router := TIECRouter.create;
    Router.Logger:=logger;
-//Router.addRoot('fer1');
-//Router.addRoute('fer1',[4,5,6]);
-    addProcess(Router);
+   addProcess(Router,ini.ReadString('router','Description',''));
   end;
 
 lines:=TstringList.Create;
 lines.Add('ff');
-//ini.ReadSection('CLI',lines);
 ini.ReadSectionRaw('CLI',lines);
 for i:=0 to lines.Count-1 do
      begin // writeln('LINE:'+lines[i]);
@@ -347,6 +345,7 @@ lines.Destroy;
 
 
 NetServer := TIECGWNetServer.Create('127.0.0.1','5001');
+NetServer.OnSocketError:=@NetsocketError;
 NetServer.Start;
 
 //ses.ThreadID:=
@@ -354,6 +353,11 @@ BeginThread(@Executemain,fSession);
 logger.addAppender(GWApp);
 logger.info('Application Start');
 ini.Destroy;
+end;
+
+procedure TMyApplication.NetsocketError(Server: TCustomServer; Socket: TTCPBlockSocket);
+begin
+ logger.error('NETSocket '+socket.GetErrorDesc(socket.LastError));
 end;
 
 procedure TMyApplication.DoRun;

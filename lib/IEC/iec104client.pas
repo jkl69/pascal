@@ -64,20 +64,20 @@ type
 
 implementation
 
-
 function run(p: Pointer): ptrint;
-var
-  client: TIEC104Client;
+var loop:word;
+    client: TIEC104Client;
 begin
   client := TIEC104Client(p);
   while (Client.Activ) do
     begin
-    client.connect;
+    if loop mod 10=0 then client.connect;
     if Client.Activ then
        begin
        client.log(debug,'THREAD_next Try msec:'+inttoStr(client.TimerSet.T0));
-       sleep(client.TimerSet.T0);
+       sleep(client.TimerSet.T0 div 10 );
        end;
+    inc(loop);
     end;
   client.log(debug,'THREAD END');
 end;

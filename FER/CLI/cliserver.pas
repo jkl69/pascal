@@ -17,12 +17,41 @@ uses
   IECItems2, IEC104Socket, tree,
   TLevelUnit;
 
+var con:TServerConnection;
 
 const
-  action : Array [0..3] of String = ('list', 'x', 'start','stop');//,'log','send','isend');
+  action : Array [0..4] of String = ('list','start','stop','log','x');
 
-function log():boolean;
+function conlog(asession:Tsession;uCLI:TCLI):Boolean;
   begin
+   try
+    con:= TServerconnection(Iserver.Connection[Strtoint(ucli.Params[1])]);
+    if con <> nil then
+       begin
+       if cli.setlevel(con.iecsock.Logger,ucli.Params[2])then
+           begin
+           asession.writeResult('server.log [OK]');
+           exit;
+           end
+      else
+        asession.writeResult('server.'+inttoStr(con.iecsock.ID)+'.log [ERROR]');
+      end;
+   except
+      asession.writeResult('server.??.log [ERROR]');
+   end;
+  end;
+
+function log(asession:Tsession;uCLI:TCLI):Boolean;
+  begin
+    if (length(ucli.Params)=2) then
+       if cli.setlevel(IServer.Logger,ucli.Params[1])then
+        begin
+        asession.writeResult('server.log [OK]');
+        exit;
+        end;
+    if (length(ucli.Params)=3) then
+        begin conlog(asession,ucli); exit; end;
+    asession.writeResult('server.log [ERROR]');
   end;
 
 function itemsend():boolean;
@@ -80,12 +109,12 @@ begin
   else
 //list Server staus
     begin
-      s:='port='+inttostr(iserver.Port)+'  status='+booltoStr(Iserver.Activ)+
+      s:='port='+inttostr(iserver.Port)+'  Activ='+boolasStr(not Iserver.Terminated)+
          '  connections:'+inttostr(Iserver.Connections.Count);
       asession.writeResult('Server '+s);
       for  i:=0 to iserver.Connections.Count-1 do
             begin
-            isock := iserver.Connection[i];
+            isock := iserver.IecSocket[i];
             if (isock<>nil) then
                s:='['+inttostr(i)+'] '+isock.Socket.GetRemoteSinIP+':'+inttostr(isock.Socket.GetRemoteSinPort);
                asession.writeResult('   connection'+s);
@@ -97,8 +126,10 @@ function start(asession:Tsession):boolean;
 var
   i:integer;
 begin
-  iserver.start;
-  asession.writeResult('server.start [OK]');
+  if iserver.start then
+    asession.writeResult('server.start [OK]')
+  else
+    asession.writeResult('server.start [ERROR]')
 end;
 
 function stop(asession:Tsession):boolean;
@@ -122,7 +153,7 @@ procedure ExecCLI(asession:Tsession;txt:String);
 var
  cmd:String;   ucli:TCli;
 begin
- Iserver.Logger.Log(info,'CLIServerCMD: '+txt);
+ Iserver.Logger.Log(Debug,'CLIServerCMD: '+txt);
  asession.onexec:=@CLIServer.execCLI;
  if asession.path<>'server.' then asession.path:=asession.path+'server.';
  if txt<>'' then
@@ -135,11 +166,13 @@ begin
      begin help(asession);  exit;  end;
 
   if (cmd='list')then
-      begin list(asession,ucli); exit end;
+        begin list(asession,ucli); exit end;
   if (cmd='start')then
         begin start(asession); exit end;
   if (cmd='stop')then
         begin stop(asession); exit end;
+  if (cmd='log')then
+        begin log(asession,ucli); exit end;
 
   if (cmd='x')then
     begin  asession.onexec:=@CLI.execcli;  asession.path:=''; exit;  end;

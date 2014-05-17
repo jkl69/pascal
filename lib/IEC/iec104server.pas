@@ -11,15 +11,33 @@ uses
   TLoggerUnit, TLevelUnit, cliexecute;
 
 type
+  TIEC104Server = class;
+
+  TServerConnection = class
+      FthreadID: TThreadID;
+      fServer  : TIEC104Server;
+      FID       : integer;
+      Fsock    : TSocket;
+      fsocket  : TTCPBlockSocket;
+      iecsock  : TIEC104Socket;
+      fTerminated : Boolean;
+    procedure execute;
+  public
+      constructor Create(aServer:TIEC104Server;asock:TSocket);
+      destructor destroy; override;
+      procedure terminate;
+      property Terminated:Boolean read fterminated;
+  end;
 
   { TIEC104Server }
-//  TIEC104Server = class(TObject)
-  TIEC104Server = class(TComponent)
+   TIEC104Server = class
+//  TIEC104Server = class(TTCPBlockSocket)
        private
-         Fth:TThreadID;
-         Fsocket: TTCPBlockSocket;
+         FthreadID:TThreadID;
+         socket: TTCPBlockSocket;
    //       Fname: String;
   //        FIECSettings:TIEC104Settings;  //Server asign settings to all sockets
+          hasbind:Boolean;
           FIECTimers:TIEC104TimerSet;
           FConnectionList:TList;
           Fport: integer;
@@ -28,36 +46,41 @@ type
           FOnClientRead: TRTXEvent;
           FOnClientSend: TRTXEvent;
           FLog: TLogger;
-          Frun :  boolean;
+          fTerminated :  boolean;
        protected
           procedure log(ALevel : TLevel; const AMsg : String);
-          Procedure SetName(const NewName: TComponentName); override;
-          procedure AcceptEvent(iSocket: TIEC104Socket);
-          procedure DisconnectEvent(iSocket: TIEC104Socket);
-         Function GetClientAddress(Socket:TTCPBlockSocket):string;
-         function GetClient(Index: Integer): TIEC104Socket;
-         function FindClient(source:TTCPBlockSocket):TIEC104Socket;
+//          Procedure SetName(const NewName: TComponentName); override;
+          procedure DoAcceptEvent(iSocket: TIEC104Socket);
+//          procedure DisconnectEvent(aSocket: TIEC104Socket);
+          Function GetClientAddress(aSocket:TTCPBlockSocket):string;
+          function GetIECSocket(Index: Integer): TIEC104Socket;
+          function GetConnection(Index: Integer): TServerConnection;
+         function getIECTCPSock(source:TTCPBlockSocket):TIEC104Socket;
          function getClientindex(sender:TIEC104Socket):integer;
          Procedure setOnClientRead(proc: TRTXEvent);
          Procedure setOnClientSend(proc: TRTXEvent);
        public
-         constructor Create(AOwner: Tcomponent);override;
+         Name:string;
+         constructor Create;
          destructor destroy; override;
-         procedure start;
+         Function start:Boolean;
          procedure stop;
+         procedure Execute;
          Function send(hexstr:String):integer;
          Function send(hexstr:String;con:integer):integer;
          procedure sendBuf(buf: array of byte);
          procedure sendBuf(buf: array of byte;con:integer);
-         procedure ClientClose(index :integer);
+         procedure ConnectionClose(index :integer);
+         procedure DoConnectionClose(con :TServerConnection);
          property Connections:TList read FConnectionList;
-         property Connection[Index: Integer]: TIEC104Socket read GetCLient;
+         property iecSocket[Index: Integer]: TIEC104Socket read GetIECSocket;
+         property Connection[Index: Integer]: TServerConnection read GetConnection;
          property Timers:TIEC104Timerset read FIECTimers write FIECTimers;
        published
-         Property Socket:TTCPBlockSocket read Fsocket write Fsocket;
+//         Property Socket:TTCPBlockSocket read Fsocket write Fsocket;
          property Port:integer read Fport write Fport;
          property Logger:Tlogger read Flog write Flog;
-         property Activ:Boolean read Frun;
+         property Terminated:Boolean read Fterminated;
   //       property Timers:TIEC104Timerset read getTimers write SetTimers;
          property onClientConnect: TIECSocketEvent read FOnClientCOnnect write FOnClientCOnnect;
          property onClientDisConnect: TIECSocketEvent read FOnClientDisConnect write FOnClientDisConnect;
@@ -67,114 +90,152 @@ type
 
 implementation
 
-type
-
-  TRunRun = class
-      server: TIEC104Server;
-      sock:Tsocket;
-    end;
-
-
-function runsock(p: Pointer): ptrint;
 var
-  r: TRunRun;
-  ip_rx:array[0..1500]of byte;
-  clsock :TTCPBlockSocket;
-  iecsock :TIEC104Socket;
-  server: TIEC104Server;
-  recv:integer;
+  ConnectionID:integer=0;
+
+function runConnection(p: Pointer): ptrint;
+var
+  con: TServerConnection;
 begin
-  r := TRunRun(p);
-  server := TIEC104Server(r.server);
-
-  clsock:=TTCPBlockSocket.create;
-  clsock.socket:=r.sock;
-  clsock.GetSins;
-  iecsock:=TIEC104Socket.Create;
-  iecsock.ID := GetThreadID;
-//  iecsock.ID:=
-  recv:=server.Connections.Add(iecsock);
-  iecsock.Socket:=clsock;
-
-  Server.AcceptEvent(iecsock);
-  server.log(debug,' runsock for: '+clsock.GetRemoteSinIP);
-
- recv:=1;
- repeat
-    server.log(debug,'ThreadID:'+inttoStr(GetThreadID)+' Wait for Data');//+asocket.GetRemoteSinIP);
-    recv:=clSock.RecvBufferFrom(@IP_RX,1500);
-    server.log(debug,' IP Stream '+inttostr(recv)+'-Bytes recived ');//+getclientAddress(socket));
-    IECSock.StreamCount:=recv;
-    IECSock.DecodeStream(IP_RX);
- //    sleep(2000);
-  until recv<=0;
-  if (server.Frun) then
-     server.log(Error,'ThreadID:'+inttoStr(GetThreadID)+' sock_ERROR: '+inttostr(clsock.lastError));
-
-  Server.DisconnectEvent(iecsock);
-
-  iecsock.Stop;
-  clsock.CloseSocket;
-  server.Connections.Delete(server.Connections.IndexOf(iecsock));
-
-  Freeandnil(clsock);
-  freeandnil(IecSock);
-  server.log(debug,'ThreadID:'+inttoStr(GetThreadID)+' EXIT');
+  con := TServerConnection(p);
+  con.Execute;
+//  con.destroy;
 end;
 
-function run(p: Pointer): ptrint;
+function runServer(p: Pointer): ptrint;
 var
  server: TIEC104Server;
- sock:TSocket;
- clsock:TTCPBlockSocket ;
- terminated:boolean;
- txt:string;
- r: TRunRun;
- i:integer;
 begin
     server := TIEC104Server(p);
-    server.socket.Listen;
-    server.log(info,'start listen on port '+inttostr(Server.port));
-    repeat
-       server.log(debug,'wait_accept');
-       sock:=server.socket.Accept;
-       i := clsock.lastError;
-//       if (i=0) then begin
-         if (server.Frun) then
-            begin
-            server.log(Info,'_doAccept_');
-            r:= TRunRun.Create;
-            r.server:=server;
-            r.sock:=sock;
-            BeginThread(@runsock,r);
-  //            Server.AcceptEvent(clsock);
-//             end;
-         end
-       else server.log(Error,'_listen_ERROR: '+inttostr(i)+' '+clsock.GetErrorDesc(i));
-      server.log(debug,'EXIT-accept');
-   until (not server.Frun);
-   server.Socket.CloseSocket;
-   server.log(debug,'EXIT-Listen');
+    Server.Execute;
 end;
 
 //+++++++++++++++++++++++++++++++++++++
-//   TIECServer    implementation
+//   TServerConnection    implementation
 //+++++++++++++++++++++++++++++++++++++
 
-constructor TIEC104Server.Create(Aowner: TComponent);
+constructor TServerConnection.Create(aServer:TIEC104Server;asock:TSocket);
 begin
-inherited create(AOwner);
+inherited create;
+fserver:=aserver;
+fsock := Asock;
+Fsocket:=TTCPBlockSocket.create;
+fsocket.socket:=fsock;
+fsocket.GetSins;
+
+iecsock:=TIEC104Socket.Create;
+iecsock.SocketType:=TIECServer;
+iecsock.Socket:=fsocket;
+fID:=ConnectionID;
+inc(ConnectionID);
+iecsock.ID:=Fserver.Connections.Count;
+
+fserver.Connections.Add(self);
+fTerminated:=false;
+end;
+
+destructor TServerConnection.destroy;
+begin
+if not terminated then begin
+   terminate;
+   end;
+inherited;
+Fserver.log(debug,'CON:Destroyed');
+end;
+
+procedure TServerConnection.terminate;
+begin
+fServer.log(Debug,'CON:'+inttoStr(fID)+' go terminate') ;
+fterminated:=true;
+fServer.DoConnectionClose(self);
+iecsock.destroy;
+//fServer.log(debug,'iecsocket destroyed') ;
+fsocket.CloseSocket;
+//fServer.log(debug,'CON:_WAIT THREAD END') ;
+WaitForThreadTerminate( FthreadID,10000);
+end;
+
+procedure TServerConnection.Execute;
+var ip_rx:array[0..1500]of byte;
+    rxcount:integer;
+begin
+// fserver.log(Debug,'CON:_EXECUTE');
+ repeat
+//   fserver.log(debug,'CON:'+inttoStr(IecSock.ID)+' Wait for Data');
+    rxcount:=fSocket.RecvBufferFrom(@IP_RX,1500);
+    if (rxCount=0) or (fsocket.LastError<>0) then
+       fserver.log(debug,'CON:'+inttoStr(fID)+
+           '_Stream '+inttostr(rxcount)+'-Bytes recived _ERROR:'+inttostr(fsocket.LastError));
+    if (RXcount=0) and (not terminated) then Terminate;
+    if not terminated then
+       begin
+       IECSock.StreamCount:=rxcount;
+       IECSock.DecodeStream(IP_RX);
+       sleep(1000);
+       end;
+  until Terminated; //rxcount<=0;
+  fserver.log(Debug,'CON:_THREAD END');// close IP-Socket');
+//  fServer.DoConnectionClose(self);
+ if rxCount=0 then
+    destroy;
+end;
+
+//+++++++++++++++++++++++++++++++++++++
+//   TIEC104Server    implementation
+//+++++++++++++++++++++++++++++++++++++
+
+//constructor TIEC104Server.Create(Aowner: TComponent);
+constructor TIEC104Server.Create;
+begin
+inherited;
 // Fname:=Name;
   Fiectimers:=DefaultTimerset;
   Port:=2404;
   FConnectionList:=TList.Create;
+  Fterminated:=true;
+  hasbind:=False;
 end;
 
 Destructor TIEC104Server.destroy;
 begin
  stop;
-// FConnectionList.Destroy;
+ FConnectionList.Destroy;
  inherited destroy;
+ log(debug,'Destroyed');
+end;
+
+procedure TIEC104Server.Execute;
+var sock:TSocket;
+    loop:word;
+    con:TServerconnection;
+begin
+log(info,'start listen on port '+inttostr(port));
+repeat
+   with socket do begin
+   if loop mod 13=0 then
+     log(debug,'wait_accept');
+//   if canread(1000) then
+   if canread(1000) then
+     if lastError = 0 then
+        begin
+        sock:=Accept;
+        if lastError=0 then
+           begin
+//           log(debug,'_doAccept_');
+           con := TServerconnection.Create(self,sock);
+           DoAcceptEvent(con.iecsock);
+           con.FthreadID:= BeginThread(@runConnection,con);
+           end
+        else
+           log(Error,'_Listen_ERROR: '+inttostr(lastError)+' '+GetErrorDesc(lastError));
+        end
+   else
+      log(Error,'_listen_ERROR: '+inttostr(lastError)+' '+GetErrorDesc(lastError));
+//   log(debug,'EXIT-accept');
+   inc(loop);
+   end;
+until (terminated);
+log(debug,'EXIT-Listen');
 end;
 
 procedure TIEC104Server.log(ALevel : TLevel; const AMsg : String);
@@ -202,7 +263,7 @@ end;
 
 Function TIEC104Server.send(hexstr:String;con:integer):integer;
 begin
-   result := Connection[con].sendHexStr(hexstr);
+   result := IecSocket[con].sendHexStr(hexstr);
 end;
 
 procedure TIEC104Server.sendBuf(buf: array of byte);
@@ -218,7 +279,7 @@ end;
 Procedure TIEC104Server.sendBuf(buf: array of byte;con:integer);
 begin
    log(info,'ServerSend_toCon_'+inttostr(con));
-   Connection[con].sendBuf(buf,length(buf),true);
+   IECSocket[con].sendBuf(buf,length(buf),true);
 end;
 
 (*
@@ -272,120 +333,139 @@ while x< FConnectionList.Count do
  end;
 end;
 
-function TIEC104Server.findClient(source:TTCPBlockSocket):TIEC104Socket;
+function TIEC104Server.getIECTCPSock(source:TTCPBlockSocket):TIEC104Socket;
 var
  x:integer;
- cclient:TIEC104Socket;
+ con:TServerConnection;
+// isock:TIEC104Socket;
 begin
 result:=nil;
 x:=0;
 while x< FConnectionList.Count do
   begin
-  cclient:=TIEC104Socket(FConnectionList[x]);
-//    if clientstr = getclientAddress(Connection.FSocket) then
-  if cclient.Socket = source then
+  con:=TServerConnection(FConnectionList[x]);
+  if con.iecsock.Socket = source then
      begin
-//       trace('found client in list:');
-     result:=cclient;
+     result:=con.iecsock;
      x:=1000;
      end;
   inc(x);
   end;
 end;
 
-procedure TIEC104Server.AcceptEvent(isocket: TIEC104Socket);
-var
-  adr:string;
+procedure TIEC104Server.DoAcceptEvent(isocket: TIEC104Socket);
+var  i:integer; adr:String;
+     alist:TStrings;
 begin
 adr:=getclientAddress(isocket.Socket);
-isocket.Logger:=logger;
-isocket.SocketType:=TIECServer;
-isocket.Name:=adr;
+isocket.Name:='Server['+inttoStr(isocket.id)+']';
+isocket.Logger:=TLogger.getInstance(isocket.Name);
+isocket.Logger.setLevel(TLevelUnit.info);
+alist:=logger.GetAllAppenders;
+for i:= 0 to alist.Count-1 do
+    isocket.Logger.AddAppender(logger.GetAppender(alist[i]));
+
 isocket.onRXData:=FOnClientRead;
 isocket.onTXData:=FOnClientSend;
-isocket.start;
 isocket.TimerSet:=timers;
-
-log(info,'ClientConect: '+adr+'  ID: '+inttostr(isocket.id));
-log(debug,'No. of connected sockets :'+inttostr(Connections.Count));
+isocket.start;
+log(info,'ClientConect: '+adr+'  ID:'+inttostr(isocket.id));
+log(debug,'No. of connections:'+inttostr(Connections.Count));
 
 if assigned(Fonclientconnect) then
-    FonclientConnect(self,isocket);
-end;
-
-procedure TIEC104Server.DisconnectEvent(iSocket: TIEC104Socket);
-begin
- log(info,'ClientDisConect:');
-// iSocket.stop;
-// freeandnil(iSocket);
+   onclientConnect(self,isocket);
 end;
 
 
-procedure TIEC104Server.Start;
+Function TIEC104Server.Start:Boolean;
 begin
-if  (not Frun) then
+if Terminated then
    begin
-   Frun:=true;
-   Fsocket := TTCPBlockSocket.Create;
-   Fsocket.Bind('0.0.0.0',inttoStr(port));
-//   log(info,'start server on port '+inttostr(port));
-   Fth:=BeginThread(@run,self);
+   socket:=TTCPBlockSocket.Create;
+   log(debug,'Bind');
+   socket.Bind('0.0.0.0',inttoStr(port));
+   if socket.lastError<>0 then
+       begin
+       log(error,socket.GetErrorDesc(socket.lastError));
+       result:=False;
+       socket.closesocket;
+       socket.Destroy;
+       exit;
+       end;
+   socket.Listen;
+   Fterminated:=false;
+   log(info,'start server on port '+inttostr(port));
+   FthreadID:=BeginThread(@runServer,self);
+   result:=True;
    end;
 end;
 
 procedure TIEC104Server.Stop;
 begin
-if  (Frun) then
+log(debug,'Enter_Stop');
+if (not Terminated) then
    begin
-   Frun:=false;
+   fTerminated:=True;  //server should accept new connects
+   if Connections.Count >0 then
+      log(debug,'Still '+inttoStr(Connections.Count)+' connections activ->go closeing');
    while Connections.Count > 0 do
       begin
-      ClientClose(Connections.Count-1);
+      ConnectionClose(Connections.Count-1);
       end;
-//   Disconnect(true);
-    Fsocket.CloseSocket;
-    WaitForThreadTerminate( Fth,100);
-    Freeandnil(Fsocket);
-    log(info,'stop server.');
+    log(debug,'Wait Terminate Listen');
+    WaitForThreadTerminate(FthreadID,100);
    end;
+socket.CloseSocket;
+socket.destroy;
+log(info,'server stoped.');
 end;
 
-procedure TIEC104Server.ClientClose(index : integer);
-//procedure TIEC104Server.ClientClose(Client: TIEC104Socket);
+procedure TIEC104Server.ConnectionClose(index : integer);
+//procedure TIEC104Server.ConnectionClose(Client: TIEC104Socket);
 var
 x,i:integer;
-iecsocket: TIEC104Socket;
+con    :TServerConnection;
+isocket: TIEC104Socket;
 begin
-iecsocket := Connection[index];
-log(Warn,'close connection: '+iecsocket.Name) ;
+if index < FConnectionList.Count then
+  begin
+  con     := Connection[index];
+//  con.destroy;
+  con.terminate; //will also destroy connection;
+  end;
+end;
 
+procedure TIEC104Server.DoConnectionClose(con:TServerConnection);
+var index:integer;
+begin
+index:= FConnectionList.IndexOf(con);
+FConnectionList.Delete(index);
+log(debug,'connection '+inttostr(index)+' deleted:') ;
 if assigned(FonclientDisconnect) then
-        FonclientDisConnect(self,iecsocket);
-
-x:=iecsocket.ID;  //threadID
-//iecsocket.Socket.CloseSocket;
-iecsocket.stop;
-//WaitForThreadTerminate( Fth,10);
-WaitForThreadTerminate( x,10);
-//while (iecsocket <>nil) do;    //wait for Thread end
+   onclientDisConnect(self,con.iecsock);
 end;
 
-function TIEC104Server.GetClient(Index: Integer): TIEC104Socket;
+function TIEC104Server.GetIECSocket(Index: Integer): TIEC104Socket;
+var con:TServerConnection;
 begin
- Result := TIEC104Socket(FConnectionList[Index]);
+  Result := TServerConnection(FConnectionList[Index]).iecsock;
+//  Result := TIEC104Socket(FConnectionList[Index]);
 end;
 
-
-procedure TIEC104Server.SetName(const NewName: TComponentName);
+function TIEC104Server.GetConnection(Index: Integer): TServerConnection;
 begin
-inherited SetName(NewName);
-//  logger.name:= name;
+  Result := TServerConnection(FConnectionList[Index]);
 end;
 
-Function TIEC104Server.GetClientAddress(Socket:TTCPBlockSocket):string;
+
+//procedure TIEC104Server.SetName(const NewName: TComponentName);
+//begin inherited SetName(NewName);end;
+
+Function TIEC104Server.GetClientAddress(aSocket:TTCPBlockSocket):string;
+//Function TIEC104Server.GetClientAddress:string;
 begin
 // result:=socket.PeerAddress+':'+inttostr(socket.peerPort);
-result:=socket.GetRemoteSinIP+':';//+inttostr(socket.GetRemoteSinPort);
+result:=asocket.GetRemoteSinIP+':';//+inttostr(socket.GetRemoteSinPort);
 end;
 
 end.
