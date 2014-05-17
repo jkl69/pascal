@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\codetyphon\fpc\bin\i386-win32\fpc.exe" Date="1152336220"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -Tlinux -Pi386 -g -gl -Xg -vewnhi -FiD:\source\pascal\FER\lib\i386-linux -FuD:\source\pascal\lib\IEC -FuD:\source\pascal\lib\log -FuD:\source\pascal\lib\sockets -FuD:\source\pascal\lib\Tree -FuD:\lazarus64\fpc\2.6.2\source\packages\fcl-json\src -FuD:\source\pascal\FER\CLI -FuD:\source\pascal\FER\ -FUD:\source\pascal\FER\lib\i386-linux\ -l IECGW.pas"/>
-  <Complete Value="False"/>
-</CONFIG>

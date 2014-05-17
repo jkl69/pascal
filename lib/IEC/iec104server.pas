@@ -68,8 +68,8 @@ type
          procedure Execute;
          Function send(hexstr:String):integer;
          Function send(hexstr:String;con:integer):integer;
-         procedure sendBuf(buf: array of byte);
-         procedure sendBuf(buf: array of byte;con:integer);
+         procedure sendBuf(buf: array of byte;count:integer);
+         procedure sendBuf(buf: array of byte;count:integer;connection:integer);
          procedure ConnectionClose(index :integer);
          procedure DoConnectionClose(con :TServerConnection);
          property Connections:TList read FConnectionList;
@@ -254,32 +254,36 @@ Function TIEC104Server.send(hexstr:String):integer;
 var
   i:integer;
 begin
- result:=-1;
+result:=-1;
+log(info,'SendToall Connections:'+inttostr(Connections.Count));
 for  i:=0 to Connections.Count-1 do
     begin
-    result:= send(hexstr,i);
+    result := send(hexstr,i);
     end;
 end;
 
 Function TIEC104Server.send(hexstr:String;con:integer):integer;
 begin
-   result := IecSocket[con].sendHexStr(hexstr);
+   log(debug,'Send_$Con_'+inttostr(con));
+   IecSocket[con].sendHexStr(hexstr);
+   result := 1;//IecSocket[con].sendHexStr(hexstr);
 end;
 
-procedure TIEC104Server.sendBuf(buf: array of byte);
+procedure TIEC104Server.sendBuf(buf: array of byte;count:integer);
 var
   i:integer;
 begin
+log(info,'Send_all_Connections:'+inttostr(Connections.Count));
 for  i:=0 to Connections.Count-1 do
     begin
-    sendbuf(buf,i);
+    sendbuf(buf,count,i);
     end;
 end;
 
-Procedure TIEC104Server.sendBuf(buf: array of byte;con:integer);
+Procedure TIEC104Server.sendBuf(buf: array of byte;count:integer;connection:integer);
 begin
-   log(info,'ServerSend_toCon_'+inttostr(con));
-   IECSocket[con].sendBuf(buf,length(buf),true);
+   log(debug,'Send_toCon_'+inttostr(connection));
+   IECSocket[connection].sendBuf(buf,length(buf),true);
 end;
 
 (*
@@ -361,10 +365,13 @@ adr:=getclientAddress(isocket.Socket);
 isocket.Name:='Server['+inttoStr(isocket.id)+']';
 isocket.Logger:=TLogger.getInstance(isocket.Name);
 isocket.Logger.setLevel(TLevelUnit.info);
-alist:=logger.GetAllAppenders;
-for i:= 0 to alist.Count-1 do
-    isocket.Logger.AddAppender(logger.GetAppender(alist[i]));
-
+alist:=isocket.logger.GetAllAppenders;
+if alist.Count=0 then  //if logger already exist do NOT ad appenders
+  begin
+  alist:=logger.GetAllAppenders;
+  for i:= 0 to alist.Count-1 do
+      isocket.Logger.AddAppender(logger.GetAppender(alist[i]));
+  end;
 isocket.onRXData:=FOnClientRead;
 isocket.onTXData:=FOnClientSend;
 isocket.TimerSet:=timers;
@@ -414,9 +421,9 @@ if (not Terminated) then
       end;
     log(debug,'Wait Terminate Listen');
     WaitForThreadTerminate(FthreadID,100);
+    socket.CloseSocket;
+    socket.destroy;
    end;
-socket.CloseSocket;
-socket.destroy;
 log(info,'server stoped.');
 end;
 

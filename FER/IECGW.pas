@@ -152,7 +152,8 @@ begin
       items.update(item);
     end;
 
- for  i:=0 to server.Connections.Count-1 do
+ if server<>nil then
+   for  i:=0 to server.Connections.Count-1 do
      begin
      cl := server.IecSocket[i];
      cl.sendBuf(buffer,count,false);
@@ -194,26 +195,23 @@ try
 end;
 
 procedure TMyApplication.ItemEvent(Sender: TObject);
-var
-  i:integer;
-  item : TIECItem;
-  eva:TEventarray;
-  txt: String;
+var  item    : TIECItem;
+     isocket :TIEC104Socket;
 begin
-   item := TIECItem (sender);
-//  o := TIECTCObj(sender);
-// item := TIECTCItem (Sender);
-// item := o.asdu;
- txt:='Item Update:'+item.name+' '+item.toString;
- logger.info(txt);
+ item := TIECItem (sender);
+ logger.info('** Update:'+item.name+' '+item.toString);
 
-if GWevent<>nil then
-//   GWevent.ItemEvent(item);
+ if GWevent<>nil then
+ //   GWevent.ItemEvent(item);
 
-if server<>nil then
-//   server.sendBuf(item.getStream);
-
-// fsession.writeResult(txt); fsession.writeResult(IECType[item.getType].name);
+ if item.IECTyp in IEC_M_Type then   //Monitoring Item defult is up to SCADA
+     if not item.ReversMode then     //IS Default ?
+        begin
+        if server<>nil then
+           server.sendBuf(item.ToIECBuffer,item.Size)
+        else
+           logger.warn('No Server to send Item');
+       end;
 end;
 
 procedure TMyApplication.Terminate;

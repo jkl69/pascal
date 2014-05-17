@@ -556,8 +556,10 @@ var
   cbuf:array[0..100]of char;
   buf:array[0..100]of byte absolute Cbuf;
 begin
+  log(info,'Send HEX:'+inttostr(count));
   while pos(' ',s)<>0 do
-     delete(s,pos(' ',s),1);
+      delete(s,pos(' ',s),1);
+
   if s<>'' then
      begin
      s:=lowercase(s);
@@ -565,8 +567,9 @@ begin
 //     trace(inttostr(Count));
      if count >0 then
          begin
+         log(info,'Send $:'+inttostr(count));
          sendbuf(buf,count,true);
-         s:=BufferToHexStr(buf,count);
+//         s:=BufferToHexStr(buf,count);
          end;
      end;
   result:=count;

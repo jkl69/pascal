@@ -40,7 +40,7 @@ Type
     BK : Byte;
   end;
 
-  TIECCRC = record
+ TIECCRC = record
     lenght: smallint;
     iobcount: smallint;
     iolenght : smallint;
@@ -49,21 +49,23 @@ Type
 
   TIECBUFFER = array of byte;
 
-
 //function toString(t : TIECSType):String;
 //function BufferToHexStr(const buf:TIECBUFFER;len:integer):string;
 //function BufferToHexStr(const buf:TIECBUFFER):string;
 function getSType(tk : byte):IEC_SType;
 
-
 var
-
   MAP :array[IEC_SType] of TIECType;
   sType : IEC_SType;
 //  lastCRC:TIECCRC;//integer;
 
 const
   IECSEPERATOR ='/';
+
+  IEC_M_Type =[	M_SP_NA,M_DP_NA,M_ME_NA,M_ME_NB,M_ME_NC,M_IT_NA,
+		M_SP_TB,M_DP_TB, M_ME_TB,M_ME_TD,M_ME_TF,M_IT_TB ];
+  IEC_C_Type =[  C_IC_NA,C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
+		C_SC_NA ,C_DC_NA,C_CS_NA ];
 
 implementation
 

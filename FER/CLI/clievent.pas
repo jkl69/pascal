@@ -72,12 +72,15 @@ procedure listtimer(asession:Tsession);
 var i:integer;
  t:TGWTimer;
 begin
+ asession.writeResult('event.timers:'+inttoStr(Ievent.TimerList.Count));
  for i:=0 to Ievent.TimerList.Count-1 do
      begin
-     asession.writeResult('event.timer '+Ievent.TimerList[i]);
+       asession.writeResult(#9+'timer:'+Ievent.TimerList[i]+'  cyle:'+
+                   inttoStr(TGWTimer(Ievent.TimerList.Objects[i]).intervall*100));
      end;
+ asession.writeResult('event.timer.events:');
  for i:=0 to Ievent.TimerEvents.Count-1 do
-     asession.writeResult('event.timer.event '+Ievent.TimerEvents[i]);
+     asession.writeResult(#9+'event.timer.event '+Ievent.TimerEvents[i]);
  asession.writeResult('event.timer  [EXIT]');
 end;
 
@@ -145,10 +148,10 @@ begin
   if (length(ucli.Params)>1) then
      if cli.setlevel(IEvent.Logger,ucli.Params[1])then
       begin
-      asession.writeResult('[OK]');
+      asession.writeResult('event.log [OK]');
       exit;
       end;
- asession.writeResult('[ERROR]');
+ asession.writeResult('event.log [ERROR]');
 end;
 procedure ExecCLI(asession:Tsession;txt:String);
 var

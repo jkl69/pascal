@@ -180,7 +180,9 @@ begin
  result := nil;
  node:= getnode(n);
  if node<>nil then
-   result:= TIECItem (node.obj);
+   result:= TIECItem (node.obj)
+ else
+   log(warn,n+' NOT found');
 end;
 
 function TIECTree.getBranchNode(n:string):Tnode;
@@ -190,8 +192,10 @@ var
  child:array[0..2] of String;
 begin
   ItemPath:= strtopath(n,false);
-  log(info,'search node /'+inttoStr(MAP[ItemPath.typ].TK)+'/'+inttostr(ItemPath.asdu)+'/'+inttostr(ItemPath.adr));
+  log(info,'search part /'+inttoStr(MAP[ItemPath.typ].TK)+'/'+inttostr(ItemPath.asdu)+'/'+inttostr(ItemPath.adr));
   result:=getBranchNode(ItemPath.typ,ItemPath.asdu,ItemPath.adr);
+  if result=nil then
+     log(warn,n+' Not found');
 end;
 
  {*#
@@ -230,8 +234,10 @@ var
  child:array[0..2] of String;
 begin
   ItemPath:= strtopath(n,true);
-  log(info,'search node /'+inttoStr(map[ItemPath.typ].TK)+'/'+inttostr(ItemPath.asdu)+'/'+inttostr(ItemPath.adr));
+  log(info,'search full /'+inttoStr(map[ItemPath.typ].TK)+'/'+inttostr(ItemPath.asdu)+'/'+inttostr(ItemPath.adr));
   result:=getNode(ItemPath.typ,ItemPath.asdu,ItemPath.adr);
+  if result=nil then
+     log(warn,n+' Not found');
 end;
 
 function TIECTree.getNode(tk:IEC_SType;asdu:integer;adr:integer):Tnode;
@@ -280,10 +286,9 @@ begin
     log(debug,'Item exist');
     ditem := TIECItem (node.Obj);
     ditem.Value:= item.Value;
+    ditem.QU:= item.QU;
 
-//    ditem..time:=item.time[0]
-
-    if assigned(onchange) then onchange(item);
+//    if assigned(onchange) then onchange(item);
     end;
 end;
 

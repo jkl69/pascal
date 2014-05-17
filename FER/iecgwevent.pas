@@ -67,6 +67,7 @@ begin
     sleep(100);
     inc(loop);
   end;
+  ev.log(debug,'Timer Terminated');
 end;
 
 { TGWTimer }
@@ -154,12 +155,11 @@ end;
 procedure TIECGWEvent.Timerevent(s:String);
 var i:integer;
 begin
-  log(info,'TimerEvent: '+s);
-//  execute('item.set /9/3/8 inc=2');
-   for i:=0 to FTimerEvents.Count-1 do
+ log(Info,'TimerEvent: '+s);
+ for i:=0 to FTimerEvents.Count-1 do
       begin
       if FTimerEvents.Names[i]=s then
-        execute(FTimerEvents.ValueFromIndex[i]);
+         execute(FTimerEvents.ValueFromIndex[i]);
       end;
 end;
 
@@ -173,7 +173,7 @@ var
   i:integer;  date: Tdatetime;  t: TGWTimer;
 begin
  date:=now;
- if (loop mod 50 = 0) then log(debug,' TIMER IRQ');
+ if (loop mod 50 = 0) then log(debug,'IRQ');
   for i:=0 to FTimerlist.Count-1 do
     begin
        t := TGWTimer(FTimerlist.Objects[i]);

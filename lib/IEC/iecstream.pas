@@ -12,6 +12,7 @@ Type
   TIECStream = class(TBytesStream)
     public
      function ToHexStr:string;
+     function ToIECBuffer:TIECBUFFER;
      procedure WriteTime(t:Tdatetime;DST:boolean);
      function ReadTime(var DST:boolean):Tdatetime;
 //     function ReadTimeStr:String;
@@ -33,6 +34,7 @@ Type
      MaxValue:Double;
      ftime:Tdatetime;  // necsesarry because not all types can store time in stream
      FDST:boolean ;    // necsesarry because not all types can store time in stream
+     ReversMode  :Boolean;
      fonChange:TNotifyEvent;
  private
      procedure setType(t:IEC_SType);
@@ -276,6 +278,16 @@ begin
  for i:=0 to Size-1 do   result:=result+inttohex(Bytes[i],2)+' ';
 end;
 
+function TIECStream.ToIECBuffer:TIECBUFFER;
+var i:integer;
+begin
+ setlength(result,size);
+ for i:=0 to Size-1 do
+    begin
+     result[i]:=Bytes[i];
+    end;
+end;
+
 
 procedure TIECStream.WriteTime(t:Tdatetime;DST:boolean);
 Var
@@ -461,11 +473,11 @@ begin
   inherited create;
   if (t =IEC_SType.IEC_NULL_TYPE) then t:=IEC_SType.M_SP_NA;
   name:='Item'+inttostr(adr);
+  ReversMode := False;
   setType(t);  // does also: setValue(0); setqu([]);
   setObjCount(1);
   setCOT(3); // on"C_" type cot should be 07
   setASDU(asdu);
-  //  writeln('COT:'+inttostr(cot));
   setAdr(adr);
 //  setValue(0);  setqu([]);
   setTime(now);
