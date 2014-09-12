@@ -8,7 +8,7 @@ uses
   Classes, SysUtils,
   TLoggerUnit, TLevelUnit,
   fpjson, jsonparser,
-  IECTree, IECGWEvent, IEC104Server, IEC101Serial,
+  IECList, IECGWEvent, IECRouter, IEC104Server, IEC101Serial,
   IEC104Clientlist, session;
 
 type
@@ -21,8 +21,11 @@ type
 
 
 var
-  IiecTree:TIECTree;  IClients:TIEC104Clientlist;  Iserver:TIEC104Server;
-  IMaster:TIEC101Master;  Ievent :TIECGWEvent;
+  IiecList:TIECList;
+  IClients:TIEC104Clientlist; Iserver:TIEC104Server;
+  IMaster:TIEC101Master; Ievent :TIECGWEvent;
+  IRouter: TIECRouter;
+  AppLogger : TLogger;
 
 procedure addProcess(o:TObject;Ahint:String);
 //procedure addProcess(o:TObject);
@@ -36,11 +39,12 @@ function BoolasStr(val:Boolean):String;
 implementation
 
 uses
-  CLIItems, CLIserver, CLIClient, CLIMaster, CLIEvent;
+  GWGlobal,
+  IECStream, CLIItems, CLIserver, CLIClient, CLIMaster, CLIEvent, CLIRouter;// CMD;
 
 var
     Process : Array of String;
-    Hint :    Array of String;
+    Hint : Array of String;
 
 procedure help(asession:Tsession);
 var
@@ -48,9 +52,33 @@ var
 begin
 asession.writeResult('commands are');
 for i:=0 to high(process) do
-//   asession.writeResult('   '+process[i]);
-   asession.writeResult('   '+process[i]+#9+'- '+hint[i]);
-asession.writeResult('   x'+#9+'-EXIT Application');
+// asession.writeResult(' '+process[i]);
+   asession.writeResult(' '+process[i]+#9+'- '+hint[i]);
+asession.writeResult(' log'+#9+'-change Log level of Application and IEC lib');
+asession.writeResult(' x'+#9+'-EXIT Application');
+end;
+
+procedure help2(asession:Tsession);
+var
+  Proc: Tproc;
+begin
+asession.writeResult('commands are');
+for Proc:=low(TProc) to high(TProc) do
+        begin
+        if (GWGlobal.Process[proc].o<>nil) then
+           asession.writeResult(' '+GWGlobal.Process[proc].name+#9+
+                      '- '+GWGlobal.Process[proc].hint);
+        end;
+asession.writeResult(' log'+#9+'-change Log level of Application and IEC lib');
+asession.writeResult(' x'+#9+'-EXIT Application');
+end;
+
+procedure setmainlog(asession:Tsession;ucli:TCLI);
+begin
+  if setlevel(AppLogger,ucli.Params[1])then
+    asession.writeResult('Main.log [OK]')
+ else
+    asession.writeResult('Main.log [ERROR]');
 end;
 
 function BoolasStr(val:Boolean):String;
@@ -77,10 +105,10 @@ function execJson(asession:Tsession;jdata : TJSONData):boolean;
   begin
   Jo :=TJSONObject(jdata);
   cmd:=jo.Strings['cmd'];
-//  logger.info('cmd:'+cmd);
+// logger.info('cmd:'+cmd);
   if pos('item',cmd)<>0 then
      begin
-//     logger.info('doItem');
+// logger.info('doItem');
      CLIItems.execJS(asession,Jo);
      end;
   exit;
@@ -131,59 +159,81 @@ procedure execCLI(asession:Tsession; txt:String);
 var
  i:integer;
  cmd:string;
- ucli:Tcli;
+ ucli:Tcli; it:TIECItem;
 begin
-//writeln('session:'+asession.name);
+logger.Debug('session:'+asession.name+'  asession.path "'+asession.path+'"');
+//writeln('session:'+asession.name+'  asession.path "'+asession.path+'"');
 //cmd:=asession.path+txt;
 if txt<>'' then
    begin
     if (txt='item')then txt:=txt+'.';
-    if (pos('item.',txt)=1) and (iIecTree<>nil)then
+    if (pos('item.',txt)=1) and (iIecList<>nil)then
+//    if (pos('item.',txt)=1) and (iIecTree<>nil)then
        begin
        txt:=copy(txt,6,length(txt));
-       CLIItems.execCLI(asession,txt);  exit;
+       CLIItems.execCLI(asession,txt); exit;
        end;
 
     if (txt='server') then txt:=txt+'.';
     if (pos('server.',txt)=1)and (iserver<>nil) then
        begin
        txt:=copy(txt,8,length(txt));
-       CLIServer.execCLI(asession,txt);  exit;
+       CLIServer.execCLI(asession,txt); exit;
        end;
 
    if (txt='client') then txt:=txt+'.';
    if (pos('client.',txt)=1)and (IClients<>nil) then
        begin
        txt:=copy(txt,8,length(txt));
-       CLIClient.execCLI(asession,txt);  exit;
+       CLIClient.execCLI(asession,txt); exit;
        end;
 
     if (txt='master') then txt:=txt+'.';
     if (pos('master.',txt)=1)and (imaster<>nil) then
        begin
        txt:=copy(txt,8,length(txt));
-       CLIMaster.execCLI(asession,txt);  exit;
+       CLIMaster.execCLI(asession,txt); exit;
        end;
 
     if (txt='event') then txt:=txt+'.';
     if (pos('event.',txt)=1)and (ievent<>nil) then
       begin
       txt:=copy(txt,7,length(txt));
-      CLIEvent.execCLI(asession,txt);  exit;
+      CLIEvent.execCLI(asession,txt); exit;
+      end;
+
+    if (txt='route') then txt:=txt+'.';
+    if (pos('route.',txt)=1)and (irouter<>nil) then
+      begin
+      txt:=copy(txt,7,length(txt));
+      CLIRouter.execCLI(asession,txt); exit;
       end;
 
  ucli:=parse(txt);
  cmd:=ucli.Params[0];
- if (cmd='') then  exit;
- if (cmd='?')then  begin help(asession);  exit;  end;
- if (cmd='x')and(asession.path='')then begin  asession.terminate; exit;  end;
- if (cmd='J')then
-      begin
-      execJson(asession,StrtoJSON(readJSONFile('d:\source\pascal\FER\j2.json')));
-      exit;
-      end;
- end;
+ if (cmd='') then exit;
+ if (cmd='log')then begin setMainLog(asession,ucli); exit; end;
+ if (cmd='?')then begin help(asession); exit; end;
+ if (cmd='x')and(asession.path='') then begin asession.terminate; exit; end;
 
+ if (cmd='J')then
+         begin
+//         for i:=0 to IIECList.Count-1 do
+         for i:=0 to sessionList.Count-1 do
+            begin
+            writeln(inttoStr(i)+' '+Tsession(sessionList[i]).Name);
+//            Tsession(sessionList[i]).writeResult('IECGW');
+//            IIECList.matchItem(i,ucli.Params[1]);
+            end;
+   //      execJson(asession,StrtoJSON(readJSONFile('d:\source\pascal\FER\j2.json')));
+         exit;
+         end;
+{    if (cmd='CMD')then
+         begin
+         ci.callProc(asession,ucli.Params);
+         exit;
+         end;  }
+ end;
  if cmd<>'' then asession.writeResult('command not available');
 
 end;
@@ -210,8 +260,8 @@ if cmd<>'' then
    if (pos(' ',cmd)>0) then
       begin
       p:=copy(cmd,1,pos(' ',cmd)-1);
-//      setlength(result.Params,length(result.Params)+1);
-//      result.Params[high(result.Params)]:=Stringreplace(p,'_',' ',[rfReplaceAll]);
+// setlength(result.Params,length(result.Params)+1);
+// result.Params[high(result.Params)]:=Stringreplace(p,'_',' ',[rfReplaceAll]);
       end;
    setlength(result.Params,length(result.Params)+1);
    result.Params[high(result.Params)]:=Stringreplace(p,'_',' ',[rfReplaceAll]);
@@ -236,32 +286,37 @@ if cmd<>'' then
       end;
    end;
 
-//    for i:= 0 to high(result.Params) do   writeln('PARAM:'+result.Params[i]+'_');
-//    for i:= 0 to high(result.Path) do   writeln('PATH:'+result.Path[i]+'_');
+// for i:= 0 to high(result.Params) do writeln('PARAM:'+result.Params[i]+'_');
+// for i:= 0 to high(result.Path) do writeln('PATH:'+result.Path[i]+'_');
 end;
 
+
 procedure addProcess(o:TObject;ahint:String);
-//  procedure addProcess(o:TObject);
+// procedure addProcess(o:TObject);
 var
   n:String;
 begin
-  if o.ClassType=TIECTree then
-     begin  IIecTree:=TIECTree(o); n:='item';end;
+//  if o.ClassType=TIECTree then   begin IIecTree:=TIECTree(o); n:='item';end;
+  if o.ClassType=TIECList then
+     begin IIecList:=TIECList(o); n:='item';end;
 
   if o.ClassType=TIEC104Clientlist then
-     begin IClients:=TIEC104Clientlist(o); n:='client';  end;
+     begin IClients:=TIEC104Clientlist(o); n:='client'; end;
 
   if o.ClassType=TIEC104Server then
-     begin IServer:=TIEC104Server(o); n:='server';  end;
+     begin IServer:=TIEC104Server(o); n:='server'; end;
 
   if o.ClassType= TIEC104Clientlist then
-     begin IClients:=TIEC104Clientlist(o); n:='client';  end;
+     begin IClients:=TIEC104Clientlist(o); n:='client'; end;
 
   if o.ClassType=TIEC101Master then
      begin IMaster:=TIEC101Master(o); n:='master'; end;
 
   if o.ClassType=TIECGWEvent then
-     begin IEvent:=TIECGWEvent(o); n:='event';  end;
+     begin IEvent:=TIECGWEvent(o); n:='event'; end;
+
+  if o.ClassType=TIECRouter then
+     begin IRouter:=TIECRouter(o); n:='router'; end;
 
   setlength(Process,length(Process)+1);
   Process[high(Process)]:=n;
@@ -271,7 +326,7 @@ end;
 
 Initialization
  begin
- IIecTree:=nil;
+ IIecList:=nil;
  iclients:=nil;
  Iserver:=nil;
  IMaster := nil;
@@ -279,4 +334,3 @@ Initialization
  end;
 
 end.
-

@@ -3,11 +3,6 @@
 | Requirements: Ararat Synapse (http://www.ararat.cz/synapse/)                 |
 |==============================================================================}
 
-{
-
-}
-
-
 unit telnetsock1;
 
 {$IFDEF FPC}
@@ -255,7 +250,7 @@ begin
        Writeln('Wait Thread end');
      end;
  // fSendCriticalSection.Enter;
-  Writeln('** Thread end');
+//  Writeln('** Thread end');
 end;
 
 procedure TTelnetConnection.ProcessClose;

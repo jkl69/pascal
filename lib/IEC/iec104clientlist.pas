@@ -27,14 +27,15 @@ TIEC104Clientlist=class
     procedure log(ALevel : TLevel; const AMsg : String);
 //    procedure Cliexecute(s:string;result:TCLIResult);
 //    function addclient:integer;
-    function addclient(name:String):integer;
+    function addclient(aname:String):integer;
     function delete(n:string):boolean;
     function delete(i:integer):boolean;
 //    procedure delete(i:integer);
     procedure clear;
     property Logger : Tlogger read Flogger write FLogger;
     property Clients:TStringList read FClients;
-    function getClient(n:String):TIEC104Client;
+    function getClientbyName(n:String):TIEC104Client;
+//    function getClientbyName(aname:String):TIEC104Client;
     property Client[Index: Integer]: TIEC104Client read GetCLient;
     property onClientCreate:TIECSocketEvent read FonClientCreate write FonClientCreate;
 end;
@@ -69,6 +70,18 @@ begin
       end;
 end;
 
+{function TIEC104Clientlist.getClientbyName(aname:String):TIEC104Client;
+var i:integer;
+begin
+  getClientbyName:= nil ;
+  for i:=0 to Fclients.Count-1 do
+    if (TIEC104Client(Fclients.Objects[i]).Name = aname) then
+       begin
+       Result := TIEC104Client(Fclients.Objects[i]);
+       end;
+end;
+}
+
 function TIEC104Clientlist.getClient(i:integer):TIEC104Client;
 begin
  getClient:= nil ;
@@ -77,7 +90,7 @@ begin
 //      Result := TIEC104Client(FClients[I]);
 end;
 
-function TIEC104Clientlist.getClient(n:String):TIEC104Client;
+function TIEC104Clientlist.getClientbyName(n:String):TIEC104Client;
 var
  i:integer;
 begin
@@ -91,7 +104,7 @@ function TIEC104Clientlist.delete(n:string):boolean;
 var
  FClient :TIEC104Client;
 begin
-  FClient:= getClient(n);
+  FClient:= getClientbyName(n);
   delete:=false;
   if (FClient<>nil) then
      begin
@@ -132,24 +145,36 @@ begin
      end;
 end;
 
-function TIEC104Clientlist.addclient(name:string):integer;
+function TIEC104Clientlist.addclient(aname:string):integer;
 var
   FClient :TIEC104Client;
-  i:integer;
+  i:integer; alist:TStrings;
 begin
     for i:=0 to Fclients.Count-1 do
         begin
 //        FClient := TIEC104Client(Fclients.Objects[i]);
 //        if Fclient.Name = name then
-        if Fclients[i] = name then
+        if Fclients[i] = aname then
            begin
            result:= -1; exit;
            end;
         end;
-    FClient:= TIEC104Client.Create(nil);
-    FClient.Name:=name;
-    Fclient.Logger:=Flogger;
-    Fclients.AddObject(name,Fclient);
+//    FClient:= TIEC104Client.Create(nil);
+    FClient:= TIEC104Client.Create(aname);
+//    FClient.Name:=aname;
+//    Fclient.Logger:=Flogger;
+
+    Fclient.Logger:=TLogger.getInstance(Fclient.Name);
+    Fclient.Logger.setLevel(TLevelUnit.info);
+    alist:=Fclient.logger.GetAllAppenders;
+    if alist.Count=0 then  //if logger already exist do NOT ad appenders
+      begin
+      alist:=logger.GetAllAppenders;
+      for i:= 0 to alist.Count-1 do
+         Fclient.Logger.AddAppender(logger.GetAppender(alist[i]));
+      end;
+
+    Fclients.AddObject(aname,Fclient);
 //    FClient.Activ:=true;
    if Assigned(FonClientCreate) then
        FonClientCreate(Fclient, Fclient.iecSocket);

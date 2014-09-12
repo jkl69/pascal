@@ -6,10 +6,17 @@ interface
 
 uses
   Classes, SysUtils,
-  IECMAP;
+  TLoggerUnit, IECMAP;
 
 Type
-  TIECStream = class(TBytesStream)
+
+ TItemPath=record
+   typ :IEC_Stype;
+   asdu :integer;
+   adr :integer;
+ end;
+
+ TIECStream = class(TBytesStream)
     public
      function ToHexStr:string;
      function ToIECBuffer:TIECBUFFER;
@@ -18,6 +25,8 @@ Type
 //     function ReadTimeStr:String;
      procedure WriteSingle(d:single);
      function ReadSingle:single;
+     function ReadInteger:Smallint;
+     function ReadDInteger:longint;
 //     procedure RewriteByteMask(mask:byte;b:byte);
 //     function ReadByteMask(mask:byte):byte;
      procedure WriteAdr(c:cardinal);
@@ -40,35 +49,44 @@ Type
      procedure setType(t:IEC_SType);
      procedure setDefLimits;
      procedure setObjCount(c:byte);
-     procedure setCOT(cot:word);
+//     procedure setCOT(acot:word);
      procedure setASDU(asdu:word);
      procedure setAdr(adr:cardinal);
-     procedure setValue(newValue:double);
 //     procedure setQU(qu:byte);
-     procedure setQU(qu_set:IECQUSet);
-     procedure setTime(ti:Tdatetime);
+//     procedure setQU(qu_set:IECQUSet);
+     procedure setTime(ti:Tdatetime;updateonChange:boolean);
      function getAdr:cardinal;
      function getValue:double;
 //     function getQU:byte;
      function getQU:IECQUSet;
      function getTime:tDatetime;
      function getType:IEC_SType;
+     function getBaseType:IEC_SType;
      function getObjCount:byte;
      function getCOT:word;
      function getASDU:word;
+     function validName:Boolean;
  public
      Name: String;
      constructor create(t:IEC_SType;asdu:word;adr:cardinal);
+     function PathtoStr(typAsName:boolean):String;
+     function ValuestoStr:String;
      function toString:String;
+     function setCOT(acot:word;updateonChange:boolean):boolean;
+     function setValue(newValue:double;updateonChange:boolean):boolean;
+     function setQU(qu_set:IECQUSet;updateonChange:boolean):Boolean;
      function getTimeStr:String;
      function getValueStr:String;
+     procedure DoUpdate;
 //     function getQUStr:String;
+     Function IsBaseEqual(tk:IEC_SType;asdu:integer;adr:integer):Boolean;
+     Function IsEqual(tk:IEC_SType;asdu:integer;adr:integer):Boolean;
      property IECTyp:IEC_SType read getType write setType;
      property ASDU:word read getASDU write setASDU;
-     property COT:word read getCOT write setCOT;
+     property COT:word read getCOT;// write setCOT;
      property Adr:Cardinal read getAdr write setAdr;
-     property Value:double read getValue write setValue;
-     property QU:IECQUSet read getQu write setQU;
+     property Value:double read getValue;//; write setValue;
+     property QU:IECQUSet read getQu; // write setQU;
      property onChange:TNotifyEvent read fonchange write fonchange;
 //     property TimeLength:byte read getTimeLength ;
      property Time:TDateTime read getTime ;
@@ -81,19 +99,36 @@ Type
  function QusettoByte(quset:iecquset):byte;
  function QuSettoStr(quset:iecquset):String;
 function ByteToQUSet(item:TIECItem;b:byte):iecquset;
-function CreteItems(buffer:array of byte):TiecItems;
+//function CreteItems(buffer:array of byte):TiecItems;
+function CreteItems(buffer:array of byte; count : Integer):TiecItems;
 
 Var
    P_SHORT : boolean =false;
+   Logger : Tlogger;
 
 implementation
 
-uses dateutils;
+uses TLevelUnit, dateutils;
+
+procedure log(ALevel : TLevel; const AMsg : String);
+begin
+ if (assigned(logger)) then
+     begin
+     logger.log(ALevel,'_IEC_'+AMsg);
+     end;
+end;
 
 function isDST:boolean;begin result:=true;end;
-function PosASDU:byte;begin result:=4;end;
+function PosASDU:byte;
+   begin
+   result:=4;// NOT for Short_Profile
+   if P_SHORT then  result:=3;
+   end;
 function PosAdr:byte;begin result:=PosASDU+2;end;
-function PosValue:byte;begin result:=PosAdr+3;end;
+function PosValue:byte;
+  begin result:=PosAdr+3; // NOT for Short_Profile
+     if P_SHORT then  result:=PosAdr+2; // for Short_Profile
+  end;
 function PosQU(t:iec_SType):byte;
 begin
  result:=-1;  //unknown QU position
@@ -107,6 +142,8 @@ begin
    M_ME_NC,M_ME_TF :                    result:=PosValue+4;
    C_SE_NC:                             result:=PosValue+4;
    M_IT_NA,M_IT_TB:                     result:=PosValue+4;
+
+   C_IC_NA,C_CI_NA,C_CS_NA:             result:=PosValue;
    end;
 end;
 function PosTime(t:iec_sType):byte;
@@ -122,6 +159,9 @@ function PosTime(t:iec_sType):byte;
     M_ME_NC,M_ME_TF :                    result:=PosValue+5;
     C_SE_NC:                             result:=PosValue+5;
     M_IT_NA,M_IT_TB:                     result:=PosValue+5;
+
+    C_IC_NA,C_CI_NA:                     result:=Posvalue+1;
+    C_CS_NA:                             result:=Posvalue+7;
    end;
 end;
 Function getTimelength(t:IEC_SType):byte;
@@ -219,51 +259,57 @@ begin
    end;
 end;
 
-function CreteItems(buffer:array of byte):TiecItems;
+//function CreteItems(buffer:array of byte):TiecItems;
+function CreteItems(buffer:array of byte;count : integer):TiecItems;
 var stream:TIECStream; ItemCount:byte; Block:boolean;
     t:iec_sType; index:byte; item:TIECItem; i:integer;
-    txt:string; asdu:word; adr:Cardinal;
+    txt:string; asdu:word; cot:word; adr:Cardinal;
+  function readObj(nr:integer):TIECITem;
+     begin
+     if (nr=0) then adr:= stream.ReadAdr;
+     if (nr>0) and  (block) then  inc(adr);
+     if (nr>0) and  (not block) then adr:= stream.ReadAdr;
+     item:=TIECITem.Create(t,asdu,adr);
+     item.setCOT(cot,false);
+     item.setValue(stream.ReadValue(t),false);
+     if t in [IEC_SType.M_SP_NA, IEC_SType.M_DP_NA,
+              IEC_SType.M_SP_TB, IEC_SType.M_DP_TB] then
+            stream.seek(-1,TSeekOrigin.soCurrent);
+     item.setqu(ByteToQUSet(item,stream.readqu(t)),false);
+     if getTimelength(t)=7 then  item.setTime(Stream.ReadTime(item.fdst),false);
+     result:=item;
+     end;
+
 begin
   stream:=TIECStream.Create();
-  stream.Write(buffer,length(buffer));
+//  stream.Write(buffer,length(buffer));
+  stream.Write(buffer,count);
   ItemCount := buffer[1] and $7F;
   Block := (buffer[1] >=128);
   t:= getstype(buffer[0]);
+  txt:='';
+  for i:=0 to stream.Size-1 do   txt:=txt+inttohex(stream.Bytes[i],2)+' ';
+  log(debug,'items_stream: ['+inttostr(stream.Size)+'] '+txt);
   if t<>IEC_SType.IEC_NULL_TYPE then
-    begin
-    setlength(result,itemcount);
-    index:=6;
-    txt:='';
-    for i:=0 to stream.Size do   txt:=txt+inttohex(stream.Bytes[i],2)+' ';
-//    writeln('Stream: '+txt);
-    stream.Position:=4;
-    asdu:= stream.ReadWord;
-    for i:=0 to ItemCount-1 do
-       begin
-//       writeln('PosAdr:'+inttostr(Stream.position));
-       if (i=0) then
-         adr:= stream.ReadAdr;
-       if (i>0) and  (block) then
-         inc(adr);
-       if (i>0) and  (not block) then
-         adr:= stream.ReadAdr;
-       item:=TIECITem.Create(t,asdu,adr);
-//       writeln('PosVal:'+inttostr(Stream.position));
-       item.Value:=stream.ReadValue(t);
-       if t in [IEC_SType.M_SP_NA, IEC_SType.M_DP_NA,
-               IEC_SType.M_SP_TB, IEC_SType.M_DP_TB] then
-                stream.seek(-1,TSeekOrigin.soCurrent);
-//       writeln('PosQU:'+inttostr(Stream.position));
-       item.qu:=ByteToQUSet(item,stream.readqu(t));
-//       writeln('PosTime:'+inttostr(Stream.position));
-       if getTimelength(t)=7 then  item.setTime(Stream.ReadTime(item.fdst));
-//       writeln('rsize:'+inttostr(length(result))+' $Item: '+item.ToHexStr+'   Item: '+item.toString);
-       result[i]:=item;
+    try
+      begin
+       setlength(result,itemcount);
+       index:=6;
+       stream.Position:=2;// POSITION_COT
+       cot:= stream.readWord;
+       stream.Position:=PosASDU;
+       asdu:= stream.ReadWord;
+       for i:=0 to ItemCount-1 do
+          result[i]:=readObj(i);
+       stream.Destroy;
        end;
-     stream.Destroy;
+    except
+        setlength(result,0);
+        log(fatal,'Stream length ERROR pos_'+inttostr(stream.Position));
     end
   else
     begin
+    log(warn,'** UNKNOWN IECTYPE **: ');
     setlength(result,1);
     result[0]:=stream;
     end;
@@ -275,7 +321,8 @@ end;
 function TIECStream.ToHexStr:string;
 var i:integer;
 begin
- for i:=0 to Size-1 do   result:=result+inttohex(Bytes[i],2)+' ';
+ result:='';
+ for i:=0 to Size-1 do  result:=result+inttohex(Bytes[i],2)+' ';
 end;
 
 function TIECStream.ToIECBuffer:TIECBUFFER;
@@ -322,6 +369,7 @@ begin
   DD := readByte and $1F;
   MM :=  readByte ;
   YY :=  readByte +2000;
+//  log(info,format('y:%d M%d D%d H%d Min%d',[YY,MM,DD,HH,MIN]));
   result := EncodeDateTime(YY,MM,DD,HH,MIN,ss,ms);
 end;
 
@@ -330,7 +378,8 @@ var b :array[0..3]of byte absolute c;
 begin
  WriteByte(b[0]);
  WriteByte(b[1]);
- WriteByte(b[2]);
+ if not P_short then
+   WriteByte(b[2]);
 end;
 
 function TIECStream.ReadAdr:cardinal;
@@ -339,7 +388,8 @@ var c:cardinal;
 begin
  b[0]:=ReadByte;
  b[1]:=ReadByte;
- b[2]:=ReadByte;
+ if not P_short then
+   b[2]:=ReadByte;
  b[3]:=0;
  result:=c;
 end;
@@ -357,6 +407,23 @@ var c:cardinal;
 begin
   c:=ReadDWord;
   result:=d;
+end;
+
+function TIECStream.ReadInteger:Smallint;
+var w:word;
+    i:Smallint absolute w;
+begin
+  w:=ReadWord;
+//  log(info,'val_'+inttostr(i));
+  result:=i;
+end;
+
+function TIECStream.ReadDInteger:longint;
+var c:cardinal;
+    i:longint absolute c;
+begin
+  c:=ReaddWord;
+  result:=i;
 end;
 
 procedure TIECStream.WriteValue(t:IEC_Stype;value:Double);
@@ -390,10 +457,12 @@ begin
   C_SE_NC:           writeSingle(Value);
   M_IT_NA,M_IT_TB:   WriteDword(round(Value));
   C_IC_NA:           writeByte(round(Value));
+  C_CS_NA:           writeTime(now,false);
   end;
 end;
 
 function TIECStream.ReadValue(t:IEC_Stype):Double;
+var fdst:boolean;
 begin
   case (t) of
      M_SP_NA,M_SP_TB :        result := ReadByte and $01;
@@ -401,12 +470,13 @@ begin
      M_DP_NA,M_DP_TB :        result := ReadByte and $03;
      C_DC_NA :                result := ReadByte and $03;
      M_ME_NA,M_ME_TB,
-     M_ME_NB,M_ME_TD :        result := readWord;
+     M_ME_NB,M_ME_TD :        result := readInteger;
      C_SE_NA,C_SE_NB :        result := readWord;
      M_ME_NC,M_ME_TF :        result := ReadSingle;
      C_SE_NC:                 result := ReadSingle;
-     M_IT_NA,M_IT_TB:         result := ReadDword;
+     M_IT_NA,M_IT_TB:         result := ReadDInteger;
      C_IC_NA:                 result := ReadByte;
+     C_CS_NA:                 result := readTime(fdst);
    end;
 end;
 
@@ -462,7 +532,8 @@ case (t) of
   M_ME_NC,M_ME_TF :  Result:= ReadByte;
   C_SE_NC:           Result:= ReadByte;
   M_IT_NA,M_IT_TB:   Result:= ReadByte;
-  C_IC_NA:           Result:= ReadByte;
+//  C_IC_NA:           Result:= ReadByte;
+  C_IC_NA:           Result:= 0;
   end;
 end;
 
@@ -472,25 +543,65 @@ constructor TiecItem.create(t:IEC_SType;asdu:word;adr:cardinal);
 begin
   inherited create;
   if (t =IEC_SType.IEC_NULL_TYPE) then t:=IEC_SType.M_SP_NA;
-  name:='Item'+inttostr(adr);
+  name:=IECSEPERATOR+inttostr(asdu)+IECSEPERATOR+inttostr(adr);
   ReversMode := False;
   setType(t);  // does also: setValue(0); setqu([]);
   setObjCount(1);
-  setCOT(3); // on"C_" type cot should be 07
+  if t in IEC_M_Type then
+    setCOT(3,false) // on"C_" type cot should be 07 Activation OK
+  else
+    setCOT($47,false); // on"C_" type cot is 07
   setASDU(asdu);
   setAdr(adr);
 //  setValue(0);  setqu([]);
-  setTime(now);
+  setTime(now,false);
+  log(info,'ITEM_Create: '+IECMap.MAP[t].name);
   end;
 
-function TiecItem.toString:String;
-var txt:String;
+function TiecItem.IsEqual(tk:IEC_SType;asdu:integer;adr:integer):Boolean;
 begin
-//txt:=format('  COT:%d  Val:%f  QU:$%x  Time:%s',[cot,value,quSetToByte(qu),gettimeStr]);
-//txt:=format('  COT:%d  Val:%f  QU:%s  Time:%s',[cot,value,quSetToStr(qu),gettimeStr]);
-txt:=format('  COT:%d  Val:%s  QU:%s  Time:%s',[cot,getvalueStr,quSetToStr(qu),gettimeStr]);
- result:=IECSEPERATOR+map[iectyp].name+IECSEPERATOR+
-         inttoStr(ASDU)+IECSEPERATOR+inttostr(Adr)+txt;
+ result:= ((tk= getType) and(asdu=getAsdu) and(adr=getAdr));
+end;
+
+function TiecItem.IsBaseEqual(tk:IEC_SType;asdu:integer;adr:integer):Boolean;
+var bk:IEC_SType;
+begin
+ bk:= getStype(Map[tk].bk);
+ result:= ((bk= getBaseType) and(asdu=getAsdu) and(adr=getAdr));
+end;
+
+function TiecItem.PathtoStr(typAsName:boolean):String;
+begin
+ if typAsName then
+   result := IECSEPERATOR+map[iectyp].name+IECSEPERATOR+inttoStr(ASDU)+IECSEPERATOR+inttostr(Adr)
+ else
+   result := IECSEPERATOR+inttostr(map[iectyp].tk)+IECSEPERATOR+inttoStr(ASDU)+IECSEPERATOR+inttostr(Adr);
+end;
+
+function TiecItem.ValuestoStr:String;
+ begin
+ //txt:=format('  COT:%d  Val:%f  QU:$%x  Time:%s',[cot,value,quSetToByte(qu),gettimeStr]);
+ //txt:=format('  COT:%d  Val:%f  QU:%s  Time:%s',[cot,value,quSetToStr(qu),gettimeStr]);
+ result:=format('COT:%d  Val:%s  QU:%s  Time:%s',[cot,getvalueStr,quSetToStr(qu),gettimeStr]);
+end;
+
+function TiecItem.validName:Boolean;
+begin
+  result:=name[1]<>IECSEPERATOR;
+end;
+
+function TiecItem.toString:String;
+begin
+ if IECTyp=IEC_SType.IEC_NULL_TYPE then
+     begin
+      result:=toHexStr;
+      exit;
+     end;
+ if not validName then
+   result:=PathtoStr(false)+'  '+ValuestoStr
+ else
+//    result:=Name+'  '+ValuestoStr;
+   result:= PathtoStr(false)+' Name:'+Name+'  '+ValuestoStr;
 end;
 
 procedure TiecItem.setDefLimits;
@@ -501,18 +612,26 @@ end;
 
 procedure TiecItem.setType(t:IEC_SType);
 begin
- size:=getItemLength(T);
+ size:=getItemLength(t);
  position:=0;
  writebyte(Map[t].TK);
  setDefLimits;
- setValue(0);
- setqu([]);
+ setValue(0,false);
+ setqu([],false);
+// writeln('ITEM_Create_size2:'+inttostr(size));
 end;
 
 function TiecItem.getType:IEC_SType;
 begin
  position:=0;
  result:= getSType(readbyte);
+end;
+
+function TiecItem.getBaseType:IEC_SType;
+var t:IEC_SType;
+begin
+  t:=getType;
+  result:= getStype(Map[t].bk);
 end;
 
 
@@ -528,16 +647,35 @@ begin
   result:= Readbyte;
 end;
 
-procedure TiecItem.setCOT(cot:word);
+//Function TiecItem.UpdateCOT(acot:word);
+//begin
+//end;
+
+//procedure TiecItem.setCOT(acot:word);
+Function TiecItem.setCOT(acot:word;updateonChange:boolean):boolean;
+var oldCot:word;
 begin
-  position:=2;
-  writeWord(cot);
+ result:=false;
+ oldCot:=getCot;
+ if (acot<>oldcot) then
+   begin
+   position:=2;
+   if P_short then
+       writeByte(acot)
+   else
+      writeWord(acot);
+   result:=true;
+   setTime(now,updateonChange);
+   end;
 end;
 
 function TiecItem.getCOT:word;
 begin
   position:=2;
-  result:= ReadWord;
+ if P_short then
+   result:= ReadByte
+ else
+    result:= ReadWord;
 end;
 
 procedure TiecItem.setASDU(asdu:word);
@@ -564,11 +702,19 @@ begin
   result:= readAdr;
 end;
 
-procedure TiecItem.setValue(newValue:double);
+//procedure TiecItem.setValue(newValue:double);
+function TiecItem.setValue(newValue:double;updateonChange:boolean):boolean;
 var
  oldValue:Double;
  t:IEC_SType;
 begin
+if getType=IEC_SType.C_CS_NA then //Clock Sync
+  begin
+  position:=posValue;
+  writeValue(C_CS_NA,NewValue);
+  setTime(now,true);
+  exit;
+  end;
 if NewValue > maxValue then newValue:= MaxValue;
 if NewValue < minValue then newValue:= MinValue;
 oldValue:=Value;
@@ -579,7 +725,8 @@ if (newValue<>oldValue) then
        position:=posValue;
 //       writeln('size:'+inttostr(size)+'   Pos:'+inttostr(position)+'    setValue:'+floattoStr(newValue));
        writeValue(t,NewValue);
-       setTime(now);
+       result:=true;
+       if updateonChange then setTime(now,updateonChange);
      end;
 end;
 
@@ -618,12 +765,14 @@ begin
    C_SE_NC:                 result := floattoStr(value);
    M_IT_NA,M_IT_TB:         result := floattoStr(round(value));
    C_IC_NA:                 result := floattoStr(round(value));
+   C_CS_NA:                 result := DatetimetoStr(value);
    else result:=floattoStr(value);
  end;
 end;
 
 //procedure TiecItem.setQU(qu:byte);
-procedure TiecItem.setQU(qu_set:IECQUSet);
+//procedure TiecItem.setQU(qu_set:IECQUSet);
+function TiecItem.setQU(qu_set:IECQUSet;updateonChange:boolean):Boolean;
 var
  oldQU_set:IECQUSet;  qubyte:byte; t:IEC_SType;
  i:integer;
@@ -639,7 +788,7 @@ oldqu_set:=QU;
        position:=posqu(t);
 //       writeln('Pos:'+inttostr(i)+'    setQUByte:'+inttostr(qubyte));
        writeQU(t,qubyte);
-       setTime(now);
+       setTime(now,updateonChange);
      end;
 end;
 
@@ -660,7 +809,12 @@ begin
 // writeln('getQU:'+inttostr(result));
 end;
 
-procedure TiecItem.setTime(ti:Tdatetime);
+procedure TiecItem.Doupdate;
+begin
+ if assigned(onChange) then onchange(self)
+end;
+
+procedure TiecItem.setTime(ti:Tdatetime;updateonChange:boolean);
 begin
  if getTimelength(iectyp) >0 then
    begin
@@ -672,7 +826,7 @@ begin
      fTime:=ti;
      FDst:=isDST;
     end;
- if assigned(onChange) then onchange(self);
+ if updateonChange then Doupdate;
 end;
 
 function TiecItem.getTime:tDatetime;

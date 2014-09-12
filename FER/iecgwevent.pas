@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,
-  session, IECItems2,
+  session, IECStream,//IECItems2,
   TLoggerUnit,TLevelUnit;
 
 type
@@ -36,16 +36,23 @@ type
     terminated : Boolean;
     constructor Create;
     destructor destroy; override;
-    procedure ItemEvent(item:TIECTCItem);
+    procedure ItemEvent(item:TIECItem);
     procedure log(ALevel : TLevel; const AMsg : String);
     Function addTimer(s:string;intervall:integer):boolean;
     Function addTimer(s:string):boolean;
     procedure addTimerevent(timername,event:String);
+    procedure addConnectEvent(connection,event:String);
+    procedure doConnectEvents(connection:String);
+    procedure addDisConnectEvent(connection,event:String);
+    procedure doDisConnectEvents(connection:String);
     Function delTimerevent(timername:String):Boolean;
     Function delTimer(s:string):boolean;
+    Function setTimercycle(s:string; intervall: integer):boolean;
 
     property Logger:TLogger read FLog write FLog;
     property TimerList:TStringlist read FTimerlist;
+    property ConnectList:TStringlist read FonConnectevent;
+    property DisConnectList:TStringlist read FonDisConnectevent;
     property TimerEvents:TStringlist read FTimerEvents;
   end;
 
@@ -96,6 +103,22 @@ begin
   result:=true;
 end;
 
+Function TIECGWEvent.setTimercycle(s:string; intervall: integer):boolean;
+var
+  i:integer; t: TGWTimer;
+begin
+ result:=false;
+ i:=FTimerlist.IndexOf(s);
+ if i = -1 then
+     begin
+     exit;
+     end;
+  t:= TGWTimer(FTimerlist.Objects[i]);
+  t.intervall:=intervall;
+  log(debug,'setTimercycle to '+inttoStr(intervall));
+  result:=true;
+end;
+
 {*
  default intervall = 50 = 5sec(50* 0.1sec)
 *}
@@ -135,6 +158,44 @@ begin
  FTimerEvents.Add(timername+'='+event);
 end;
 
+procedure TIECGWEvent.addConnectEvent(connection,event:String);
+begin
+  FonConnectevent.Add(connection+'='+event);
+end;
+
+procedure TIECGWEvent.doConnectEvents(connection:String);
+var i:integer;
+begin
+  log(info,'doConnectEvent '+fsession.path+'_');
+  for i:=0 to FonConnectevent.Count-1 do
+     begin
+     if FonConnectEvent.Names[i]=connection then
+        execute(FonConnectEvent.ValueFromIndex[i]);
+     end;
+  //fsession.EcexuteCmd('item.set /1/100/11 val=1');
+  //fsession.onexec:=@CLI.ExecCli;
+end;
+
+procedure TIECGWEvent.addDisConnectEvent(connection,event:String);
+begin
+  FonDisConnectevent.Add(connection+'='+event);
+end;
+
+procedure TIECGWEvent.doDisConnectEvents(connection:String);
+var i:integer;
+begin
+log(info,'doDisConnectEvent ');
+for i:=0 to FonDisconnectEvent.Count-1 do
+     begin
+     if FonDisconnectEvent.Names[i]=connection then
+        execute(FonDisconnectEvent.ValueFromIndex[i]);
+     end;
+
+//log(info,'doDisConnectEvent '+fsession.path+'_');
+//  fsession.EcexuteCmd('item.set /1/100/11 val=0');
+//  fsession.onexec:=@CLI.ExecCli;
+end;
+
 Function TIECGWEvent.delTimerevent(timername:String):boolean;
 var i:integer;
 begin
@@ -163,7 +224,7 @@ begin
       end;
 end;
 
-procedure TIECGWEvent.ItemEvent(item:TIECTCItem);
+procedure TIECGWEvent.ItemEvent(item:TIECItem);
 begin
   log(info,'ItemEvent: '+item.Name);
 end;
@@ -185,7 +246,7 @@ begin
     end;
 end;
 
-Function getKey(S:String):String;
+{Function getKey(S:String):String;
 begin
   result:=copy(s,1,pos('=',s)-1);
 end;
@@ -194,7 +255,7 @@ function getValue(S:String):String;
 begin
   result:=copy(s,pos('=',s)+1,length(s));
 end;
-
+}
 constructor TIECGWEvent.create;
 begin
   inherited create;
@@ -204,10 +265,9 @@ begin
   FonDisConnectevent := TStringlist.Create;
   FonItemEvent:=TStringlist.create;
   terminated := false;
-
   fsession:= Tsession.create;
+  fsession.Name:='EventHandler';
   fsession.onexec:=@CLI.ExecCli;
-
   //  fth:=BeginThread(@run,Pointer(self));
   BeginThread(@timer,Pointer(self));
 end;

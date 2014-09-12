@@ -15,7 +15,7 @@ implementation
 
 
 const
-  action : Array [0..2] of String = ('timer','log','x');//list', 'connect','dis','item','delitem');
+  action : Array [0..4] of String = ('timer','list','add','log','x');//list', 'connect','dis','item','delitem');
   timeraction : Array [0..5] of String = ('list','newTimer','remTimer','add','del','x');//list', 'connect','dis','item','delitem');
 
 procedure addtimer(asession:Tsession;s:String);
@@ -68,6 +68,19 @@ begin
     asession.writeResult('event.timer.remTimer  [ERROR]');
 end;
 
+procedure setTimerCycle(asession:Tsession;ucli:Tcli);
+begin
+  try
+    if IEvent.setTimercycle(ucli.Params[1],strtoInt(ucli.Params[2])) then
+       asession.writeResult('event.timer.cycle '+ucli.Params[2]+'  [OK]')
+    else
+       asession.writeResult('event.timer.cycle  [ERROR]');
+    exit;
+  Except
+    asession.writeResult('event.timer.cycle  [ERROR]');
+   end;
+end;
+
 procedure listtimer(asession:Tsession);
 var i:integer;
  t:TGWTimer;
@@ -75,7 +88,7 @@ begin
  asession.writeResult('event.timers:'+inttoStr(Ievent.TimerList.Count));
  for i:=0 to Ievent.TimerList.Count-1 do
      begin
-       asession.writeResult(#9+'timer:'+Ievent.TimerList[i]+'  cyle:'+
+       asession.writeResult(#9+'timer:'+Ievent.TimerList[i]+'  cycle:'+
                    inttoStr(TGWTimer(Ievent.TimerList.Objects[i]).intervall*100));
      end;
  asession.writeResult('event.timer.events:');
@@ -92,6 +105,40 @@ begin
        deltimer(asession,ucli.Params[i])
  else
    asession.writeResult('event.timer.del  [_ERROR]');
+end;
+
+procedure add(asession:Tsession;uCLI:TCLI);
+var i:integer;
+begin
+ if length(ucli.Params) >3 then
+    begin
+    if ucli.Params[1]='connect' then
+       begin
+       Ievent.addConnectEvent(ucli.Params[2],ucli.Params[3]);
+       asession.writeResult('event.add connect [OK]');
+       exit;
+       end;
+    if ucli.Params[1]='disconnect' then
+       begin
+       Ievent.addDisConnectEvent(ucli.Params[2],ucli.Params[3]);
+       asession.writeResult('event.add disconnect [OK]');
+       exit;
+       end;
+    asession.writeResult('event.add ?? [ERROR]');
+    end
+ else
+   asession.writeResult('event.add  [ERROR]');
+end;
+
+procedure list(asession:Tsession;uCLI:TCLI);
+var i:integer;
+begin
+ asession.writeResult('event.connect:');
+ for i:=0 to Ievent.ConnectList.count-1 do
+    asession.writeResult(#9+'onConnect '+Ievent.ConnectList[i]);
+ asession.writeResult('event.disconnect:');
+ for i:=0 to Ievent.DisConnectList.count-1 do
+    asession.writeResult(#9+'onDisConnect '+Ievent.DisConnectList[i]);
 end;
 
 function help(asession:Tsession):boolean;
@@ -134,7 +181,9 @@ begin
   if (cmd='remTimer')then
           begin  delTimers(asession,ucli); exit;  end;
   if (cmd='list')then
-          begin  listTimer(asession); exit;  end;
+           begin  listTimer(asession); exit;  end;
+  if (cmd='cycle')then
+           begin  setTimercycle(asession,ucli); exit;  end;
 
   if (cmd='x')then
         begin  asession.onexec:=@CLIEvent.execCLI;  asession.path:='event.'; exit;  end;
@@ -173,6 +222,10 @@ begin
   if (pos('timer.',txt)=1)then
          begin   txt:=copy(txt,7,length(txt)); TimerCLI(asession,txt);  exit; end;
 
+    if (cmd='add')then
+          begin  add(asession,ucli); exit;  end;
+    if (cmd='list')then
+          begin  list(asession,ucli); exit;  end;
     if (cmd='log')then
           begin  log(asession,ucli); exit;  end;
     if (cmd='x')then

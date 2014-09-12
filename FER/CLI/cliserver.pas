@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,
-  session, IEC104Client, IEC104Server,IECTree,
+  session, IEC104Client, IEC104Server, //IECList,
   CLI;
 
 procedure ExecCLI(asession:Tsession;txt:String);

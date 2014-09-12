@@ -78,13 +78,13 @@ var
 
 const
   IECTK : array [IEC_SType] of byte = ($00,
-       	$01,$03,$09,$0b,$0d,$0f,     // M_SP_NA, M_DP_NA, M_ME_NA, M_ME_NB ,M_ME_NC, M_IT_NA,
-       	$1e,$1f,$0a,$0c,$0e,$10,     // M_SP_TB, M_DP_TB, M_ME_TB, M_ME_TD, M_ME_TF, M_IT_TB,
+       	$01,$03,$09,$0a,$0d,$0f,     // M_SP_NA, M_DP_NA, M_ME_NA, M_ME_NB ,M_ME_NC, M_IT_NA,
+       	$1e,$1f,$22,$23,$24,$10,     // M_SP_TB, M_DP_TB, M_ME_TB, M_ME_TD, M_ME_TF, M_IT_TB,
         $64,$65,  48,49, 50,         // C_IC_NA,C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
         $2d, $2e, $67);             //	C_SC_NA ,C_DC_NA,C_CS_NA);
   IECBK : array [IEC_SType] of byte = ($00,
-       	$01,$03,$09,$0b,$0d,$0f,
-       	$01,$03,$09,$0b,$0d,$0f,
+       	$01,$03,$09,$0a,$0d,$0f,
+       	$01,$03,$09,$0a,$0d,$0f,
         $64,$65,  48,49, 50, 	$2d, $2e, $67);
 
 
@@ -139,6 +139,7 @@ function getSType(tk :byte):IEC_SType;
 
 Initialization
    begin
+   writeln('MAP_init');
    readSTypeName;
    for sType:=low(IEC_SType) to high(IEC_SType) do
           begin

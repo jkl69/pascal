@@ -460,7 +460,20 @@ type
       e.g host, connection, sec-websocket-key
     }
     property Header: TStringList read fHeaders;
+//**
+    property ReadFinal: boolean read fReadFinal;
+    property ReadRes1: boolean read fReadRes1;
+    property ReadRes2: boolean read fReadRes2;
+    property ReadRes3: boolean read fReadRes3;
+    property ReadCode: integer read fReadCode;
+    property ReadStream: TMemoryStream read fReadStream;
 
+    property WriteFinal: boolean read fWriteFinal;
+    property WriteRes1: boolean read fWriteRes1;
+    property WriteRes2: boolean read fWriteRes2;
+    property WriteRes3: boolean read fWriteRes3;
+    property WriteCode: integer read fWriteCode;
+    property WriteStream: TMemoryStream read fWriteStream;
   end;
 
   {: Class of WebSocket server connections }
@@ -659,7 +672,7 @@ begin
     aSocket.MaxLineLength := 1024 * 1024; // not to attack memory on server
     s := aSocket.RecvString(30 * 1000); // not to hang up connection
 //    s := aSocket.RecvString(1000); // not to hang up connection
-    writeln('Rcv TimeOut');
+//    writeln('Rcv TimeOut');
     if (aSocket.LastError <> 0) then
     begin
       result := false;
@@ -724,6 +737,7 @@ end;
 procedure TWebSocketServer.CloseAllConnections(aCloseCode: integer; aReason: string);
 var i: integer;
 begin
+  Writeln('CloseAllConnections');
   LockTermination;
   //for i := 0 to fConnections.Count - 1 do
   for i := fConnections.Count - 1 downto 0 do
@@ -732,7 +746,6 @@ begin
       TWebSocketServerConnection(fConnections[i]).Close(aCloseCode, aReason);// SendBinary(aData, aFinal, aRes1, aRes2,  aRes3);
   end;
   UnLockTermination;
-
 end;
 
 function TWebSocketServer.CreateServerConnection(aSocket: TTCPCustomConnectionSocket): TCustomConnection;
@@ -743,20 +756,19 @@ var headers, hrs: TStringList;
     res: boolean;
     r : TWebSocketServerConnections;
 begin
-  writeln('CreateServerConnection');
+//  writeln('CreateServerConnection');
   fncSocket := aSocket;
   result := inherited CreateServerConnection(aSocket);
   headers := TStringList.Create;
   try
-    writeln('wait HTTP GET');
     res := ReadHttpHeaders(aSocket, get, headers);
-    writeln('wait HTTP GET exit');
+//    writeln('wait HTTP GET exit'+headers.Text);
+    writeln(headers.Text);
     if (res) then
     begin
 //      res := false;
       try
         //CHECK HTTP GET
-        writeln('CHECK HTTP GET');
         if ((Pos('GET ', Uppercase(get)) <> 0) and (Pos(' HTTP/1.1', Uppercase(get)) <> 0)) then
         begin
           fncResourceName := SeparateRight(get, ' ');
@@ -810,11 +822,9 @@ begin
         if (LowerCase(headers.Values['upgrade']) <> LowerCase('websocket')) or (pos('upgrade', LowerCase(headers.Values['connection'])) = 0) then
           begin
             exit;
-             writeln('HTTP EXIT');
           end;
 
         //COOKIES
-        writeln('Cookies');
         fncProtocol := '-';
         fncExtensions := '-';
         fncCookie := '-';
@@ -839,10 +849,8 @@ begin
         fncHeaders := trim(headers.text);
         res := true;
       finally
-        writeln('finally');
         if (res) then
         begin
-          writeln('finally 2');
           fncResultHttp := 101;
           hrs := TStringList.Create;
           hrs.Assign(headers);
@@ -991,7 +999,8 @@ begin
   fFullDataProcess := false;
   fFullDataStream := TMemoryStream.Create;
 
-  fSendCriticalSection := TCriticalSection.Create;
+//  fSendCriticalSection := TCriticalSection.Create;
+  fSendCriticalSection := syncobjs.TCriticalSection.Create;
   fHandshake := false;
 
   inherited;
@@ -1011,7 +1020,8 @@ end;
 procedure TWebSocketCustomConnection.DoSyncClose;
 begin
   if (assigned(fOnClose)) then
-    Synchronize(SyncClose);
+    SyncClose;
+// Synchronize(SyncClose);
 
 end;
 
@@ -1065,7 +1075,6 @@ var
     lastDataCode, lastDataCode2: integer;
     //Data: TStringStream;
 begin
-  writeln('Con.Execute2');
   DoSyncOpen;
   try
     //while(not IsTerminated) or fClosed do
@@ -1074,9 +1083,7 @@ begin
     while CanReceiveOrSend do
     begin
       //OutputDebugString(pChar(Format('execute %d', [fIndex])));
-      writeln('Con.Execute3');
       result := ReadData(fReadFinal,  fReadRes1, fReadRes2, fReadRes3, fReadCode, fReadStream);
-      writeln('Con.Execute$');
       if (CanReceiveOrSend)  then
       begin
         if (result = 0) then // no socket error occured
@@ -1097,7 +1104,6 @@ begin
             fReadStream.Position := 0;
           end;
           //if (fReadFinal) then //final frame
-          writeln('Con.Execute$$');
           begin
             case fReadCode of
               wsCodeContinuation: begin

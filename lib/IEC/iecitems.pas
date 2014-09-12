@@ -85,6 +85,7 @@ Type
      Function ToString:String;
      Function Equal(item:TIECTCItem):boolean;
      procedure setType(t: TIECSType);
+     function getBaseType:TIECSType;
      function getType:TIECSType;
      procedure setASDU(ASDU : integer);
      procedure addIOB();
@@ -177,7 +178,8 @@ var
   TypeAsNumber :boolean=false;
   iobx:integer=1001;
   index:integer;
-  P_SHORT : boolean =false;
+//  P_SHORT : boolean =false;
+  P_SHORT : boolean = True;
   Respone_Unknown : boolean  = true;
   IECType :array[TIECSType] of TIECType;
   sType : TIECSType;
@@ -199,12 +201,12 @@ const
   IECTK : array [TIECSType] of byte = ($00,
        	$01,$03,$09,$0b,$0d,$0f,   //M_SP_NA, M_DP_NA, M_ME_NA, M_ME_NB, M_ME_NC, M_IT_NA,
        	$1e,$1f,$0a,$0c,$0e,$10,   //M_SP_TB, M_DP_TB, M_ME_TB, M_ME_TD ,M_ME_TF, M_IT_TB,
-        $64,$65,  48,49, 50,      //C_IC_NA, C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
+        $64, $65,  48,49, 50,      //C_IC_NA, C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
         $2d, $2e, $67);          //C_SC_NA ,C_DC_NA,C_CS_NA
   IECBK : array [TIECSType] of byte = ($00,
        	$01,$03,$09,$0b,$0d,$0f,   //M_SP_NA, M_DP_NA, M_ME_NA, M_ME_NB, M_ME_NC, M_IT_NA,
        	$01,$03,$09,$0b,$0d,$0f,  //M_SP_TB, M_DP_TB, M_ME_TB, M_ME_TD ,M_ME_TF, M_IT_TB,
-        $64,$65,  48,49, 50,      //C_IC_NA, C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
+        $64, $65,  48,49, 50,      //C_IC_NA, C_CI_NA, C_SE_NA, C_SE_NB , C_SE_NC,
         $2d, $2e, $67);           //C_SC_NA ,C_DC_NA,C_CS_NA
   sepchar ='/';
 
@@ -635,6 +637,11 @@ procedure TIECTCItem.setType(t : TIECSType);
   sTYPE := t;
   end;
 
+function TIECTCItem.getBaseType:TIECSType;
+  begin
+    result := getSType(IECType[getType].BK);
+  end;
+
 function TIECTCItem.getType:TIECSType;
   begin
     result := getSType(Stream[0]);
@@ -646,12 +653,15 @@ procedure TIECTCItem.setCOT(cot : word);
     if (cot > 65535) then cot := 65535;
     if (cot < 1) then cot := 1;
     Stream[2] := byte(cot mod 256);
-    Stream[3] := byte(cot div 256);
+   if not P_Short then
+       Stream[3] := byte(cot div 256);
   end;
 
 Function TIECTCItem.getCOT: word;
   begin
-    result:= Stream[2]+Stream[3]*256;
+    result:= Stream[2];
+  if not P_short then
+     result:= result+ Stream[3]*256;
   end;
 
 procedure TIECTCItem.setASDU(ASDU : integer);
@@ -709,7 +719,8 @@ begin
 	      memcpy(@Stream[4],@Stream_s[3],Streamlength-4);
               result := arraycopyOf(Stream_s,StreamLength-1);
 	      end
-           else  result :=  ArraycopyOf(Stream,StreamLength);
+           else
+              result :=  ArraycopyOf(Stream,StreamLength);
 	   end;
         exit;
         end;
@@ -730,7 +741,7 @@ begin
         b := o.getStream();
 	if (P_SHORT) then begin
 //           arraycopy(b,0,Stream_s,indexIOB,length(b))
-           memcpy(@b[0],@Stream[indexIOB],length(b));
+           memcpy(@b[0],@Stream_s[indexIOB],length(b));
            end
 	else
             begin
@@ -1051,6 +1062,8 @@ procedure TIECTCOBJ.writeQu();
 var index:integer;  b:byte;
  begin
    index := 3;
+   if P_Short then
+      index:=2;
     case (asdu.getType()) of
     M_SP_NA,M_SP_TB: buf[index] := fQU or  buf[index];
     C_SC_NA:         buf[index] := fQU or  buf[index];
@@ -1120,6 +1133,7 @@ var
   i_value : array[0..1] of byte absolute ivalue;
  begin
    index:=3;
+   if P_Short then index:=2;
    case (fitem.getType) of
    M_SP_NA,M_SP_TB : begin buf[index]:= byte ( round(value) and $01); end;
    C_SC_NA :  begin
@@ -1205,7 +1219,7 @@ begin
         begin
         result_s :=  ArraycopyOf(buf, l);
 //	arraycopy(buf, 3, result_s, 2, l-3);
-        memcpy(@buf[3],@result_s[2],l-3);
+//        memcpy(@buf[3],@result_s[2],l-3);
 //	log.finer("s:"+l+"[ "+IECFunctions.byteArrayToHexString(result_s,0,result_s.length)+"]");
 	result := result_s;
         end

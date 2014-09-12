@@ -10,22 +10,22 @@ uses
   {$ELSE UNIX}
   windows,
   {$ENDIF}
-  Classes,  SysUtils,
+  Classes, SysUtils,
   synaser, TLoggerUnit, TLevelUnit;
 
 type
 
   TSerialFunctionEvent = procedure(Sender: TObject; funcNo:byte) of object;
   TRxBufEvent = procedure(Sender: TObject;const Buffer: array of byte; Count: Integer) of object;
-//  TMessageBuffer = procedure(Sender: TObject; v: double) of object;
-//  TRxBufEvent = procedure(Sender: TObject; buffer: pointer; Count: Integer) of object;
+// TMessageBuffer = procedure(Sender: TObject; v: double) of object;
+// TRxBufEvent = procedure(Sender: TObject; buffer: pointer; Count: Integer) of object;
 
 
   TIEC101Frame = (IEC101FrameError, IEC101FrameShort,IEC101FrameLong);
 
   TIEC101Serial = class;
 
-//  TIEC101Member = record
+// TIEC101Member = record
   TIEC101Member = class
      fAlive :boolean;
   protected
@@ -34,8 +34,8 @@ type
      IEC101Port : TIEC101Serial;
      INIT :boolean;
      fdata:Tlist; //messageBuffer
-     RXPRM,PRM:Boolean; // Direction 1= master to slave  0= slave to master
-     RXFCB,FCB:Boolean;  // master muss jede Nachricht toggeln;
+     RXPRM,PRM:Boolean; // Direction 1= master to slave 0= slave to master
+     RXFCB,FCB:Boolean; // master muss jede Nachricht toggeln;
      RXFCV,FCV:Boolean;
      RXf101:byte;
      f101:byte;
@@ -57,22 +57,22 @@ type
      Function HasData:boolean;
      procedure Adddata(buffer: array of byte);
      procedure setRequest(val:Byte);
-     property  Alive:Boolean read fAlive write setAlive;
-     property  Logger:Tlogger read Flog write Flog;
-     property  onConnect : TnotifyEvent read fonConnect write fonConnect;
-     property  onDisConnect : TnotifyEvent read fonDisConnect write fonDisConnect;
-     property  onDataRx:TRxBufEvent read fonDataRX write fonDataRX;
-     property  onDataTx:TRxBufEvent read fonDataTX write fonDataTX;
+     property Alive:Boolean read fAlive write setAlive;
+     property Logger:Tlogger read Flog write Flog;
+     property onConnect : TnotifyEvent read fonConnect write fonConnect;
+     property onDisConnect : TnotifyEvent read fonDisConnect write fonDisConnect;
+     property onDataRx:TRxBufEvent read fonDataRX write fonDataRX;
+     property onDataTx:TRxBufEvent read fonDataTX write fonDataTX;
   end;
 
   TIEC101Serial = class(TBlockSerial)
     protected
-//      loopcount :integer;
+// loopcount :integer;
       currentmember: TIEC101Member;
     private
        FLog: TLogger;
        ThreadID:TThreadID;
-       FT0:  Word;
+       FT0: Word;
        fms:word;
        Fport: String;
        parity: char;
@@ -81,8 +81,8 @@ type
        Blocklength:byte;
        buf:array[0..255] of byte;
        fonRX : TRxBufEvent;// TGetStrProc;
-       fonTX :  TRxBufEvent;
-       fonlog :  TGetStrProc;
+       fonTX : TRxBufEvent;
+       fonlog : TGetStrProc;
        fonStart : TnotifyEvent;
        fonStop : TnotifyEvent;
        procedure ConfigIECSerial;
@@ -91,8 +91,8 @@ type
        procedure DecodeRX;
        Function IsLinkNo:boolean;
        Procedure ReceiveFT12Frame;
-//       Function ReceiveFT12Frame:boolean;
-//       Function ReceiveFT12Frame(waittime:word):boolean;
+// Function ReceiveFT12Frame:boolean;
+// Function ReceiveFT12Frame(waittime:word):boolean;
        procedure decodeControlByte;
        procedure encodeControlByte;
        procedure doFunction; virtual Abstract;
@@ -102,36 +102,36 @@ type
        procedure getdata;
        procedure TXData(st:TMemorystream);
        procedure send(buffer: pointer; length: integer);
-//       procedure ReqLinkStatus;
+// procedure ReqLinkStatus;
     public
        Name:String;
        baud, bits: integer;
        stopbits: integer;
        rxcount :cardinal;
-       rxDatacount  :cardinal;
+       rxDatacount :cardinal;
        txcount :cardinal;
-       txDatacount  :cardinal;
+       txDatacount :cardinal;
        Terminated:boolean;
-//       pause:boolean;
+// pause:boolean;
       constructor Create;
       destructor destroy;
       class function GetErrorDesc(ErrorCode: integer): string;
       Function getConfig:TDCB;
       function getConfigStr:String;
       function setParity(p:char):boolean;
-//       procedure send(a:array of byte);
+// procedure send(a:array of byte);
       Function Start:Boolean;
       procedure Stop;
       procedure Execute; virtual Abstract;
-      property  Logger:Tlogger read Flog write Flog;
-      property  Port:String read Fport write Fport;
-      //      property  LinkAdr:word read Flinkadr write FLinkAdr;
-      property  onStart:TnotifyEvent read fonStart write fonStart;
-      property  onStop:TnotifyEvent read fonStop write fonStop;
-      property  onRx:TRxBufEvent read fonRX write fonRX;
-      property  onTx:TRxBufEvent read fonTX write fonTX;
-//      property  onLog:TGetStrProc read fonlog write fonlog;
-//      property  onFunctionChange:TSerialFunctionEvent read fonFunctionChange write fonFunctionChange;
+      property Logger:Tlogger read Flog write Flog;
+      property Port:String read Fport write Fport;
+      // property LinkAdr:word read Flinkadr write FLinkAdr;
+      property onStart:TnotifyEvent read fonStart write fonStart;
+      property onStop:TnotifyEvent read fonStop write fonStop;
+      property onRx:TRxBufEvent read fonRX write fonRX;
+      property onTx:TRxBufEvent read fonTX write fonTX;
+// property onLog:TGetStrProc read fonlog write fonlog;
+// property onFunctionChange:TSerialFunctionEvent read fonFunctionChange write fonFunctionChange;
   end;
 
   TIEC101Master = class(TIEC101Serial)
@@ -142,11 +142,11 @@ type
     fonConnect : TnotifyEvent;
     fonDisConnect : TnotifyEvent;
     fonDataRX : TRxBufEvent;// TGetStrProc;
-//    Function  GetNextMember:TIEC101Member;
-    Procedure  GetNextMember;
-    procedure  doPoll;
-    procedure  Request;
-    procedure  doFrame;
+// Function GetNextMember:TIEC101Member;
+    Procedure GetNextMember;
+    procedure doPoll;
+    procedure Request;
+    procedure doFrame;
     procedure ReqData(dclass:byte);
     procedure ReqLinkStatus;
     procedure SendReset;
@@ -158,13 +158,13 @@ type
       function GetMember(Index: Integer): TIEC101Member;
       function GetMember(aname:String): TIEC101Member;
       Function addMember(s:String;adr:word;alog:Tlogger):TIEC101Member;
-//      Function addMember(s:String;adr:word):TIEC101Member;
+// Function addMember(s:String;adr:word):TIEC101Member;
       procedure sendData(stream:TMemorystream; WaitConfirm:boolean);
       property Members:Tlist Read FMemberList write FMemberList;
       property Member[Index: Integer]: TIEC101Member read GetMember;
-      property  onConnect : TnotifyEvent read fonConnect write fonConnect;
-      property  onDisConnect : TnotifyEvent read fonDisConnect write fonDisConnect;
-      property  onDataRx:TRxBufEvent read fonDataRX write fonDataRX;
+      property onConnect : TnotifyEvent read fonConnect write fonConnect;
+      property onDisConnect : TnotifyEvent read fonDisConnect write fonDisConnect;
+      property onDataRx:TRxBufEvent read fonDataRX write fonDataRX;
   end;
 
  TIEC101Slave = class(TIEC101Serial)
@@ -178,7 +178,7 @@ type
      constructor Create;
      destructor destroy;
      procedure Execute; override;
-     property  Member:TIEC101Member read fmember write fmember;
+     property Member:TIEC101Member read fmember write fmember;
    end;
 
 function hextoStr(b:array of byte;count:integer):String;
@@ -209,7 +209,7 @@ begin
   iecport.Execute;
 end;
 
-{  TIEC101Member  }
+{ TIEC101Member }
 constructor TIEC101Member.Create(port: TIEC101Serial);
 begin
   IEC101Port := port;
@@ -242,9 +242,9 @@ begin
    begin
    fAlive:=val;
    if val then
-     if assigned(onConnect) then  onConnect(self);
+     if assigned(onConnect) then onConnect(self);
    if not val then
-     if assigned(onDisConnect) then  onDisConnect(self);
+     if assigned(onDisConnect) then onDisConnect(self);
    end;
 end;
 
@@ -262,7 +262,7 @@ end;
 
 function TIEC101Member.Bufferusage:double;
 begin
-  result :=  fdata.Count / MessageBufferSize;
+  result := fdata.Count / MessageBufferSize;
 end;
 
 procedure TIEC101Member.Adddata(buffer:array of byte);
@@ -291,7 +291,7 @@ begin
    end;
 end;
 
-{  TIEC101Serial }
+{ TIEC101Serial }
 
 constructor TIEC101Serial.Create;
 begin
@@ -299,7 +299,7 @@ begin
   currentMember := nil;
   ThreadID := 0;
   fport:='COM1';
-//  config(9600, 8, 'E', SB1, False, False);
+// config(9600, 8, 'E', SB1, False, False);
    baud :=9600;
    bits := 8;
    parity:= 'E';
@@ -310,9 +310,9 @@ class function TIEC101Serial.GetErrorDesc(ErrorCode: integer): string;
 begin
    Result:= '';
   case ErrorCode of
-    sOK:               Result := 'OK';
-    ErrFTFirst:   Result := 'HEADER ERROR FirstByte' ;{JKL}
-    ErrFTCRC:     Result := 'HEADER ERROR CRC';    {JKL}
+    sOK: Result := 'OK';
+    ErrFTFirst: Result := 'HEADER ERROR FirstByte' ;{JKL}
+    ErrFTCRC: Result := 'HEADER ERROR CRC'; {JKL}
   end;
   if Result = '' then
   begin
@@ -329,7 +329,7 @@ procedure TIEC101Serial.ConfigIECSerial;
 begin
   log(info,'CONFIG MASTER');
   config(baud, bits, parity, stopbits, False, False);
-  if LastError<>0 then begin  log(error,'LastError:'+GetErrorDesc(LastError));   end;
+  if LastError<>0 then begin log(error,'LastError:'+GetErrorDesc(LastError)); end;
 end;
 
 function parityToChar(p:byte):char;
@@ -379,7 +379,7 @@ else
   begin
     p:= Fport;
     ptxt :=Parity;
-    b:=  Baud;
+    b:= Baud;
     l:= Bits;
     stb:= StopBits;
     s:='[close]';
@@ -392,19 +392,19 @@ else
  end;
 
   result:=format('Device%s: %s %d %d%s%s',
- //   [s,p,DCB.BaudRate,DCB.ByteSize,txt,sb]);
+ // [s,p,DCB.BaudRate,DCB.ByteSize,txt,sb]);
     [s,p,b,l,ptxt,sb]);
 end;
 
 destructor TIEC101Serial.destroy;
 begin
-//  fserial.destroy;
-//  fmember.Destroy;
+// fserial.destroy;
+// fmember.Destroy;
   inherited;
 end;
 
 procedure TIEC101Serial.decodeControlByte;
-var  s:String; i:integer;  b:byte;
+var s:String; i:integer; b:byte;
 begin
 if currentMember<>nil then
     with currentMember do
@@ -430,7 +430,7 @@ end;
 
 //Function TIEC101Serial.encodeControlByte:byte;
 procedure TIEC101Serial.encodeControlByte;
-var  b:byte;
+var b:byte;
 begin
 if currentMember<>nil then
     with currentMember do
@@ -449,7 +449,7 @@ end;
 
 
 function TIEC101Serial.IsLinkNo:boolean;
-var  linkNo:word;
+var linkNo:word;
 begin
   if Frame = TIEC101Frame.IEC101FrameShort then
     linkNo:=buf[2]+buf[3]*256
@@ -466,13 +466,13 @@ Procedure TIEC101Serial.ReceiveFT12Frame;
 var le:TLoggingEvent;
     txt : String;
     TS : TTimeStamp;
-//    Function ReceivePart2:boolean; //
+// Function ReceivePart2:boolean; //
     Procedure ReceivePart2;
     var waittime:word;
     begin
-//      result:=false;
+// result:=false;
       waittime:=Ft0-fms;
-//  log(debug,format('Receive first Byte after: %d/%d  msec left:%d',[fms,fT0,waittime]));
+// log(debug,format('Receive first Byte after: %d/%d msec left:%d',[fms,fT0,waittime]));
       Frame := TIEC101Frame.IEC101FrameError;
       if (buf[0]=$68) then
          begin
@@ -482,44 +482,44 @@ var le:TLoggingEvent;
            Blocklength :=buf[1];
            Bytestowait := Blocklength+2;
            RecvBufferEx(@buf[4] ,Bytestowait, waittime);
-//           result:=True;
+// result:=True;
          end;
       if buf[0]=$10 then
          begin
            Frame := TIEC101Frame.IEC101FrameShort;
            RecvBufferEx(@buf[1] ,5, waittime);
            Blocklength :=0;
-//           result:=True;
+// result:=True;
          end;
       if Frame = TIEC101Frame.IEC101FrameError then
           fLastError := ErrFTFirst//'HEADER ERROR firstByte['+hextostr(buf,1);
       else
-        if CurrentMember=nil then   //log here is no Member assinged otherwise the member should log
+        if CurrentMember=nil then //log here is no Member assinged otherwise the member should log
            log(debug,'RX '+hextoStr(buf,6))
         else
            currentMember.log(debug,'RX '+hextoStr(buf, Blocklength+6));
     end;
 
 begin
-//  result:=true;
+// result:=true;
  FLastError :=ErrWrongParameter;
   TS := DateTimeToTimeStamp(Now);
-  Bytestowait:=1;       //wait only for 1 byte ( $10 or $68)
+  Bytestowait:=1; //wait only for 1 byte ( $10 or $68)
   RecvBufferEx(@buf[0] ,Bytestowait, FT0);
   Fms := DateTimeToTimeStamp (Now).Time -ts.Time;
-  if LastError <> sOK then  exit;
+  if LastError <> sOK then exit;
 
-//  if ReceivePart2 then
+// if ReceivePart2 then
  ReceivePart2;
  if LastError <> sOK then exit;
 
  if not isCRC then
     begin
-    FLastError := ErrFTCRC;  //'HEADER ERROR CRC ';
+    FLastError := ErrFTCRC; //'HEADER ERROR CRC ';
     exit;
     end;
   FLastError :=sOK;
- //  result:=false;
+ // result:=false;
 end;
 
 procedure TIEC101Serial.send(buffer: pointer; length: integer);
@@ -527,7 +527,7 @@ procedure TIEC101Serial.send(buffer: pointer; length: integer);
  if assigned(fontx) then
     fontx(self,buf,length);
  inc(TXcount);
- if CurrentMember=nil then   //log here is no Member assinged otherwise the member should log
+ if CurrentMember=nil then //log here is no Member assinged otherwise the member should log
     log(debug,'TX: '+HEXTOSTR(buf,length))
  else
     currentMember.log(debug,'TX: '+HEXTOSTR(buf,length));
@@ -543,9 +543,9 @@ begin
     PRM:=false;
     FCB:=false;
     FCV:=false;
-    buf[0]:=$10;  encodecontrolByte;
-    buf[2]:=linkadr mod 256;  buf[3]:=linkadr div 256;  Blocklength:=3;
-    buf[4]:=CalcCRC;  buf[5]:=$16;
+    buf[0]:=$10; encodecontrolByte;
+    buf[2]:=linkadr mod 256; buf[3]:=linkadr div 256; Blocklength:=3;
+    buf[4]:=CalcCRC; buf[5]:=$16;
     Send(@buf,6);
    end;
 end;
@@ -554,10 +554,10 @@ function TIEC101Serial.IsCRC:boolean;
 var c:byte;index:integer;
 begin
 result:= False;
-if Frame = TIEC101Frame.IEC101FrameLong then  index := 4+Blocklength
-else   index :=4;
+if Frame = TIEC101Frame.IEC101FrameLong then index := 4+Blocklength
+else index :=4;
 c:=buf[index];
-if c=CalcCRC then   result:=true;
+if c=CalcCRC then result:=true;
 end;
 
 function TIEC101Serial.CalcCRC:byte;//(count:byte):byte;
@@ -585,12 +585,12 @@ begin
 
   log(info,'DATA: '+hextostr(data,Blocklength-3));
   inc(rxDatacount);
-//  if assigned(fonDataRx) then
-//    fonDataRx(self,data,Blocklength-3);
+// if assigned(fonDataRx) then
+// fonDataRx(self,data,Blocklength-3);
 end;
 
 procedure TIEC101Serial.getdata;
-var  data:array[0..246]of byte; i:integer;
+var data:array[0..246]of byte; i:integer;
 begin
   for i:=0 to Blocklength-3 do
      data[i]:=buf[7+i];
@@ -598,8 +598,8 @@ begin
 
   log(info,'DATA: '+hextostr(data,Blocklength-3));
   inc(rxDatacount);
-//  if assigned(fonDataRx) then
-//    fonDataRx(self,data,Blocklength-3);
+// if assigned(fonDataRx) then
+// fonDataRx(self,data,Blocklength-3);
 end;
 
 procedure TIEC101Serial.log(ALevel : TLevel; const AMsg : String);
@@ -616,7 +616,7 @@ begin
  else
     log(debug,'RX '+hextoStr(buf,Blocklength+3));
 
- //  trigger an RX indicator
+ // trigger an RX indicator
   if assigned(fonRx) then
       fonRx(self,buf,Blocklength+3);
 
@@ -629,7 +629,7 @@ begin
        decodeControlByte;//(buf[1]);
        log(Debug,'RX_len:'+inttostr(Blocklength)+' CRC=$'+inttoHex(crc,2)+
               ' func:'+inttoStr(f101));
-//  if (oldfunc101 <> f101) and assigned(fonFunctionChange) then fonfunctionChange(self, f101);
+// if (oldfunc101 <> f101) and assigned(fonFunctionChange) then fonfunctionChange(self, f101);
         doFunction;
       end
   else
@@ -637,14 +637,14 @@ begin
 end;
 
 Function TIEC101Serial.Start:Boolean;
-var  tld , tlba:integer;
+var tld , tlba:integer;
 const
   tr=50; LBAMax=32;
 begin
 Connect(fport);
 if LastError<>0 then
      begin
-//      log(error,'LastError:'+inttoStr(LastError)+' '+GetErrorDesc(LastError));
+// log(error,'LastError:'+inttoStr(LastError)+' '+GetErrorDesc(LastError));
      log(error,'LastError: '+GetErrorDesc(LastError));
      result:=False;
      end
@@ -682,18 +682,18 @@ end;
 procedure TIEC101Serial.Execute;
 var index:byte;
 begin
- log(info,'Port is Execute')
+log(info,'Port is Execute')
 end;
 *}
 
-{  TIEC101Slave }
+{ TIEC101Slave }
 
 constructor TIEC101Slave.Create;
 begin
  inherited;
   fmember := TIEC101Member.Create(self);
   fmember.linkadr := 1;
-  fmember.PRM := False;  // Direction 1= master to slave  0= slave to master
+  fmember.PRM := False; // Direction 1= master to slave 0= slave to master
 end;
 
 destructor TIEC101Slave.destroy;
@@ -704,11 +704,11 @@ end;
 procedure TIEC101Slave.doFunction;
 
 begin
-  if fmember.f101 = 9 then   //ping
+  if fmember.f101 = 9 then //ping
     PingRespond(false);
-  if fmember.f101 = 0 then   //init
+  if fmember.f101 = 0 then //init
      Confirm(true);
-  if fmember.f101 = 11 then   //dataRequest
+  if fmember.f101 = 11 then //dataRequest
       DataRespond;
   if fmember.f101 = 3 then //data received
     begin
@@ -717,7 +717,7 @@ begin
     end;
 end;
 
-procedure  TIEC101Slave.DataRespond8(data:array of Byte);
+procedure TIEC101Slave.DataRespond8(data:array of Byte);
 var index,i:integer;
 begin
  fmember.f101:=8;
@@ -730,7 +730,7 @@ begin
  buf[1]:=Blocklength;
  buf[2]:=Blocklength;
  buf[3]:=$68;
- Frame := TIEC101Frame.IEC101FrameLong;  encodecontrolByte;
+ Frame := TIEC101Frame.IEC101FrameLong; encodecontrolByte;
  encodecontrolByte;
  buf[5]:=fmember.linkadr mod 256; buf[6]:=fmember.linkadr div 256;
  index:=7;
@@ -770,9 +770,9 @@ begin
     fmember.PRM:=false;
     fmember.FCB:=false;
     fmember.FCV:=false;
-    buf[0]:=$10;  encodecontrolByte;
-    buf[2]:=fmember.linkadr mod 256;    buf[3]:=fmember.linkadr div 256;  Blocklength:=3;
-    buf[4]:=CalcCRC;  buf[5]:=$16;
+    buf[0]:=$10; encodecontrolByte;
+    buf[2]:=fmember.linkadr mod 256; buf[3]:=fmember.linkadr div 256; Blocklength:=3;
+    buf[4]:=CalcCRC; buf[5]:=$16;
     Send(@buf,6);
     end;
 end;
@@ -786,9 +786,9 @@ begin
   fmember.FCB:=false;
   fmember.FCV:=false;
   buf[0]:=$10;
-  Frame := TIEC101Frame.IEC101FrameShort;  encodecontrolByte;
-  buf[2]:= fmember.linkadr mod 256;  buf[3]:= fmember.linkadr div 256;  blocklength:=3;
-  buf[4]:=CalcCRC;  buf[5]:=$16;
+  Frame := TIEC101Frame.IEC101FrameShort; encodecontrolByte;
+  buf[2]:= fmember.linkadr mod 256; buf[3]:= fmember.linkadr div 256; blocklength:=3;
+  buf[4]:=CalcCRC; buf[5]:=$16;
   Send(@buf,6);
 end;
 
@@ -804,7 +804,7 @@ begin
         RecvBuffer(@buf[0],Bytestowait);
         inc(index,Bytestowait);
         ReceiveFT12Frame;
-//        if ReceiveFT12Frame then
+// if ReceiveFT12Frame then
            begin
             RecvBufferEx(@buf[index] ,Bytestowait, 500);
             DecodeRX;
@@ -814,7 +814,7 @@ begin
  log(info,'Port is closed')
 end;
 
-{  TIEC101Master }
+{ TIEC101Master }
 
 constructor TIEC101Master.Create;
 begin
@@ -833,11 +833,11 @@ end;
 procedure TIEC101Master.Stop;
 var i:integer;
 begin
- for i:=0 to FMemberList.Count-1 do
-    TIEC101Member(FMemberList[i]).reset;
- inherited;
+for i:=0 to FMemberList.Count-1 do
+TIEC101Member(FMemberList[i]).reset;
+inherited;
 end;
- }
+}
 procedure TIEC101Master.SendReset;
 //procedure TIEC101Master.SendReset(LinkNr:word);
 begin
@@ -849,9 +849,9 @@ begin
      FCV:=false;
      buf[0]:=$10;
      encodecontrolByte;
-     buf[2]:= linkadr mod 256;  buf[3]:=linkadr div 256;
+     buf[2]:= linkadr mod 256; buf[3]:=linkadr div 256;
      Blocklength:=3;
-     buf[4]:=CalcCRC;  buf[5]:=$16;
+     buf[4]:=CalcCRC; buf[5]:=$16;
      send(@buf,6);
    end;
 end;
@@ -859,9 +859,9 @@ end;
 procedure TIEC101Master.sendData(stream:TMemorystream; WaitConfirm:boolean);
 var index,i:integer;
 begin
- //      st:=TMemorystream (member.fdata[0]);
+ // st:=TMemorystream (member.fdata[0]);
  // IF DEBUG
-//  currentMember := Member[0];
+// currentMember := Member[0];
   //DEBUG
  if currentMember = nil then exit;
 
@@ -885,10 +885,10 @@ begin
  stream.Position:=0;
  stream.ReadBuffer(buf[index],stream.Size);
 { for i:=0 to high(data) do
-   begin
-     buf[index]:=data[0+i];
-     inc(index);
-   end; }
+begin
+buf[index]:=data[0+i];
+inc(index);
+end; }
  inc(index,stream.Size);
  buf[index]:=CalcCRC;
 // fontx('index= '+inttoStr(index)+' CRC:'+inttohex(buf[index],2));
@@ -913,7 +913,7 @@ if currentMember<>nil then
 end;
 
 procedure TIEC101Master.ReqLinkStatus;
-//  procedure TIEC101Master.ReqLinkStatus(LinkNr:word);
+// procedure TIEC101Master.ReqLinkStatus(LinkNr:word);
 begin
  Frame := TIEC101Frame.IEC101FrameShort;
   with currentmember do
@@ -923,29 +923,29 @@ begin
     FCV:=false;
     buf[0]:=$10;
     encodecontrolByte;
-    buf[2]:=linkadr mod 256;  buf[3]:= linkadr div 256;
+    buf[2]:=linkadr mod 256; buf[3]:= linkadr div 256;
     Blocklength:=3;
-    buf[4]:=CalcCRC;  buf[5]:=$16;
+    buf[4]:=CalcCRC; buf[5]:=$16;
     send(@buf,6);
    end;
 end;
 
 
 procedure TIEC101Master.ReqData(dclass:byte);
-//  procedure TIEC101Master.ReqData(LinkNr:word;dclass:byte);
+// procedure TIEC101Master.ReqData(LinkNr:word;dclass:byte);
 begin
 Frame := TIEC101Frame.IEC101FrameShort;
 with currentmember do
    begin
      f101:=dclass;
      FCB := not FCB;
-//  log(info,'FCB:'+booltostr(FCB));
+// log(info,'FCB:'+booltostr(FCB));
      FCV :=true;
      buf[0]:=$10;
      encodecontrolByte;
-     buf[2]:= linkadr mod 256;  buf[3]:= linkadr div 256;
+     buf[2]:= linkadr mod 256; buf[3]:= linkadr div 256;
      Blocklength:=3;
-     buf[4]:=CalcCRC;  buf[5]:=$16;
+     buf[4]:=CalcCRC; buf[5]:=$16;
      send(@buf,6);
    end;
 end;
@@ -958,7 +958,7 @@ var
 begin
  m := TIEC101Member.Create(self);
  m.name := s;
- m.PRM:=True;   // Direction 1= master
+ m.PRM:=True; // Direction 1= master
  m.FCB:=False;
  m.FCV:=False;
  m.linkadr:=adr;
@@ -995,8 +995,8 @@ begin
      end;
 end;
 
-//Function  TIEC101Master.GetNextMember:TIEC101Member;
-Procedure  TIEC101Master.GetNextMember;
+//Function TIEC101Master.GetNextMember:TIEC101Member;
+Procedure TIEC101Master.GetNextMember;
 var
   index:integer;
 begin
@@ -1005,7 +1005,7 @@ begin
      if (loopcount mod 10) =0 then
              log(Warn,'No Mebmer Assinged');
      currentMember:=nil;
-//     result:=nil;
+// result:=nil;
      exit;
      end;
   if currentMember= nil then
@@ -1014,12 +1014,12 @@ begin
   else
     begin
     index :=FMemberList.IndexOf(currentMember)+1;
-    if index= FMemberList.Count then  index:=0;//last member reached
+    if index= FMemberList.Count then index:=0;//last member reached
     currentMember:= TIEC101Member(FMemberList[index]);
     end;
 end;
 
-procedure  TIEC101Master.doPoll;
+procedure TIEC101Master.doPoll;
 begin
  GetNextMember;
  if currentMember<>nil then
@@ -1038,7 +1038,7 @@ begin
     end;
 end;
 
-procedure  TIEC101Master.doFrame;
+procedure TIEC101Master.doFrame;
 var
  i:integer;
  data : array of byte;
@@ -1073,7 +1073,7 @@ begin
 // fmember.function101:=255;
  while not terminated do
      begin
-//       log(info,'Master Poll');
+// log(info,'Master Poll');
        doPoll;
        if currentMember <>nil then
           begin
@@ -1098,4 +1098,3 @@ begin
 end;
 
 end.
-

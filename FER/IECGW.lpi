@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -28,7 +28,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;../lib/Tree;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src;CLI"/>
+            <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;../lib/Tree;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src/;CLI"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -60,7 +60,7 @@
         <LaunchingApplication PathPlusParams="/usr/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <Units Count="22">
+    <Units Count="26">
       <Unit0>
         <Filename Value="IECGW.pas"/>
         <IsPartOfProject Value="True"/>
@@ -152,9 +152,9 @@
         <UnitName Value="CLITimer"/>
       </Unit17>
       <Unit18>
-        <Filename Value="../lib/IEC/iectree.pas"/>
+        <Filename Value="../lib/IEC/iectree01.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="IECTree"/>
+        <UnitName Value="iectree01"/>
       </Unit18>
       <Unit19>
         <Filename Value="CLI/cliitems.pas"/>
@@ -171,6 +171,26 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="GWNetConnection"/>
       </Unit21>
+      <Unit22>
+        <Filename Value="../lib/IEC/ieclist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="IECList"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="CLI/cmd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CMD"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="CLI/cmd2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cmd2"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="gwglobal.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GWGlobal"/>
+      </Unit25>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -180,7 +200,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;../lib/Tree;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src;CLI"/>
+      <OtherUnitFiles Value="../lib/IEC;../lib/log;../lib/sockets;../lib/Tree;D:/lazarus64/fpc/2.6.2/source/packages/fcl-json/src/;CLI"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

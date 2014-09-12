@@ -17,8 +17,9 @@ type
 
   { TIEC104Client }
 //   TIEC104Client = class(TObject)
-  TIEC104Client = class(TComponent)
-//  TIEC104Client = class
+//  TIEC104Client = class(TComponent)
+  TIEC104Client = class
+           Name : String;
           private
             Fth:TThreadID;
 //            Fcli:TcliExecute;
@@ -42,7 +43,9 @@ type
             procedure connect;
             function doRecieve: integer;
           public
-            constructor Create(AOwner: Tcomponent); override;
+//            constructor Create(AOwner: Tcomponent); override;
+//            constructor Create;
+            constructor Create(aName:String);
             destructor destroy; override;
 //            procedure CLIexecute(s:string;result:TCLIResult);
             procedure Start;
@@ -66,28 +69,38 @@ implementation
 
 function run(p: Pointer): ptrint;
 var loop:word;
+    idleTime:word;
     client: TIEC104Client;
 begin
   client := TIEC104Client(p);
+//  idletime:=client.TimerSet.T0;
   while (Client.Activ) do
     begin
-    if loop mod 10=0 then client.connect;
+    if loop mod 10=0 then
+       begin
+       client.connect; //stay in connect till disconnect
+       idletime:=client.TimerSet.T0
+       end;
     if Client.Activ then
        begin
-       client.log(debug,'THREAD_next Try msec:'+inttoStr(client.TimerSet.T0));
+       client.log(debug,'['+client.Name+'] next Try msec:'+inttoStr(IdleTime));
+       dec(idleTime,client.TimerSet.T0 div 10);
        sleep(client.TimerSet.T0 div 10 );
        end;
     inc(loop);
     end;
-  client.log(debug,'THREAD END');
+  client.log(debug,'['+client.Name+'] THREAD END');
 end;
 
     { TIEC104Client }
 
-constructor TIEC104Client.Create(AOwner: Tcomponent);
+//constructor TIEC104Client.Create(AOwner: Tcomponent);
 //constructor TIEC104Client.Create;
+constructor TIEC104Client.Create(aname:string);
     begin
-    inherited create(Aowner);
+//    inherited create(Aowner);
+    inherited create;
+    name := aname;
     FtimerSet:=IEC104Socket.DefaultTimerset;
     Port:=2404;
     host:= '127.0.0.1';
@@ -96,12 +109,12 @@ Fcli:=TClientCLI.Create(self,
       ['start','stop','close','host','port','send',
         'startDt','stopdt','list','timer']);
     Fcli.name:='Client';*}
-
   Fiecsock := TIEC104Socket.Create;
+  Fiecsock.Name:=Name;
   Fiecsock.SocketType:=TIECClient;
   Fiecsock.Logger:=Flog;
   Fiecsock.TimerSet:=Ftimerset;
-    end;
+  end;
 
 destructor TIEC104Client.Destroy;
     begin
@@ -154,7 +167,7 @@ function TIEC104Client.doRecieve: integer;
 var
    buffer:   array[0..2000]of byte;
 begin
-  log(info,'Connected to server OK.');
+  log(info,'['+Name+'] Connected to server OK.');
   Fiecsock.Socket := Fsocket;
   Fiecsock.start;
   repeat
@@ -177,12 +190,12 @@ procedure TIEC104Client.connect;
 var
   sockresult:integer;
 begin
-    log(info,'Try connect to Server '+host+':'+IntToStr(Port));
+    log(info,'['+Name+'] Try connect to Server '+host+':'+IntToStr(Port));
     Fsocket := TTCPBlockSocket.Create;
     Fsocket.Connect(host,IntToStr(Port));
 // Was there an error?
     if Fsocket.LastError <> 0 then
-      log(info,'Could not connect to server.')
+      log(warn,'['+Name+'] Could not connect to server.')
     else
       begin
       ConnectEvent;

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils,
   TLevelUnit,tree,
   fpjson ,
-  CLI, IECStream, IECTree, session;
+  CLI, IECStream, IECList, session;
 
 
 procedure execJS(asession:Tsession;jo : TJSONObject);
@@ -33,10 +33,10 @@ begin
  for  i:=0 to high(n.Fchildren) do
      begin
      child:=n.Fchildren[i];
-     r:=n.Fchildren[i].name+' ';
+     r:=n.Fchildren[i].text+' ';
      for  x:=0 to high(child.Fchildren) do
          begin
-         s:=child.Fchildren[x].name;
+         s:=child.Fchildren[x].text;
          if length(child.Fchildren[x].Fchildren)>0 then s:=s+'+';
          r:=r+s+' ';
          end;
@@ -74,7 +74,7 @@ procedure add(asession:Tsession;ja:TJSONArray);
 //  procedure add(ja:TJSONArray);
 var
   s,r:String;
-  i,t:integer;
+  i,t:integer; it:TIECItem;
   jo:TJSONObject;
 begin
 //  writeResult('ADD');
@@ -84,87 +84,73 @@ begin
     r:='[ERROR]';
     jo:=ja.Objects[i];
     s:=jo.Strings['path'];
-    if IIecTree.add(s) then r:='[OK]';
+    it:=IIecList.addItem(s);
+    if it<>nil then r:='[OK]';
+//    if IIecTree.add(s) then r:='[OK]';
     asession.writeresult('item.add '+s+' '+r);
     end;
 end;
 
-function listnode2(n:Tnode):boolean;
+{function listnode2(n:Tnode):boolean;
 begin
  result:=true;
  list(IIecTree.toJson(n));
-end;
+end;}
 
-function listNode(asession:Tsession;n:Tnode):boolean;
+function list2(asession:Tsession;uCLI:TCLI):boolean;
 var
-  i:integer;
-  t,s,txt:String;
+  index:integer;
   item:TIECItem;
-
 begin
-  inc(tablevel);
-//  s:=inttostr(tablevel);
-  t:='';
-  for i:=0 to tablevel do
-      t:=t+'  ';
-  if  length(n.Fchildren)=0 then
+ for index:=0 to IIecList.Count-1 do
      begin
-     if n.Obj<>nil then
-             begin
-             item:=TIECItem(n.Obj);
-//             txt:='  Value='+floattoStr(item.Value)+'  Qu='+QuSettoStr(item.Qu)+'  Time='+item.getTimeStr;
-             txt:=item.toString;
-             end;
-     asession.writeResult('item '+n.name+txt);
+     item:=TIECItem(IIecList[index]);
+//      asession.writeResult('check match '+item.PathtoStr(false)+' name:'+item.Name);
+     if IIECList.matchItem(index,ucli.Params[1]) then
+       asession.writeResult('item '+item.tostring);
+//       asession.writeResult('item '+item.PathtoStr(false)+'  [match]');
      end;
-  if  length(n.Fchildren)>0 then
-      begin
-      for i:=0 to high(n.Fchildren) do
-         begin
-         txt:='';
-         if n.Fchildren[i].Obj<>nil then
-             begin
-              item:=TIECItem(n.Fchildren[i].Obj);
-//              txt:='  Val='+floattoStr(item.Value)+'  Qu='+QusetTostr(item.Qu)+'  Time='+item.getTimeStr;
-              txt:=item.toString;
-             end;
-         s:=t+'item '+n.Fchildren[i].name+'  '+txt;
-         asession.writeResult(s);
-         if  length(n.Fchildren[i].Fchildren)>0 then
-             listNode(asession,n.Fchildren[i]);
-         end;
-     end;
-  dec(tablevel);
 end;
 
 function list(asession:Tsession;uCLI:TCLI):boolean;
-var
-  n:Tnode;
-  s:String='';
+var  i:integer;  item:TIECItem;
 begin
-  if (length(ucli.Params)>1) then s:= ucli.Params[1];
-  n:=IIECTree.getBranchNode(s);
-  if n<>nil then
-    begin
-     listNode(asession,n);
-    end
-  else  asession.writeResult('item.list  [EXIT]');
+  if (length(ucli.Params)>1) then
+     begin
+     list2(asession,ucli);
+     end
+  else
+  for i:=0 to IIecList.count-1 do
+      begin
+      item := TIECItem(IIecList[i]);
+      asession.writeResult('item '+item.tostring);
+      end;
+  asession.writeResult('item.list  [EXIT]')
 end;
 
 function set2(asession:Tsession;item:TIECItem;s:string):boolean;
 var
-  i:integer;  key,value:string;
+  i:integer; done:boolean; key,value:string;
 begin
   try
+    done:=false;
     key:=copy(s,1,pos('=',s)-1);value:=copy(s,pos('=',s)+1,length(s));
-    IIecTree.log(debug,'set_'+item.name+'  '+key+':'+value);
+//    IIecTree.log(debug,'set_'+item.name+'  '+key+':'+value);
+    IIeclist.log(debug,'set_'+item.name+'  '+key+':'+value);
 //    IIecTree.log(info,'set_'+IECType[item.getType].name+' Key:'+key+'  value:'+value);
-    if key='val' then item.Value:=(strtofloat(value));
-    if key='inc' then item.Value:=item.Value+(strtofloat(value));
-    if key='qu' then item.Qu:=ByteToQUSet(item,strtoint(value));
-    asession.writeResult('item.set '+key+'='+value+' [OK]');
+//    if key='name' then begin item.name:=value; done:=true; end;
+    if key='name' then begin
+      if IIecList.setItemname(item,value) then done:=true;
+      end;
+    if key='cot' then begin item.setCOT(strtoint(value),true); done:=true; end;
+//    if key='cot' then begin item.COT:=(strtoint(value)); done:=true; end;
+    if key='val' then begin item.setValue(strtofloat(value),true);done:=true; end;
+    if key='inc' then begin item.setValue(item.Value+(strtofloat(value)),true);done:=true; end;
+    if key='qu' then begin item.setQu(ByteToQUSet(item,strtoint(value)),true);done:=true; end;
+    if done then asession.writeResult('item.set '+key+'='+value+' [OK]')
+    else asession.writeResult('item.set '+key+'='+value+' [ERROR]')
  except
-   asession.writeResult('item.set  [ERROR]');
+   asession.writeResult('item.set '+key+'='+value+' [ERROR]');
  end;
 end;
 
@@ -172,35 +158,66 @@ function set1(asession:Tsession;uCLI:TCLI):boolean;
 var
   i:integer;  n:Tnode;  s:String='';  item:TIECItem;
 begin
-n:=nil;
 if (length(ucli.Params)>2) then
-    begin
-    s:= ucli.Params[1];
-    n:=IIECTree.getNode(s);
-    end;
-if n<>nil then
-    begin
-    item:=TIECItem(n.Obj);
-    for i:=2 to high(ucli.Params) do
-       set2(asession,item,ucli.Params[i]);
-    exit;
-    end;
+  begin
+  item:=IIecList.getItem(ucli.Params[1]);
+  if item<>nil then
+     begin
+//     asession.writeResult('item.??.set  [Found]');
+     for i:=2 to high(ucli.Params) do
+        set2(asession,item,ucli.Params[i]);
+     exit;
+     end
+  else
+    asession.writeResult('item.??.set  [ERROR]');
+  exit;
+  end;
+asession.writeResult('item.set  [ERROR]');
+end;
 
+function set11(asession:Tsession;uCLI:TCLI):boolean;
+var
+  index,i:integer;   s:String='';  item:TIECItem;
+begin
+result:=false;
+if (length(ucli.Params)>2) then
+  begin
+  for index:=0 to IIecList.Count-1 do
+      begin
+      item:=TIECItem(IIecList[index]);
+//      asession.writeResult('check match '+item.PathtoStr(false)+' name:'+item.Name);
+      if IIECList.matchItem(index,ucli.Params[1]) then
+        begin
+        result:=true;
+        asession.writeResult('item '+item.PathtoStr(false)+'  [match]');
+        for i:=2 to high(ucli.Params) do
+           set2(asession,item,ucli.Params[i]);
+        end;
+      end;
+  if result then exit;
+  end;
+//else
 asession.writeResult('item.set  [ERROR]');
 end;
 
 function add(asession:Tsession;ucli:TCli):Boolean;
-var
- i:integer ;
- r:String;
-
+var  i:integer ; r,k,v:String;
+    it: TIECItem;
 begin
   r:='[ERROR]';
-  // if no parameter result ERROR
   if length(ucli.Params)=1 then asession.writeResult('item.add: '+r);
   for i:=1 to high(ucli.params) do
       begin
-      if IIecTree.add(ucli.params[i])then r:='[OK]';
+      k:=getKey(ucli.params[i]);
+      v:=getVal(ucli.params[i]);
+//      if IIecList.addItem(ucli.params[i])then r:='[OK]';
+      it:= IIecList.addItem(v);
+      if it<>nil then
+        begin
+        r:='[OK]';
+//        if k<>v then it.Name:=v;  //allowes double names
+        if k<>'' then IIecList.setItemname(it,k); //allowes only unique Names
+        end;
       asession.writeResult('item.add:'+ucli.params[i]+' '+r);
       end;
   end;
@@ -208,12 +225,13 @@ begin
 function level(asession:Tsession;uCLI:TCLI):Boolean;
 begin
   if (length(ucli.Params)>1) then
-     if cli.setlevel(IIecTree.Logger,ucli.Params[1])then
+    if cli.setlevel(IIecList.Logger,ucli.Params[1])then
+//      if cli.setlevel(IIecTree.Logger,ucli.Params[1])then
       begin
-      asession.writeResult('[OK]');
+      asession.writeResult('item.log:'+ucli.Params[1]+' [OK]');
       exit;
       end;
-asession.writeResult('[ERROR]');
+asession.writeResult('item.log: '+IIecList.Logger.GetLevel().ToString()+' [EXIT]');
 end;
 
 procedure help(asession:Tsession);
@@ -264,7 +282,8 @@ begin
     begin  add(asession,ucli);  exit; end;
 
   if (cmd='set')then
-    begin  set1(asession,ucli);  exit; end;
+  //  begin  set1(asession,ucli);  exit; end;
+    begin  set11(asession,ucli);  exit; end;
 
   if (cmd='x')then
     begin  asession.onexec:=@CLI.execcli;  asession.path:=''; exit;  end;

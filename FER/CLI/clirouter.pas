@@ -6,106 +6,27 @@ interface
 
 uses
   Classes, SysUtils,
-  TLevelUnit,tree,
+  session, TLevelUnit,tree,
   CLI, IECRouter;
 
-function exec(R:TIECRouter;c:TCLI):TcliReturn;
-
+procedure ExecCLI(asession:Tsession;txt:String);
 
 implementation
 
-var
-  router:TIECRouter;
-  cmd:TCLI;
-//  res:TCLIReturn;
+var slevel:String='|-';
 
 const
-  action : Array [0..3] of String = ('list', 'add','del','move');
-  NO_PARAM='missing Parameter';
+  action : Array [0..5] of String = ('root','add', 'list','set','log', 'x');
+  Hint : Array [0..5] of String = (
+     'add an chanel as root for ASDUs e.g.: route.root client NAME',
+     'add an ASDU below an chanel or other ASDU e.g.: route.add client.FER ASDU',
+     'list of route tree.',
+     'set route Parameters e.g. rote.set 55 name=Trasfomer_1',
+     'show / set log level',
+     'Exit route menu.');
 
-function listnode(n:Tnode):TCLIReturn;
-var
-  i,x:integer;
-  r,s:String;
-  child:TNode;
-begin
- result.succsess:=true;
- for  i:=0 to high(n.Fchildren) do
-     begin
-     child:=n.Fchildren[i];
-     setlength(result.result,length(result.result)+1);
-     r:=n.Fchildren[i].Fdata+' ';
-     for  x:=0 to high(child.Fchildren) do
-         begin
-         s:=child.Fchildren[x].Fdata;
-         if length(child.Fchildren[x].Fchildren)>0 then s:=s+'+';
-         r:=r+s+' ';
-         end;
-     Result.result[high(Result.result)]:=r+' ';
-     end;
- end;
 
-function list():TCLIReturn;
-var
-  l:TstringList;
-  n:Tnode;
-begin
- result.succsess:=false;
- result.msg:= 'Route list entrys:';
-// l:=router.root.print;
- if length(cmd.child)>0 then
-      begin
-      n:= router.root.get(cmd.child[high(cmd.child)]);
-      if n<>nil then begin result:=listnode(n); exit; end
-      else Result.msg:='head not found'; exit;
-      end;
- result:=listnode(router.root);
-end;
-
-function addchild():TCLIReturn;
-var
- x,i,c:integer;
- n:Tnode;
- a:array of integer;
-begin
-   result.succsess:=false;
-   for x:=0 to high(cmd.Params) do
-       begin
-       val(cmd.Params[x],i,c);
-       if c<>0 then   // Param is NO number
-          begin Result.msg:='param is no number'; exit; end
-       else
-         begin
-         setlength(a,length(a)+1);
-         a[x]:=i;
-         end;
-       end;
-   if not router.addRoute(cmd.child[high(cmd.child)],a) then
-      begin Result.msg:='head not found OR child already exist'; exit; end;
-   result.succsess:=true;
-   Result.msg:='add child';
-  end;
-
-function add():TCLIReturn;
-  begin
-   result.succsess:=false;
-   if length(cmd.Params)>0 then
-     begin
-     if length(cmd.child)>0 then
-         begin result:=addchild(); exit; end;
-
-     if router.addRoot(cmd.Params[0]) then
-        begin
-        Result.msg:= 'add Root '+cmd.Params[0];
-        result.succsess:=true;
-        end
-     else
-        Result.msg:='alrady exist';
-     end
-   else
-      Result.msg:= NO_PARAM;
-  end;
-
+{
 function del():TCLIReturn;
   begin
    result.succsess:=false;
@@ -134,44 +55,166 @@ function move():TCLIReturn;
      Result.msg:= NO_PARAM;
   end;
 
-function help():TCLIReturn;
+}
+
+function help(asession:Tsession):boolean;
 var
   i:integer;
 begin
- result.msg:= 'possible commands are:';
- setlength(result.result,length(action));
- for  i:=0 to high(action) do
-     Result.result[i]:=action[i];
+  asession.writeResult('route commands');
+  for i:=0 to high(action) do
+      asession.writeResult('   '+action[i]+#9+'- '+hint[i]);
+// irouter.Root.print;
 end;
 
-function exec(R:TIECRouter;c:TCLI):TcliReturn;
-// ('list', 'add');
+function log(asession:Tsession;uCLI:TCLI):Boolean;
 begin
- router:=r;
- cmd:=c;
-// router.log(info,'exec');
- if cmd.action='?' then
+  if (length(ucli.Params)>1) then
+    if cli.setlevel(IRouter.Logger,ucli.Params[1])then
+      begin
+      asession.writeResult('route.log:'+ucli.Params[1]+' [OK]');
+      exit;
+      end
+  else
     begin
-    result:=help; exit;
+    asession.writeResult('route.log:'+ucli.Params[1]+' [ERROR]');
+    exit;
     end;
- if cmd.action=action[0] then
+
+asession.writeResult('route.log: '+IIecList.Logger.GetLevel().ToString()+' [EXIT]');
+end;
+
+function addroot(asession:Tsession;uCLI:TCLI):boolean;
+  begin
+  result:=false;
+  if (length(ucli.Params)>2) and (irouter.addRoot(ucli.Params[1],ucli.Params[2])) then
+       begin
+       asession.writeResult('route.root  [OK]');
+       exit;
+       end ;
+  asession.writeResult('route.root  [ERROR]');
+ end;
+
+function set2(asession:Tsession;rnode:TRouteNode;param:string):boolean;
+var
+  i:integer; done:boolean; key,value:string;
+begin
+  try
+    done:=false;
+    key:=copy(param,1,pos('=',param)-1);value:=copy(param,pos('=',param)+1,length(param));
+    IRouter.log(debug,'set_'+RNode.text+'  '+key+':'+value);
+    if key='name' then
+      begin
+      RNode.ritem.ASDUname:=value;
+      asession.writeResult('route.set '+key+'='+value+' [OK]')
+      end
+    else asession.writeResult('route.set '+key+'='+value+' [ERROR]')
+ except
+   asession.writeResult('item.set '+key+'='+value+' [ERROR]');
+ end;
+end;
+
+function set1(asession:Tsession;uCLI:TCLI):boolean;
+var
+  index,i:integer; rnode:TRouteNode;
+begin
+result:=false;
+if (length(ucli.Params)>2) then
+  begin
+  rnode := TRouteNode(Irouter.Root.getNode(ucli.Params[1]));
+  if rnode<>nil then
     begin
-    result:=list; exit;
-    end;
- if cmd.action=action[1] then
+    for i:=2 to  high(ucli.Params) do
+        begin
+        set2(asession,RNode,ucli.Params[i]);
+        end;
+   exit;
+   end;
+  end;
+asession.writeResult('route.set  [ERROR]');
+end;
+
+function add(asession:Tsession;uCLI:TCLI):boolean;
+var i:integer;
+begin
+  result:=false;
+//  try
+  if (length(ucli.Params)>2) then
+      begin
+      for i:=2 to  high(ucli.Params) do
+          begin
+          if (irouter.addRoute(ucli.Params[1],ucli.Params[i])) then
+             asession.writeResult('route.add  '+ucli.Params[i]+' [OK]')
+          else
+             asession.writeResult('route.add  '+ucli.Params[i]+' [ERROR]');
+          end ;
+      exit;
+      end;
+//   except   asession.writeResult('route.add  [ERROR]');   end;
+  asession.writeResult('route.add  [ERROR]');
+ end;
+
+function listnode(asession:Tsession;n:TRouteNode):boolean;
+var
+  i:integer; txt:String;
+  child:TRouteNode;
+begin
+ slevel:='| '+slevel;
+ for  i:=0 to high(n.Fchildren) do
+     begin
+     child:=TRouteNode(n.Fchildren[i]);
+     txt:=slevel+' ';
+     if (Irouter.getASDUname(child)<>'') then
+   //     txt:= txt+' Name:'+ Irouter.getASDUname(child);
+        txt:=txt+ Irouter.getASDUname(child)+'_';
+     txt:=txt+child.text;
+     asession.writeResult(txt);//
+//             ' Level:'+inttostr(Irouter.getlevel(child)));
+     listnode(asession,child);
+     end;
+ delete(slevel,1,2);
+ end;
+
+function list(asession:Tsession;uCLI:TCLI):boolean;
+var
+  n:TRouteNode;
+begin
+ n:= Irouter.root;
+ listnode(asession,n);
+ asession.writeResult('route.list  [EXIT]');
+end;
+
+procedure ExecCLI(asession:Tsession;txt:String);
+var
+ cmd:String;   ucli:TCli;
+begin
+ IEvent.log(debug,'CLIEventCMD: '+txt);
+ asession.onexec:=@CLIRouter.execCLI;
+ if asession.path<>'route.' then asession.path:=asession.path+'route.';
+ if txt<>'' then
     begin
-    result:=add; exit;
-    end;
- if cmd.action=action[2] then
-    begin
-    result:=del; exit;
-    end;
- if cmd.action=action[3] then
-    begin
-    result:=move; exit;
-    end;
- result.succsess:=false;
- result.msg:='command not found';
+    ucli:=parse(txt);
+    cmd:=ucli.Params[0];
+
+  if (cmd='') then  exit;
+  if (cmd='?')then
+     begin help(asession);  exit;  end;
+
+    if (cmd='root')then
+            begin  addroot(asession,ucli); exit;  end;
+    if (cmd='add')then
+            begin  add(asession,ucli); exit;  end;
+    if (cmd='list')then
+            begin  list(asession,ucli); exit;  end;
+    if (cmd='set')then
+            begin  set1(asession,ucli); exit;  end;
+    if (cmd='log')then
+            begin  log(asession,ucli); exit;  end;
+  if (cmd='x')then
+        begin  asession.onexec:=@CLI.execcli;  asession.path:=''; exit;  end;
+
+  end;
+ if txt<>'' then asession.writeResult('command not available')
 end;
 
 end.

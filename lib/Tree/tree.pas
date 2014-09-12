@@ -18,21 +18,23 @@ type
    end;
 
   TNode = class
-      name : String;
+      text : String;
       Ffilter :boolean;
       FParent: TNode;
       Fobject: Tobject;
       Fchildren : array of TNode;
+//  private
   public
       constructor create(S:String);
 //      constructor create(parent:tnode;S:String);
       destructor destroy;
       procedure clear;
-      Function get(s:string):Tnode;
+      Function getNode(s:string):Tnode;
       Function add(child:TNode):Tnode;
       procedure del(index:integer);
       Function cut(index:integer):Tnode;
-      Function Dataindex(s:String):integer;
+//      Function Dataindex(s:String):integer;
+      Function getNodeIndex(s:String):integer;
       Function getParent():Tnode;
       Function getRoot():Tnode;
       Function print:TStringlist;
@@ -67,9 +69,8 @@ constructor TNode.create(S:String);
 begin
   inherited create;
   FParent:=nil;
-//  FParent:=parent;
-  name:= S;
-//  Fobject:= nil;
+  text:= S;
+  Fobject:= nil;
 end;
 
 
@@ -77,7 +78,7 @@ destructor TNode.destroy;
 var
   i:integer;
 begin
-//writeln(name+' destroy childrens:'+inttostr(length(Fchildren)));
+//writeln(getNameNode+' destroy childrens:'+inttostr(length(Fchildren)));
   while length(Fchildren) > 0 do
      begin
        Fchildren[length(Fchildren)-1].destroy;
@@ -91,13 +92,14 @@ begin
   result:= FParent;
 end;
 
-Function TNode.Dataindex(s:String):integer;
+//Function TNode.Dataindex(s:String):integer;
+Function TNode.getNodeIndex(s:String):integer;
 var
   i:integer;
 begin
   result:=-1;
   for i:=0 to high(Fchildren) do
-    if Fchildren[i].name=s then
+    if Fchildren[i].text=s then
 //    if Fchildren[i].Fobject.toString=s then
            begin
            result:= i; exit;
@@ -111,13 +113,14 @@ begin
      result:= result.FParent;
 end;
 
-// search down for node with data s;
-Function TNode.get(s:string):Tnode;
+// search down for node with text s;
+Function TNode.getNode(s:string):Tnode;
 var
   i:integer;
 begin
+//  writeln('myNameis:'+text);
   result:=nil;
-  if name=s then
+  if text=s then
 //  if Fobject.toString =s then
       begin
       result:=self;
@@ -125,15 +128,15 @@ begin
       end;
   for i:=0 to high(Fchildren) do
     begin
-      result:=Fchildren[i].get(s);
+      result:=Fchildren[i].getNode(s);
       if result<>nil then exit;
     end;
 end;
 
 Function TNode.add(child:TNode):Tnode;
 begin
-setLength(Fchildren,Length(Fchildren)+1);
 child.FParent:=self;
+setLength(Fchildren,Length(Fchildren)+1);
 Fchildren[high(Fchildren)] := child;
 result:=child;
 end;
@@ -165,7 +168,7 @@ begin
 //writeln('length_'+inttostr(x));
  for i:=index to length(Fchildren)-2 do
    begin
-//    writeln(inttostr(i)+' copy_'+Fchildren[i+1].name+' to '+Fchildren[i].name);
+//    writeln(inttostr(i)+' copy_'+Fchildren[i+1].getNameNode+' to '+Fchildren[i].getNameNode);
     Fchildren[i]:=Fchildren[i+1];
    end;
 setlength(Fchildren,length(Fchildren)-1);
@@ -178,13 +181,13 @@ var
   i:integer;
 begin
   result:=Tstringlist.Create;
-  writeln('DATA:'+name);
+  writeln('DATA:'+text);
 //  writeln('DATA:'+Fobject.toString);
   st:='| '+st;
   for i:=0 to length(Fchildren)-1 do
     begin
-     result.Append(st+inttostr(i)+' '+Fchildren[i].name);
-     writeln(st+'clid:'+inttostr(i)+' '+Fchildren[i].name);
+     result.Append(st+inttostr(i)+' '+Fchildren[i].text);
+     writeln(st+'clid:'+inttostr(i)+' '+Fchildren[i].text);
 //     result.Append(st+inttostr(i)+' '+Fchildren[i].FObject.ToString);
 //     writeln(st+'clid:'+inttostr(i)+' '+Fchildren[i].FObject.ToString);
       result.AddStrings(Fchildren[i].print);
